@@ -18,6 +18,14 @@ npm --version # should output a npm version
 pip install django djangorestframework 
 ```
 
+- **Github Desktop / Git**
+
+    *Для работы с репозиторием и его синхронизацией.*
+
+    [Ссылка для Windows](https://desktop.github.com/download/)
+
+    Для Linux используйте Flathub.
+
 
 ## Полноценное копирование приложение
 - **Сам репозиторий**
@@ -30,7 +38,7 @@ pip install django djangorestframework
 
     <img src="md/code.png" style="height: 50%; width: 50%">
 
-    Также, как могли заметить, вы могли сразу использовать опцию в **Code**: *Open with Github Desktop*. После копирования репозитория, вы можете использовать его в *Visual Studio Code* - для дополнительного взаимодействия с репозиторием ИЗ VSC вам потребуется установить *[Git](https://git-scm.com/downloads/win)* (откроется функция Source Control `Ctrl + Shift + G`)
+    Также, как могли заметить, вы могли сразу использовать опцию в **Code**: *Open with Github Desktop*. После копирования репозитория, вы можете использовать его в *Visual Studio Code* - для дополнительного взаимодействия с репозиторием __из VSC__ вам потребуется установить *[Git](https://git-scm.com/downloads/win)* (откроется функция Source Control `Ctrl + Shift + G`)
 
 - **React-часть**
 ```powershell
