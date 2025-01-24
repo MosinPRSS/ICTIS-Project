@@ -26,9 +26,11 @@ pip install django djangorestframework
 
     <img src="md/urlpath.png" style="height: 50%; width: 50%">
 
-    Выберите URL. На сайте Github найдите вкладку **Code**, затем скопируйте *ссылку*:
+    Выберите URL. На сайте Github найдите вкладку **Code**, затем скопируйте *ссылку* и вставьте ее в поле URL в Desktop-версии:
 
     <img src="md/code.png" style="height: 50%; width: 50%">
+
+    Также, как могли заметить, вы могли сразу использовать опцию в **Code**: *Open with Github Desktop*. После копирования репозитория, вы можете использовать его в *Visual Studio Code* - для дополнительного взаимодействия с репозиторием ИЗ VSC вам потребуется установить *[Git](https://git-scm.com/downloads/win)* (откроется функция Source Control `Ctrl + Shift + G`)
 
 - **React-часть**
 ```powershell
