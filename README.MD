@@ -2,24 +2,18 @@
 ----------
 ## Требования
 - **NodeJS** 
-<br>
-*Необходим для запуска React-приложения.*
-<br>
-Для большинства *Linux*-дистрибутивов идет в комплекте.
-<br>
-Для *Windows*: [ссылка](https://nodejs.org/dist/v22.13.1/node-v22.13.1-x64.msi) (версия 22.13.1)
-<br>
-Для проверки установки, откройте *Powershell*:
-<br>
+
+    *Необходим для запуска React-приложения.*
+
+    Для большинства *Linux*-дистрибутивов идет в комплекте. Для *Windows*: [ссылка](https://nodejs.org/dist/v22.13.1/node-v22.13.1-x64.msi) (версия 22.13.1). Для проверки установки, откройте *Powershell* или *Bash*:
 ```powershell
 npm --version # should output a npm version
 ```
 - **Django // будет обновляться по мере требований**
-<br>
-*Необходим для backend-части*
-<br>
-Устанавливается с помощью pip / pipx
-<br>
+
+    *Необходим для backend-части*
+
+    Устанавливается с помощью pip / pipx
 ```python
 pip install django djangorestframework 
 ```
@@ -27,11 +21,14 @@ pip install django djangorestframework
 
 ## Полноценное копирование приложение
 - **Сам репозиторий**
-<br>
-Войдите в *Github Desktop*, затем зажмите `Ctrl+Shift+O`:
-<br>
-<img src="md/urlpath.png" style="height: 50%; width: 50%">
-<br>
+
+    Войдите в *Github Desktop*, затем зажмите `Ctrl+Shift+O`:
+
+    <img src="md/urlpath.png" style="height: 50%; width: 50%">
+
+    Выберите URL. На сайте Github найдите вкладку **Code**, затем скопируйте *ссылку*:
+
+    <img src="md/code.png" style="height: 50%; width: 50%">
 
 - **React-часть**
 ```powershell
