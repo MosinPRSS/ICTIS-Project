@@ -23,6 +23,11 @@
 
 Если используется иная студия, а не Visual Studio Code, то в вашем проекте откройте папку ICTIS-Project (чаще всего хранится по пути `<User>\Documents\GitHub\`).
 
+Далее в терминале перейдите в директорию `server`:
+```shell
+cd server
+```
+
 Затем выполните:
 ```shell
 python -m venv venv
