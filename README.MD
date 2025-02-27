@@ -40,7 +40,6 @@ python -m venv venv
 
 Теперь установим зависимости проекта:
 
-```shell
+```
 pip install -r requirements.txt
 ```
-
