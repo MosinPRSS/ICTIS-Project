@@ -1,11 +1,11 @@
 from django.db import models
 
-# Create your models here.
 class users(models.Model):
     username = models.CharField(max_length=40, unique=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     auth = models.ForeignKey('auth', on_delete=models.CASCADE)
+    data = models.ForeignKey('user_files', on_delete=models.CASCADE)
     
 
 class sessions(models.Model):
@@ -15,7 +15,10 @@ class bots(models.Model):
     ...
 
 class auth(models.Model):
-    ...
+    email = models.EmailField(max_length=254, unique=True)
+    password = models.TextField()
 
-class personas(models.Model):
-    ...
+class user_files(models.Model):
+    avatar = models.ImageField('')
+    personas = models.FileField('')
+    
