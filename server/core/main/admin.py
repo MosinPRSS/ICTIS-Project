@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import users, user_files
     
 
 
