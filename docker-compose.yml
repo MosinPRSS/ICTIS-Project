@@ -1,3 +1,5 @@
+
+
 services:
 
   db:
@@ -6,13 +8,13 @@ services:
     container_name: main_arisen_db
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASS=21master28admin06
+      - POSTGRES_PASSWORD=21master28admin06
       - POSTGRES_DB=arisen_database
       - POSTGRES_PORT=5432
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/ # не трогать - для линукса
 
   pgadmin:
       image: dpage/pgadmin4
@@ -28,5 +30,5 @@ services:
 
 
 volumes:
-  postgres_data:
+  postgres_data: 
 
