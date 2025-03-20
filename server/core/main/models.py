@@ -2,19 +2,20 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class user_files(models.Model):
-    user_description = models.TextField(max_length=2048)
-    avatar = models.ImageField(upload_to=f"avatars/") # по юзернейму
-    chats = models.FileField(upload_to=f"chats/")
-    personas = models.FileField(upload_to=f"personas/")
-    user_data = models.ForeignKey(to="User", on_delete=models.CASCADE)
+class UserData(models.Model):
+    account = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to="avatars/users", verbose_name=User.username)
+    
 
-    def __str__(self):
-        return
 
-class bots(models.Model):
-    botname = models.TextField(max_length=256)
-    public_description = models.TextField(max_length=2048)
-    description = models.TextField(max_length=8192) # for prompt generation
-    avatar = models.ImageField(upload_to=f"{botname}/")
-    chat_count = models.IntegerField()
+class Personas(models.Model):
+    username = models.ForeignKey(to=UserData, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+
+
+class BotData(models.Model):
+    botname = models.CharField(max_length=128)
+    pub_desc = models.TextField(max_length=2048)
+    description = models.TextField(max_length=8192)
+    
