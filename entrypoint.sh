@@ -8,8 +8,8 @@ docker compose pull
 
 
 # Backend
+
+. "venv/bin/activate" # для линукс-системы!
 cd server/core && python3 manage.py runserver
 
-# Frontend
-cd ../client && npm run dev 
 

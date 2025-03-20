@@ -1,6 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse    
+from django.contrib.auth.models import User
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, AllowAny    
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Created.")
+
+from .serializers import UserSerializer
+
+
+class createUser(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]

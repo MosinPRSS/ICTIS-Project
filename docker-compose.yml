@@ -24,13 +24,9 @@ services:
       ports:
         - "5051:80"
       environment:
-        PGADMIN_DEFAULT_EMAIL: ssav@sfedu.ru
-        PGADMIN_DEFAULT_PASSWORD: 21master28admin06
+        PGADMIN_DEFAULT_EMAIL: test@test.com
+        PGADMIN_DEFAULT_PASSWORD: 1234
       restart: always
-  ai_support:
-    image: ollama/ollama
-    container_name: ollama
-    restart: always
 
 
 volumes:
