@@ -31,10 +31,20 @@ SECRET_KEY = os.getenv('DJANGO_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на фронтенд
 
 
 # Application definition
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
 
 INSTALLED_APPS = [
     'main',
@@ -79,15 +89,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES":(
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
-    ),
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",   
-    ]
-}
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
@@ -103,7 +104,7 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv("PGUSER"),
         'PASSWORD': os.getenv("PGPASSWORD"),
-        'HOST': 'localhost',
+        'HOST': '0.0.0.0',
         'PORT': os.getenv("PGPORT"),
     }
 }
