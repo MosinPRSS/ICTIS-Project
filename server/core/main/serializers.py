@@ -42,6 +42,7 @@ class BotSerializer(serializers.ModelSerializer):
             "description": {"required": True},
             "is_public": {"required": True},
         }
+        
 
 
 
