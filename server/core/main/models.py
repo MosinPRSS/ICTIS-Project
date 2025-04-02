@@ -2,13 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-
 class UserData(models.Model):
     account = models.OneToOneField(User, on_delete=models.CASCADE)
     description = models.TextField(max_length=2048)
     user_image = models.ImageField(upload_to="avatars/users/")
-    
-
 
 class Personas(models.Model):
     username = models.ForeignKey(to=UserData, on_delete=models.CASCADE)
@@ -20,6 +17,7 @@ class Personas(models.Model):
 class BotData(models.Model):
     botname = models.CharField(max_length=128, unique=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    bot_avatar = models.ImageField(upload_to="avatars/bots/")
 
     pub_desc = models.TextField(max_length=2048)
     description = models.TextField(max_length=8192)
