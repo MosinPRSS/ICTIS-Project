@@ -29,6 +29,7 @@ class BotData(models.Model):
     is_public = models.BooleanField()
     rating = models.IntegerField(default=0)
 
+# re-work chat models
 class ChatsData(models.Model):
     role = models.TextField()
     sent_time = models.DateTimeField(auto_now=True)
