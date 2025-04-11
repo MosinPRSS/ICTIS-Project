@@ -28,5 +28,8 @@ class DeleteBot(generics.DestroyAPIView):
 
 
 class EmailTokenObtainPairView(TokenObtainPairView):
+    """
+    Customized Auth System via E-Mail (only)
+    """
     serializer_class = CustomTokenObtainPairSerializer
     permission_classes = [AllowAny]
