@@ -2,37 +2,32 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class UserData(models.Model):
-    account = models.OneToOneField(User, on_delete=models.CASCADE)
-    description = models.TextField(max_length=2048)
-    user_image = models.ImageField(upload_to="avatars/users/")
+class User_Extended(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to="img/user/")
+    description = models.TextField(max_length=1024)
+
+class Chatbots(models.Model):
+    belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, unique=True)
+    avatar = models.ImageField(upload_to="img/bot/")
+    
+    description = models.TextField(max_length=16384)
+    scenario = models.TextField(max_length=8192)
+    first_message = models.TextField(max_length=1024)
+
+    rate = models.IntegerField(default=0)
+    is_public = models.BooleanField(default=False)
+    public_description = models.TextField() # no generation
 
 class Personas(models.Model):
-    username = models.ForeignKey(to=UserData, on_delete=models.CASCADE)
+    belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    description = models.TextField(max_length=1024)
-    persona_avatar = models.ImageField(upload_to="avatars/personas/")
-
-
-class BotData(models.Model):
-    botname = models.CharField(max_length=128, unique=True)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    bot_avatar = models.ImageField(upload_to="avatars/bots/")
-
-    pub_desc = models.TextField(max_length=2048)
+    avatar = models.ImageField(upload_to="img/personas/")
     description = models.TextField(max_length=8192)
-    scenario = models.TextField(max_length=4096, default=" ")
-    first_message = models.TextField(max_length=2048, default=" ")
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    is_public = models.BooleanField()
-    rating = models.IntegerField(default=0)
-
-# re-work chat models
-class ChatsData(models.Model):
-    role = models.TextField()
-    sent_time = models.DateTimeField(auto_now=True)
-    chat_number = models.IntegerField()
-
-    
+class Sessions(models.Model):
+    belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    conversation_code = models.CharField(max_length=64)
+    chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
+    conversation = models.JSONField(null=True)

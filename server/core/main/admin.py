@@ -4,7 +4,7 @@ from .models import *
 
 
 # Register your models here.
-admin.site.register(BotData)
-admin.site.register(ChatsData)
+admin.site.register(Chatbots)
+admin.site.register(Sessions)
 admin.site.register(Personas)
-admin.site.register(UserData)
+admin.site.register(User_Extended)

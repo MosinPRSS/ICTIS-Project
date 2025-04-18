@@ -36,7 +36,6 @@ ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на ф�
 
 # Application definition
 
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -150,8 +149,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Content of users/bots
-MEDIA_ROOT = os.path.join("./server/databases")
+# image content of users/bots/personas
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
