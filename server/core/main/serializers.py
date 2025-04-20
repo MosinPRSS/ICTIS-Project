@@ -6,12 +6,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
 from rest_framework.validators import UniqueValidator
 
+
+# --- USERS Settings
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-
     class Meta:
         model = User
         fields = ["email", "username", "password"]
@@ -32,12 +33,12 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-
 class UserExtendedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_Extended
         fields = ['avatar', 'description']   
 
+# --- BOTS Settings
 class BotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chatbots
@@ -45,10 +46,11 @@ class BotSerializer(serializers.ModelSerializer):
             "id",
             "name", 
             "public_description",
+            "first_message",
             "description", 
             "scenario",
             "is_public"
-            ]
+        ]
         extra_kwargs = {
             "name": {"required": True},
             "description": {"required": True},
@@ -57,9 +59,19 @@ class BotSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user
         return super().create(validated_data)
-
-
         
+class BotUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chatbots
+        fields = [
+            "name",
+            "public_description",
+            "description",
+            "first_message",
+            "avatar",
+            "scenario",
+            "is_public"
+        ]
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = User.EMAIL_FIELD
     @classmethod

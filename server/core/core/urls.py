@@ -28,7 +28,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/register", CreateUser.as_view(), name="register"),
-    path("api/user/update/", UpdateUserAvatar.as_view(), name='update-user'),
+    path("api/user/view/update/", UpdateUserExtended.as_view(), name='update-user'),
     path("api/token/", EmailTokenObtainPairView.as_view(), name="login"),
     path("api/token/verify/", TokenVerifyView.as_view(), name='token_verify'),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
