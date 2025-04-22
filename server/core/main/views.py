@@ -11,14 +11,14 @@ class CreateUser(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-class UpdateUserAvatar(generics.UpdateAPIView):
+class UpdateUserExtended(generics.UpdateAPIView):
     serializer_class = UserExtendedSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user.user_extended
+    
 # --- BOTS SETTINGS 
-
 class CreateBot(generics.CreateAPIView):
     queryset = Chatbots.objects.all()
     serializer_class = BotSerializer
@@ -27,6 +27,12 @@ class CreateBot(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(belongs_to=self.request.user)
     # replace to isAuth!!!
+
+class UpdateBot(generics.UpdateAPIView):
+    serializer_class = BotUpdateSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        return self.request.user.chatbots
 
 class ListPublicBots(generics.ListCreateAPIView): 
     serializer_class = BotSerializer

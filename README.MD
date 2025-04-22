@@ -9,6 +9,8 @@
 
 - (*) [Ollama](https://ollama.com/download/OllamaSetup.exe) - ollama-side
 
+- (*) [Docker](https://docs.docker.com/) - docker containers
+
 - [Github Desktop](https://central.github.com/deployments/desktop/desktop/latest/win32) - для всех
 
 - [Postman](https://dl.pstmn.io/download/latest/win64) - для бэкенда
