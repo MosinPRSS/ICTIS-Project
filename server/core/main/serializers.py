@@ -3,17 +3,27 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import User
-from .models import BotData
+from .models import *
+from rest_framework.validators import UniqueValidator
 
+
+# --- USERS Settings
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     class Meta:
         model = User
         fields = ["email", "username", "password"]
         extra_kwargs = {
-            "email": {"required": True},
-            "password": {"write_only": True}
+            "password": {"write_only": True, "required": True},
+            "username": {
+                "required": True,
+                "validators": [UniqueValidator(queryset=User.objects.all())]
             }
+        }
+
     def create(self, validated_data):
         user = User(
             email=validated_data['email'],
@@ -23,29 +33,45 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+class UserExtendedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_Extended
+        fields = ['avatar', 'description']   
+
+# --- BOTS Settings
 class BotSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BotData
+        model = Chatbots
         fields = [
             "id",
-            "botname", 
-            "pub_desc", 
-            "user", 
+            "name", 
+            "public_description",
+            "first_message",
             "description", 
             "scenario",
-            "is_public",
-            "created_at"
-            ]
+            "is_public"
+        ]
         extra_kwargs = {
-            "user": {"write_only": True},
-            "botname": {"required": True},
+            "name": {"required": True},
             "description": {"required": True},
             "is_public": {"required": True},
         }
+    def create(self, validated_data):
+        validated_data["belongs_to"] = self.context["request"].user
+        return super().create(validated_data)
         
-
-
-
+class BotUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chatbots
+        fields = [
+            "name",
+            "public_description",
+            "description",
+            "first_message",
+            "avatar",
+            "scenario",
+            "is_public"
+        ]
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = User.EMAIL_FIELD
     @classmethod
