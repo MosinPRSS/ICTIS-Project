@@ -38,69 +38,6 @@ class UserExtendedSerializer(serializers.ModelSerializer):
         model = User_Extended
         fields = ['avatar', 'description']   
 
-# --- BOTS Settings
-class BotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chatbots
-        fields = [
-            "id",
-            "name", 
-            "public_description",
-            "first_message",
-            "description", 
-            "scenario",
-            "is_public"
-        ]
-        extra_kwargs = {
-            "name": {"required": True},
-            "description": {"required": True},
-            "is_public": {"required": True},
-        }
-    def create(self, validated_data):
-        validated_data["belongs_to"] = self.context["request"].user
-        return super().create(validated_data)
-        
-class BotUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chatbots
-        fields = [
-            "name",
-            "public_description",
-            "description",
-            "first_message",
-            "avatar",
-            "scenario",
-            "is_public"
-        ]
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = User.EMAIL_FIELD
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        
-        token['name'] = User.username()
-
-        return token
-    def validate(cls, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        try:
-            user = get_user_model().objects.get(email=email)
-        except get_user_model().DoesNotExist:
-            raise AuthenticationFailed('No active account found with the given credentials')
-
-        if not user.check_password(password):
-            raise AuthenticationFailed('No active account found with the given credentials')
-
-        if not user.is_active:
-            raise AuthenticationFailed('This account is inactive')
-
-        refresh = RefreshToken.for_user(user)
-        return {
-            'access': str(refresh.access_token),
-            'refresh': str(refresh)
-        }
 
 
     

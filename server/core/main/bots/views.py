@@ -1,6 +1,6 @@
 from rest_framework import generics
 from ..models import Chatbots
-from serializers import *
+from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 
 class CreateBot(generics.CreateAPIView):
@@ -10,7 +10,7 @@ class CreateBot(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(belongs_to=self.request.user)
-        
+
 class UpdateBot(generics.UpdateAPIView):
     serializer_class = BotUpdateSerializer
     permission_classes = [IsAuthenticated]
