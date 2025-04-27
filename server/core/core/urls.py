@@ -17,7 +17,6 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from main.views import *
 from rest_framework_simplejwt.views import (
     TokenRefreshView, 
     TokenVerifyView
@@ -27,8 +26,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/user/register", CreateUser.as_view(), name="register"),
-    path("api/user/view/update/", UpdateUserExtended.as_view(), name='update-user'), # replace to auth
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("main.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth import get_user_model
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.tokens import RefreshToken
-from .models import *
+from ..models import User_Extended
+from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 
-
-# --- USERS Settings
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
