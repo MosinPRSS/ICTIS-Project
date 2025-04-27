@@ -29,9 +29,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/register", CreateUser.as_view(), name="register"),
     path("api/user/view/update/", UpdateUserExtended.as_view(), name='update-user'),
-    path("api/token/", EmailTokenObtainPairView.as_view(), name="login"),
-    path("api/token/verify/", TokenVerifyView.as_view(), name='token_verify'),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
+    path("api-token/", EmailTokenObtainPairView.as_view(), name="login"),
+    path("api-token/verify/", TokenVerifyView.as_view(), name='token_verify'),
+    path("api-token/refresh/", TokenRefreshView.as_view(), name="refresh_token"), # replace to auth
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("main.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
