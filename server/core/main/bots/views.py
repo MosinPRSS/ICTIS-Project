@@ -1,5 +1,5 @@
 from rest_framework import generics
-from ..models import Chatbots
+from ..models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -22,11 +22,16 @@ class ListPublicBots(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True)
+    
+class ListUserBots(generics.ListCreateAPIView):
+    serializer_class = BotSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return Chatbots.objects.filter(belongs_to=self.request.user)
 
 class DeleteBot(generics.DestroyAPIView):
     serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return Chatbots.objects.filter(user=user)
+        return Chatbots.objects.filter(belongs_to=self.request.user)
