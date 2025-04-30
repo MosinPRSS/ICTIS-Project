@@ -25,11 +25,18 @@ class BotUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chatbots
         fields = [
-            "name",
-            "public_description",
-            "description",
-            "first_message",
-            "avatar",
-            "scenario",
-            "is_public"
+            'name', 'avatar', 'description', 'scenario',
+            'first_message', 'is_public', 'public_description'
         ]
+        extra_kwargs = {
+            field: {'required': False} for field in fields 
+        }
+
+    def validate_name(self, value):
+        user = self.context['request'].user
+        instance = self.instance
+
+        if instance.name != value:
+            if Chatbots.objects.filter(name=value).exclude(pk=instance.pk).exists():
+                raise serializers.ValidationError("Бот с таким именем уже существует.")
+        return value

@@ -7,5 +7,5 @@ urlpatterns = [
     # "read" principle
     path("list/public", ListPublicBots.as_view(), name="list-public-bots"),
     path("list/user", ListUserBots.as_view(), name="user-bots"),
-    path("update", UpdateBot.as_view(), name="update-bot")
+    path("update/<int:pk>", UpdateBot.as_view(), name="update-bot")
 ]
