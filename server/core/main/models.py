@@ -9,7 +9,7 @@ class User_Extended(models.Model):
 
 class Chatbots(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=128)
     avatar = models.ImageField(upload_to="img/bot/")
     
     description = models.TextField(max_length=16384)
