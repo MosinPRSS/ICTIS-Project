@@ -14,7 +14,7 @@ class Chatbots(models.Model):
     
     description = models.TextField(max_length=16384)
     scenario = models.TextField(max_length=8192)
-    first_message = models.TextField(max_length=1024)
+    first_message = models.TextField(max_length=3000)
 
     rate = models.IntegerField(default=0)
     is_public = models.BooleanField(default=False)
