@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from ..models import User_Extended
-from django.contrib.auth.models import User
+from ..models import User
 from rest_framework.validators import UniqueValidator
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
             "password": {"write_only": True, "required": True},
             "username": {
                 "required": True,
-                "validators": [UniqueValidator(queryset=User.objects.all())]
             }
         }
 
@@ -27,11 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
-    
-class UserExtendedSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User_Extended
-        fields = ["avatar", "description"]   
+
 
 
 

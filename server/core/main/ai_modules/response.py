@@ -7,19 +7,25 @@
 которые нужно отпарсить...
 """
 
-import requests, os, json, asyncio, aiohttp
+import requests, os, json, asyncio, aiohttp, dotenv
+
+dotenv.load_dotenv()
 
 # Запуск модели - хотя, думаю, стоит сделать под Докер?
-AUTH = {"Authorization:": "Bearer cpk_87a9e78336e44c299eb91ddf0e4b0949.732e0bae689e575b94ada3803eeba737.7Q34sBlnT4dUCQpwWW9yKY2wFVeJSh1s"}
+conversation = {
+    "User": "*comes behind you, wrapping their arms loosely around Roleplay Master's waist*",
+}
 
 HOST = "https://llm.chutes.ai/v1/chat/completions"
 JSON_QUERY = {
-    "model": "Qwen/Qwen3-14B",
+    "model": "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8",
     "messages": 
     [ 
         {
         "role": "user", 
-        "content": "are you okay?"
+        "content": f"""
+          hello
+        """
         } 
     ],
     "temperature": 0.6,
@@ -28,7 +34,7 @@ JSON_QUERY = {
 
 async def get_response() -> dict:
     headers = {
-        "Authorization": "Bearer cpk_87a9e78336e44c299eb91ddf0e4b0949.732e0bae689e575b94ada3803eeba737.7Q34sBlnT4dUCQpwWW9yKY2wFVeJSh1s",
+        "Authorization": f"Bearer {os.getenv("api_key")}",
         "Content-Type": "application/json"
     }
     async with aiohttp.ClientSession() as session:
@@ -37,14 +43,13 @@ async def get_response() -> dict:
             if response.status == 200:
                 return await response.json()
             else: Exception() 
-                
 
 async def main():
     try:
         data = await get_response()
         print(data['choices'][0]['message']['content'])
     except Exception:
-        Exception("smth reaaly went wrong man")
+        Exception("smth really went wrong man")
     
 if "__main__" == __name__:
     asyncio.run(main())
