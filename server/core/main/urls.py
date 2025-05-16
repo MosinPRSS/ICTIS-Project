@@ -1,9 +1,11 @@
-from django.urls import path
-from . import views
-
+from django.urls import path, include
+from main.bots import urls as bot_urls
+from main.auth import urls as auth_urls
+from main.users import urls as user_urls
+from main.session import urls as session_urls
 urlpatterns = [
-    path("bot/create/", views.CreateBot.as_view(), name="create-bot"),
-    path("bot/delete/<str:pk>/", views.DeleteBot.as_view(), name="delete-bot"),
-    path("bot/list/public", views.ListPublicBots.as_view(), name="list-public-bots"),
-    path("bot/update/", views.UpdateBot.as_view(), name="update-bot")
+    path("bot/", include(bot_urls)),
+    path("auth/", include(auth_urls)),
+    path("user/", include(user_urls)),
+    # path("c/") - сессии
 ]
