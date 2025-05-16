@@ -38,6 +38,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'user': {
                 'id': user.id,
                 'email': user.email,
-                'username': user.username
+                'username': user.username,
+                'avatar': user.avatar_url,
+                'description': user.description
             }
         }
