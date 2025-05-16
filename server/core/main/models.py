@@ -24,11 +24,6 @@ class User(AbstractBaseUser):
         """
         return self.username
 
-# class User_Extended(models.Model):
-    # user = models.OneToOneField(to=User, on_delete=models.CASCADE)
-    # avatar = models.ImageField(upload_to="img/user/")
-    # description = models.TextField(max_length=1024)
-
 class Chatbots(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)

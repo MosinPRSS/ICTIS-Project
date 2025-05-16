@@ -16,6 +16,9 @@ class BotSerializer(serializers.ModelSerializer):
             "name": {"required": True},
             "description": {"required": True},
             "is_public": {"required": True},
+            "first_message" : {"required": True},
+            "scenario": {"required": False},
+            "public_description": {"required": False}
         }
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user

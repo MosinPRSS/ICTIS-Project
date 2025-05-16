@@ -9,12 +9,13 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ["email", "username", "password"]
+        fields = ["email", "username", "password", "avatar", "description"]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {
                 "required": True,
-            }
+            },
+            "description": {"required": False}
         }
 
     def create(self, validated_data):
@@ -25,6 +26,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+    
+    def update(self, instance, validated_data):
+        if "password" in validated_data:
+            instance.set_password(validated_data.pop("password"))
+        
+        new_avatar = validated_data.get('avatar', None)
+        if new_avatar and instance.avatar:
+            if instance.avatar.name != new_avatar.name and instance.avatar.storage.exists(instance.avatar.name):
+                instance.avatar.delete(save=False)
+        return super().update(instance, validated_data)
 
 
 

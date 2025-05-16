@@ -1,4 +1,6 @@
 class serialize_json:
+    prompt: str # will be prompt here (maybe in dict format)
+
     def create_prompt(
         character_name: str,
         character_description: str,

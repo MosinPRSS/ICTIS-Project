@@ -8,12 +8,13 @@
 """
 
 import requests, os, json, asyncio, aiohttp, dotenv
+import collector
 
 dotenv.load_dotenv()
 
 # Запуск модели - хотя, думаю, стоит сделать под Докер?
 conversation = {
-    "User": "*comes behind you, wrapping their arms loosely around Roleplay Master's waist*",
+    
 }
 
 HOST = "https://llm.chutes.ai/v1/chat/completions"
