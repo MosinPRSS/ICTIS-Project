@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from ..models import User_Extended
-from django.contrib.auth.models import User
+from ..models import User
 from rest_framework.validators import UniqueValidator
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,13 +9,13 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ["email", "username", "password"]
+        fields = ["email", "username", "password", "avatar", "description"]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {
                 "required": True,
-                "validators": [UniqueValidator(queryset=User.objects.all())]
-            }
+            },
+            "description": {"required": False}
         }
 
     def create(self, validated_data):
@@ -28,10 +27,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-class UserExtendedSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User_Extended
-        fields = ["avatar", "description"]   
+    def update(self, instance, validated_data):
+        if "password" in validated_data:
+            instance.set_password(validated_data.pop("password"))
+        
+        new_avatar = validated_data.get('avatar', None)
+        if new_avatar and instance.avatar:
+            if instance.avatar.name != new_avatar.name and instance.avatar.storage.exists(instance.avatar.name):
+                instance.avatar.delete(save=False)
+        return super().update(instance, validated_data)
+
 
 
 

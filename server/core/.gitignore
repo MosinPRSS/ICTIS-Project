@@ -1,2 +1,4 @@
 *.png
 media
+__pycache__/
+migrations/
