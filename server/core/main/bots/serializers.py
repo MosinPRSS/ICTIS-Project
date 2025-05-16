@@ -6,6 +6,7 @@ class BotSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name", 
+            "avatar",
             "public_description",
             "first_message",
             "description", 
@@ -15,7 +16,11 @@ class BotSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "name": {"required": True},
             "description": {"required": True},
+            "avatar": {"required": False},
             "is_public": {"required": True},
+            "first_message" : {"required": True},
+            "scenario": {"required": False},
+            "public_description": {"required": False}
         }
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user

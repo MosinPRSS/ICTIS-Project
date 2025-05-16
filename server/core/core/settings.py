@@ -46,6 +46,7 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
+    'daphne',
     'main',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -109,7 +110,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -132,6 +132,10 @@ AUTHENTICATION_BACKENDS = [
     'main.email_auth.EmailBackend',
 ]
 
+AUTH_USER_MODEL = 'main.User'
+
+
+ASGI_APPLICATION = "core.asgi.application"
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -142,7 +146,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
