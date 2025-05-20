@@ -52,6 +52,8 @@ class Personas(models.Model):
     avatar = models.ImageField(upload_to="img/personas/")
     description = models.TextField(max_length=8192)
 
+
+# rework 
 class Sessions(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     conversation_code = models.CharField(max_length=64)
