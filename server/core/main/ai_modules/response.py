@@ -7,28 +7,21 @@
 которые нужно отпарсить...
 """
 
-import requests, os, json, asyncio, aiohttp, dotenv
-import collector
+import os, asyncio, aiohttp, dotenv
 
 dotenv.load_dotenv()
 
-# Запуск модели - хотя, думаю, стоит сделать под Докер?
-conversation = {
-    
+system_message = {
+    "role": "system",
+    "content": "You are a human. You must answer in a free conversational style"
 }
+# Запуск модели - хотя, думаю, стоит сделать под Докер?
+conversation = []
 
 HOST = "https://llm.chutes.ai/v1/chat/completions"
 JSON_QUERY = {
     "model": "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8",
-    "messages": 
-    [ 
-        {
-        "role": "user", 
-        "content": f"""
-          hello
-        """
-        } 
-    ],
+    "messages": [system_message, *conversation],
     "temperature": 0.6,
     "stream": False
 }
@@ -46,11 +39,22 @@ async def get_response() -> dict:
             else: Exception() 
 
 async def main():
-    try:
-        data = await get_response()
-        print(data['choices'][0]['message']['content'])
-    except Exception:
-        Exception("smth really went wrong man")
+    while 1:
+        message: str = input(">>> ")
+        if message.lower() == "q": exit(0)
+        conversation.append({
+            "role": "user",
+            "content": message
+        })
+        try:
+            data = await get_response()
+            print(data['choices'][0]['message']['content'])
+            conversation.append({
+                "role": "assistant",
+                "content": data['choices'][0]['message']['content']
+            })
+        except Exception:
+            Exception("smth really went wrong man")
     
 if "__main__" == __name__:
     asyncio.run(main())

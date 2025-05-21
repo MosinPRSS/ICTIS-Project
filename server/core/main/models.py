@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from .managers import UserManager
 from django.conf import settings
+import random, string
+
+# Отсюда будут браться компоненты для отправки сообщений.
+# Возможно, будем использовать и другие модели, поэтому сделаем свою реализацию взаимодействия
+# подобно ollama-lib и другим.
+# from .ai_modules.response import *
+import asyncio
 
 class User(AbstractBaseUser):
     email = models.EmailField('email address', unique=True)
@@ -10,6 +18,8 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
+
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -52,10 +62,27 @@ class Personas(models.Model):
     avatar = models.ImageField(upload_to="img/personas/")
     description = models.TextField(max_length=8192)
 
-
 # rework 
-class Sessions(models.Model):
+class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    conversation_code = models.CharField(max_length=64)
     chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
-    conversation = models.JSONField(null=True)
+    session_code = models.CharField(max_length=32)
+
+    # time working
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    messages = models.JSONField(null=True)
+    
+    async def _send_message(
+            self, message, role: str = "user"
+            ) -> dict:
+        """
+        Пользователь отправляет сообщение...
+        """
+        return {
+            "role": role,
+            "content": message
+        }
+    async def _handle(self, message):
+        user_message = self._send_message(message=message)

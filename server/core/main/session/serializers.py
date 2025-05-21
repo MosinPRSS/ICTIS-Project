@@ -7,17 +7,23 @@ class SendMessage(serializers.Serializer):
     temperature = serializers.FloatField()
     top_k = serializers.FloatField()
     max_length = serializers.IntegerField()
-    
+
+def generate_session_code(length=32):
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+   
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Sessions
+        model = AiSession
         fields = [
             "id",
-            "conversation_code",
-            "chatbot",
+            "chatbot"
         ]
-        def create(self, validated_data):
-            validated_data["belongs_to"] = self.context["request"].user
-            return super().create(validated_data)
-        
+        extra_kwargs = {
+            "chatbot": {"required": True}
+        }
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['session_code'] = generate_session_code()
+        validated_data['belongs_to'] = user
+        return super().create(validated_data)
 

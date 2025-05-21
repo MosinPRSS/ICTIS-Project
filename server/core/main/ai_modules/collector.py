@@ -1,5 +1,7 @@
+from ..models import *
+
 class serialize_json:
-    prompt: str # will be prompt here (maybe in dict format)
+    prompt: str = f""
 
     def create_prompt(
         character_name: str,
@@ -7,7 +9,11 @@ class serialize_json:
         character_fst_message: str, # first message
         character_scenario: str
     ) -> str:
-        pass
+        """
+        Здесь получаем данные о боте для генерации. 
+        """
+        Chatbots.objects.filter()
+        
     def prepare_persona(
         persona_name: str,
         persona_description: str 
