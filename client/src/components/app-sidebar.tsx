@@ -28,7 +28,7 @@ import NavGuest from "./nav-guest"
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "Qua11ra",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
@@ -87,19 +87,8 @@ const data = {
       ],
     },
   ],
-  navSecondary: [
-    {
-      title: "Параметры",
-      url: "#",
-      icon: SettingsIcon,
-    },
-    {
-      title: "Нужна помощь?",
-      url: "#",
-      icon: HelpCircleIcon,
-    },
-  ],
 }
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const {isReg} = useRegister()
@@ -114,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <div>
-                <TriangleIcon className="h-5 w-5" />
+                <TriangleIcon className="h-10 w-10 ml-[3px]" />
                 <span className="text-xl font-semibold">ARI-ai</span>
               </div>
             </SidebarMenuButton>
@@ -125,8 +114,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className="bg-violet-950 rounded-xl">
-        {isReg ? <NavUser user={data.user} /> : <NavGuest />}
+      <SidebarFooter className={`bg-violet-950 rounded-xl pl-[2px] h-[60px] items-center ${!isReg ? 'hover:bg-white hover:text-black hover:border-3' : ''}`}>
+        {isReg ? <NavUser user={data.user}/> : <NavGuest />}
       </SidebarFooter>
     </Sidebar>
   )

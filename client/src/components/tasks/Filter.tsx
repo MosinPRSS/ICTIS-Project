@@ -22,7 +22,7 @@ export default function Filter() {
         <div className="flex items-center justify-between space-y-2 mb-4">
             <h2 className="text-xl font-bold tracking-tight">Категории</h2>
         </div>
-        <DataTable data={tasks} columns={columns} />
+        <DataTable data={tasks} columns={columns}/>
       </div>  
     </>
   )

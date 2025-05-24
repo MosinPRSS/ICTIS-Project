@@ -38,6 +38,7 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="Введите почту"
+                    className="hover:bg-black hover:text-white"
                     required
                   />
                 </div>
@@ -53,11 +54,11 @@ export function LoginForm({
                       </a>
                     : <></>}
                   </div>
-                  <Input id="password" type="password" placeholder="Введите пароль" required />
+                  <Input id="password" type="password" className="hover:bg-black hover:text-white" placeholder="Введите пароль" required />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full outline bg-violet-100 outline-black cursor-pointer"
+                  className="w-full outline bg-violet-100 outline-black cursor-pointer hover:bg-black hover:text-white"
                   onClick={() => {
                     regFunc(true)
                     wantRegFunc(false)

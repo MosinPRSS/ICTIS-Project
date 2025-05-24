@@ -27,14 +27,14 @@ export function NavMain({
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
               tooltip="Quick Create"
-              className="min-w-8 cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+              className="ml-[1px] rounded-sm hover:bg-white hover:text-black hover:border-black hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground"
             >
               <PlusCircleIcon />
               <span>Создать</span>
             </SidebarMenuButton>
             <Button
               size="icon"
-              className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
+              className="h-9 w-9 rounded-sm hover:bg-white hover:text-black cursor-pointer shrink-0 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
               <MailIcon className="size-5"/>
@@ -46,7 +46,7 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
+                {item.icon && <item.icon className="ml-[1px]" />}
                 <span>{item.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
