@@ -14,3 +14,10 @@ export type UserContextType = {
 export type UserIsRegisteredContextProps = {
   children: ReactNode;
 };
+
+export type CategoryFilterProps = {
+  categories: string[];
+  selectedCategories: string[];
+  onCategoryToggle: (category: string) => void;
+  onCategoryRemove: (category: string) => void;
+};
