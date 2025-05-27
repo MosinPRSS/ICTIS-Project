@@ -54,6 +54,7 @@ class Chatbots(models.Model):
 
     rate = models.IntegerField(default=0)
     is_public = models.BooleanField(default=False)
+    hide_info = models.BooleanField(default=False)
     public_description = models.TextField() # no generation
 
 class Personas(models.Model):
@@ -74,15 +75,14 @@ class AiSession(models.Model):
 
     messages = models.JSONField(null=True)
     
-    async def _send_message(
-            self, message, role: str = "user"
-            ) -> dict:
+    async def _prepare_message(
+            self, message: str, role: str = "user",
+            ) -> str:
         """
         Пользователь отправляет сообщение...
         """
-        return {
-            "role": role,
-            "content": message
-        }
+        return f"{role}: {message}"
     async def _handle(self, message):
-        user_message = self._send_message(message=message)
+        user_message = self._prepare_message(message=message)
+        
+        # take all messages and etc...

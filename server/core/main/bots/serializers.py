@@ -25,6 +25,12 @@ class BotSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user
         return super().create(validated_data)
+    
+
+class PublicBotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chatbots
+        fields = ['id', 'name', 'public_description', 'avatar']
         
 class BotUpdateSerializer(serializers.ModelSerializer):
     class Meta:

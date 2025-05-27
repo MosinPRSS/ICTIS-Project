@@ -1,7 +1,7 @@
 from rest_framework import generics
 from ..models import *
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotFound
 
 class CreateBot(generics.CreateAPIView):
@@ -47,6 +47,13 @@ class ListPublicBots(generics.ListCreateAPIView):
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True)
     
+class ListPublicBotsToNotRegistered(generics.ListCreateAPIView): 
+    serializer_class = PublicBotSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        return Chatbots.objects.filter(is_public=True).only('id', 'name', 'public_description', 'avatar')
+        
 class ListUserBots(generics.ListCreateAPIView):
     serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
