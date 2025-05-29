@@ -40,7 +40,7 @@ class User(AbstractBaseUser):
         if self.avatar and hasattr(self.avatar, 'url'):
             return self.avatar.url
         else:
-            return f"{settings.MEDIA_URL}img/Default_Avatar.svg"
+            return f"{settings.MEDIA_URL}/Default_Avatar.svg"
 
 
 class Chatbots(models.Model):

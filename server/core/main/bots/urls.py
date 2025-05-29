@@ -10,6 +10,7 @@ urlpatterns = [
     path("list/public", ListPublicBots.as_view(), name="list-public-bots"),
     path("list/public/non-registered", ListPublicBotsToNotRegistered.as_view(), name="bots-for-non-registered"),
     path("list/user", ListUserBots.as_view(), name="user-bots"),
+    path("search", SearchBots.as_view(), name="search-by-name-desc"),
     # "update"
     path("update/<int:pk>", UpdateBot.as_view(), name="update-bot")
 ]

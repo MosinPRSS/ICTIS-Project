@@ -25,6 +25,11 @@ Auth:
     additional_description: "При получении токенов, необходимо refresh-токен хранить в более безопасном хранилище браузера"
     body-type: "raw/json"
     required_fields: ['email', 'password']
+    return_values: [
+      'refresh', 
+      'access', 
+      'user': ['id', 'email', 'username', 'avatar', 'description']
+      ]
 
   verify-token:
     link: "http://127.0.0.1:8000/api/auth/api-token/verify"
@@ -32,24 +37,31 @@ Auth:
     bearer_required: false
     description: "Проверка токена на подлинность. Если токен истек, используется метод refresh"
     body-type: "raw/json"
-    required_fields: ['token']
+    required_fields: ['token'] # речь о access-токене
+    return_values: "code" # речь о кодах ответа.
 
   refresh-token:
+    # ПРИМЕЧАНИЕ: не тестировано
     link: "http://127.0.0.1:8000/api/auth/api-token/refresh"
     type: "POST"
     bearer_required: false
     description: "Выдает новый токен пользователю, если предыдущий истек. Восстановление происходит по refresh-токену"
     body-type: "raw/json"
     required_fields: ['refresh']
+    return_values: "Ошибка об истекшем refresh-токене и требовании перезайти в систему ИЛИ новый access-токен"
 
 User:
   create:
+    # ПРИМЕЧАНИЕ: в сериализаторе вложено также добавление
+    # аватара и описания. При создании пользователя не 
+    # давать эту возможность в целях безопасности 
     link: "http://127.0.0.1:8000/api/user/create"
     type: "POST"
     bearer_required: false
-    description: "Создание нового пользователя. При создании пользователя НЕ РЕКОМЕНДУЕТСЯ ему давать сразу возможность ставить аватар/описание"
-    body-type: "form-data"
+    description: "Создание нового пользователя."
+    body-type: "raw/json"
     required_fields: ['email', 'username', 'password']
+    return_values: ['id', 'email', 'username', 'avatar', 'description']
 
   read:
     link: "http://127.0.0.1:8000/api/user/read"
@@ -58,15 +70,17 @@ User:
     description: "Получение данных о пользователе. Речь идет о самом пользователе, который это запрашивает"
     body-type: "raw/json"
     required_fields: null
+    return_values: ['id', 'email', 'username', 'avatar', 'description']
 
   update:
+    # TODO: эндпоинт для сравнения пароля при его обновлении
     link: "http://127.0.0.1:8000/api/user/update"
     type: "PATCH"
     bearer_required: true
-    description: "Обновление данных о пользователе. Могут подлежать обновлению все поля. Рекомендуется со стороны фронтенда обеспечить проверку пароля при замене данных"
+    description: "Обновление данных о пользователе. Могут подлежать обновлению все поля."
     body-type: "form-data"
-    required_fields: ['email', 'password', 'username'] 
-    additional_fields: ['description', 'avatar']
+    fields: ['email', 'username', 'password', 'avatar', 'description']
+    return_values: ['id', 'email', 'username', 'avatar', 'description']
 
   delete:
     link: "http://127.0.0.1:8000/api/user/delete/<int>"
@@ -135,6 +149,14 @@ Bot:
     description: "Обновляет бота с id в запросе пользователя, чей бот принадлежит"
     body-type: "form-data"
     fields: ['name', 'avatar', 'description', 'scenario', 'first_message', 'is_public', 'public_description']
+  search:
+    link: "http://127.0.0.1:8000/api/bot/search?query=<str>"
+    type: "GET"
+    bearer_required: false
+    description: "Поиск бота по его имени или публичному описанию."
+    body-type: null
+    fields: null # в ?query= записывается
+
 
 
 Session:

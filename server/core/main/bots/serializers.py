@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from ..models import Chatbots
 class BotSerializer(serializers.ModelSerializer):
+    bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
+    avatar_owner = serializers.CharField(source='belongs_to.avatar_url', read_only=True)
+
     class Meta:
         model = Chatbots
         fields = [
@@ -11,7 +14,9 @@ class BotSerializer(serializers.ModelSerializer):
             "first_message",
             "description", 
             "scenario",
-            "is_public"
+            "is_public",
+            "bot_owner",
+            "avatar_owner"
         ]
         extra_kwargs = {
             "name": {"required": True},
@@ -25,12 +30,14 @@ class BotSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user
         return super().create(validated_data)
-    
 
-class PublicBotSerializer(serializers.ModelSerializer):
+class PublicBotSerializerNotRegistered(serializers.ModelSerializer):
+    bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
+    avatar_owner = serializers.CharField(source='belongs_to.avatar_url', read_only=True)
+
     class Meta:
         model = Chatbots
-        fields = ['id', 'name', 'public_description', 'avatar']
+        fields = ['id', 'name', 'public_description', 'avatar', 'bot_owner', 'avatar_owner']
         
 class BotUpdateSerializer(serializers.ModelSerializer):
     class Meta:
