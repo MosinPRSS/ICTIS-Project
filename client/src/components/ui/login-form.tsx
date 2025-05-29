@@ -16,12 +16,12 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const {regFunc, wantRegFunc} = useRegister()
+  const {regFunc, wantRegFunc, theme} = useRegister()
   const [RegOrLog, setROL] = useState('log')
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-violet-50 text-black">
+      <Card className={`${theme.options.regBgColor} ${theme.options.regTextColor}`}>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Добро пожаловать!</CardTitle>
           <CardDescription>
@@ -38,7 +38,7 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="Введите почту"
-                    className="hover:bg-black hover:text-white"
+                    className={`${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`}
                     required
                   />
                 </div>
@@ -54,11 +54,11 @@ export function LoginForm({
                       </a>
                     : <></>}
                   </div>
-                  <Input id="password" type="password" className="hover:bg-black hover:text-white" placeholder="Введите пароль" required />
+                  <Input id="password" type="password" className={`${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`} placeholder="Введите пароль" required />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full outline bg-violet-100 outline-black cursor-pointer hover:bg-black hover:text-white"
+                  className={`w-full outline ${theme.options.regButtonColor} outline-black cursor-pointer ${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`}
                   onClick={() => {
                     regFunc(true)
                     wantRegFunc(false)

@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../components/ui/sidebar"
+import { useRegister } from "../context/UserIsRegisteredContext"
 
 export function NavMain({
   items,
@@ -20,6 +21,7 @@ export function NavMain({
     icon?: LucideIcon
   }[]
 }) {
+  const {theme} = useRegister()
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -27,14 +29,14 @@ export function NavMain({
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
               tooltip="Quick Create"
-              className="ml-[1px] rounded-sm hover:bg-white hover:text-black hover:border-black hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground"
+              className={`ml-[1px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
             >
               <PlusCircleIcon />
               <span>Создать</span>
             </SidebarMenuButton>
             <Button
               size="icon"
-              className="h-9 w-9 rounded-sm hover:bg-white hover:text-black cursor-pointer shrink-0 group-data-[collapsible=icon]:opacity-0"
+              className={`h-9 w-9 rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer shrink-0 group-data-[collapsible=icon]:opacity-0`}
               variant="outline"
             >
               <MailIcon className="size-5"/>

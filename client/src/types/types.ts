@@ -5,10 +5,18 @@ export type UserContextType = {
   wantToReg: boolean,
   isSettings: boolean,
   isHelp: boolean,
+  isAccount: boolean,
+  selected: string[],
+  theme: object,
+  isPalette: boolean,
   regFunc: (e: boolean) => void,
   wantRegFunc: (e: boolean) => void,
   settingsFunc: (e: boolean) => void,
-  helpFunc: (e: boolean) => void
+  helpFunc: (e: boolean) => void,
+  selectFunc: (e: string[]) => void,
+  accountFunc: (e: boolean) => void,
+  themeFunc: (e: object) => void,
+  paletteFunc: (e: boolean) => void
 };
 
 export type UserIsRegisteredContextProps = {
@@ -21,3 +29,5 @@ export type CategoryFilterProps = {
   onCategoryToggle: (category: string) => void;
   onCategoryRemove: (category: string) => void;
 };
+
+export type ThemeIcons = [string, React.RefAttributes<SVGSVGElement>]

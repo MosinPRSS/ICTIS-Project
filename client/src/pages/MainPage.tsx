@@ -7,16 +7,17 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import Help from "../components/Help"
 import Settings from "../components/Settings"
 
-//import data from "../services/data.json"
-
 export default function MainPage() {
-  const {wantToReg, isHelp, isSettings} = useRegister()
+  const {wantToReg, isHelp, isSettings, theme, paletteFunc} = useRegister()
 
+  function setPalette() {
+    paletteFunc(false)
+  }
 
   return (
-    <SidebarProvider className="text-white bg-violet-950 select-none">
+    <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
       <AppSidebar variant="inset" />
-      <SidebarInset className="bg-violet-950 relative" style={{margin: 0, padding: 0}}>
+      <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
       <SiteHeader />
         <DashBoard />
       </SidebarInset>

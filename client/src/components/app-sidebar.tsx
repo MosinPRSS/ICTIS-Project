@@ -1,13 +1,12 @@
 "use client"
 
 import * as React from "react"
+import cn from 'classnames'
 import {
   CameraIcon,
   FileCodeIcon,
   FileTextIcon,
-  HelpCircleIcon,
   LayoutDashboardIcon,
-  SettingsIcon,
   TriangleIcon,
 } from "lucide-react"
 
@@ -91,11 +90,11 @@ const data = {
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {isReg} = useRegister()
+  const {isReg, theme} = useRegister()
 
   return (
-    <Sidebar className="bg-violet-900 z-10" collapsible="icon" {...props}>
-      <SidebarHeader className="bg-violet-950 rounded-xl">
+    <Sidebar className={`${theme.options.mgColor} z-10`} collapsible="icon" {...props}>
+      <SidebarHeader className={`${theme.options.bgColor} rounded-xl`}>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -114,7 +113,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className={`bg-violet-950 rounded-xl pl-[2px] h-[60px] items-center ${!isReg ? 'hover:bg-white hover:text-black hover:border-3' : ''}`}>
+      <SidebarFooter
+        className={cn(
+          theme.options.bgColor,
+          'rounded-xl pl-[2px] h-[60px] items-center cursor-pointer',
+          {
+            [`${theme.options.hoverBgColor} ${theme.options.hoverTextColor} hover:border-3`]: !isReg
+          }
+        )}
+      >
         {isReg ? <NavUser user={data.user}/> : <NavGuest />}
       </SidebarFooter>
     </Sidebar>

@@ -23,13 +23,13 @@ export function NavSecondary({
   }[]
   collapsible?: "offcanvas" | "icon" | "none"
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const {settingsFunc, helpFunc} = useRegister()
+  const {settingsFunc, helpFunc, theme} = useRegister()
 
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu className="flex items-start">
-            <SidebarMenuItem key="settings" className="h-[39px] hover:bg-white hover:text-black rounded-sm">
+            <SidebarMenuItem key="settings" className={`h-[39px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} rounded-sm`}>
               <SidebarMenuButton
                 tooltip="Quick Create"
                 className={cn(
@@ -43,7 +43,7 @@ export function NavSecondary({
                 <span className="group-data-[collapsible=icon]:hidden+origin-left">Параметры</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem key="help" className="h-[39px] hover:bg-white hover:text-black rounded-sm">
+            <SidebarMenuItem key="help" className={`h-[39px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} rounded-sm`}>
               <SidebarMenuButton
                 tooltip="Quick Create"
                 className={cn(
