@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Bot 1",
+        "description": "бот для общения, игр, шуток и прочего",
+        "author": "author 1",
+        "chatsCount": 1,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Кухня", "Веселье", "Увлечения"
+        ]
+    },
+    {
+        "name": "Bot 2",
+        "description": "Bot 2 description",
+        "author": "author 2",
+        "chatsCount": 4,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Природа", "Животные"
+        ]
+    },
+    {
+        "name": "Bot 3",
+        "description": "Bot 3 description",
+        "author": "author 3",
+        "chatsCount": 3,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Страшилки", "Школа", "Веселье"
+        ]
+    },
+    {
+        "name": "Bot 4",
+        "description": "Bot 4 description",
+        "author": "author 3",
+        "chatsCount": 9,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Школа", "Психолог"
+        ]
+    },
+    {
+        "name": "Bot 5",
+        "description": "Bot 5 description",
+        "author": "author 4",
+        "chatsCount": 6,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Игры"
+        ]
+    },
+    {
+        "name": "Bot 6",
+        "description": "Bot 6 description",
+        "author": "author 5",
+        "chatsCount": 2,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Природа", "Путешествия", "Веселье", "Кухня", "Животные"
+        ]
+    },
+    {
+        "name": "Bot 7",
+        "description": "Bot 7 description",
+        "author": "author 6",
+        "chatsCount": 8,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "кухня"
+        ]
+    },
+    {
+        "name": "Bot 8",
+        "description": "Bot 8 description",
+        "author": "author 6",
+        "chatsCount": 5,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Страшилки", "Психолог", "Увлечения", "Игры"
+        ]
+    },
+    {
+        "name": "Bot 9",
+        "description": "Bot 9 description",
+        "author": "author 6",
+        "chatsCount": 7,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Школа", "Животные"
+        ]
+    },
+    {
+        "name": "Bot 10",
+        "description": "Bot 10 description",
+        "author": "author 6",
+        "chatsCount": 7,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Увлечения", "Страшилки"
+        ]
+    },
+    {
+        "name": "Bot 11",
+        "description": "Bot 11 description",
+        "author": "author 6",
+        "chatsCount": 7,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Природа", "Игры"
+        ]
+    },
+    {
+        "name": "Bot 12",
+        "description": "Bot 12 description",
+        "author": "author 6",
+        "chatsCount": 7,
+        "image": "/images/dashboardBackground.png",
+        "tags": [
+            "Страшилки", "Кухня"
+        ]
+    }
+]

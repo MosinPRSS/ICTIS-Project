@@ -4,21 +4,26 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-
-//import data from "../services/data.json"
+import Help from "../components/Help"
+import Settings from "../components/Settings"
 
 export default function MainPage() {
-  const {wantToReg} = useRegister()
+  const {wantToReg, isHelp, isSettings, theme, paletteFunc} = useRegister()
 
+  function setPalette() {
+    paletteFunc(false)
+  }
 
   return (
-    <SidebarProvider className="text-white bg-violet-950">
+    <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
       <AppSidebar variant="inset" />
-      <SidebarInset className="bg-violet-950 relative" style={{margin: 0, padding: 0}}>
+      <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
       <SiteHeader />
         <DashBoard />
       </SidebarInset>
       {wantToReg ? <RegLog /> : <></>}
+      {isHelp ? <Help /> : <></>}
+      {isSettings ? <Settings /> : <></>}
     </SidebarProvider>
   )
 }

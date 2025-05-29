@@ -1,13 +1,12 @@
 "use client"
 
 import * as React from "react"
+import cn from 'classnames'
 import {
   CameraIcon,
   FileCodeIcon,
   FileTextIcon,
-  HelpCircleIcon,
   LayoutDashboardIcon,
-  SettingsIcon,
   TriangleIcon,
 } from "lucide-react"
 
@@ -28,7 +27,7 @@ import NavGuest from "./nav-guest"
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "Qua11ra",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
@@ -87,26 +86,15 @@ const data = {
       ],
     },
   ],
-  navSecondary: [
-    {
-      title: "Параметры",
-      url: "#",
-      icon: SettingsIcon,
-    },
-    {
-      title: "Нужна помощь?",
-      url: "#",
-      icon: HelpCircleIcon,
-    },
-  ],
 }
 
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {isReg} = useRegister()
+  const {isReg, theme} = useRegister()
 
   return (
-    <Sidebar className="bg-violet-900 z-10" collapsible="icon" {...props}>
-      <SidebarHeader className="bg-violet-950 rounded-xl">
+    <Sidebar className={`${theme.options.mgColor} z-10`} collapsible="icon" {...props}>
+      <SidebarHeader className={`${theme.options.bgColor} rounded-xl`}>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -114,7 +102,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <div>
-                <TriangleIcon className="h-5 w-5" />
+                <TriangleIcon className="h-10 w-10 ml-[3px]" />
                 <span className="text-xl font-semibold">ARI-ai</span>
               </div>
             </SidebarMenuButton>
@@ -125,8 +113,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className="bg-violet-950 rounded-xl">
-        {isReg ? <NavUser user={data.user} /> : <NavGuest />}
+      <SidebarFooter
+        className={cn(
+          theme.options.bgColor,
+          'rounded-xl pl-[2px] h-[60px] items-center cursor-pointer',
+          {
+            [`${theme.options.hoverBgColor} ${theme.options.hoverTextColor} hover:border-3`]: !isReg
+          }
+        )}
+      >
+        {isReg ? <NavUser user={data.user}/> : <NavGuest />}
       </SidebarFooter>
     </Sidebar>
   )
