@@ -21,12 +21,11 @@ export default function Bots() {
   }
 
   useEffect(() => {
-    console.log(selected)
     if (selected.length == 0) {
       setFindBots(BotsData)
     } else {
       const find = BotsData.filter((bot) => 
-        selected.some((tag) => bot.tags.includes(tag))
+        selected.every((tag) => bot.tags.includes(tag))
       );
       setFindBots(find)
     }
