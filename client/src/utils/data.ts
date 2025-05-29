@@ -1,1 +1,0 @@
-export const Categories: string[] = [ "Anime", "Isekai", "Futanari", "Loli", "Sister", "Wore", "Kawaii", "X-Ray", "Cumshot", "Ugly Bastard", "Elf"]
