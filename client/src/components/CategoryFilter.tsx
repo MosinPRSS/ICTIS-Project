@@ -38,7 +38,6 @@ const CategoryFilter: React.FC<Props> = ({ categories }) => {
     const find = categories.filter((e) => e.toLowerCase().includes(newValue) || e.toUpperCase().includes(newValue) || e.includes(newValue)).filter((e) => !selected.includes(e))
     setUnselectedCategories(find)
   }
-  console.log(unselectedCategories)
   return (
           <>
             <div className="md:hidden">
