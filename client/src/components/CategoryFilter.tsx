@@ -15,6 +15,7 @@ const CategoryFilter: React.FC<Props> = ({ categories }) => {
   const onCategoryToggle = (category: string) => {
     selectFunc(prev => [...prev, category]);
     setUnselectedCategories(unselectedCategories.filter((e) => e != category))
+
   };
 
   const onCategoryRemove = (category: string) => {
@@ -63,7 +64,7 @@ const CategoryFilter: React.FC<Props> = ({ categories }) => {
                             ))}
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {unselectedCategories.length != 0 ? unselectedCategories.map((category) => (
+                            {unselectedCategories.length != 0 || selected.length == categories.length ? unselectedCategories.map((category) => (
                             <div
                                 key={category}
                                 className={`cursor-pointer border border-gray-300 px-3 py-1 rounded-full text-sm ${theme.options.hoverBgColor2} ${theme.options.textColor2} ${theme.options.regButtonColor} ${theme.options.hoverTextColor2} transition`}
