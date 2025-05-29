@@ -7,5 +7,5 @@ urlpatterns = [
     path("bot/", include(bot_urls)),
     path("auth/", include(auth_urls)),
     path("user/", include(user_urls)),
-    # path("c/") - сессии
+    path("c/", include(session_urls))
 ]

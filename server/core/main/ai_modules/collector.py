@@ -1,21 +1,24 @@
-class serialize_json:
-    prompt: str # will be prompt here (maybe in dict format)
+from ..models import *
 
-    def create_prompt(
+class data_prepare:
+    """
+    Сериализация, подготовка данных...
+    """
+    
+    def create_message(
+        self,
         character_name: str,
         character_description: str,
-        character_fst_message: str, # first message
-        character_scenario: str
+        character_fst_message: str,
+        conversation: str,
+        character_scenario: str = "is not set.",
     ) -> str:
-        pass
-    def prepare_persona(
-        persona_name: str,
-        persona_description: str 
-    ) -> str:
-        pass
-    def serialize(
-        prompt: str,
-        model: str,
-    ) -> dict:
-        pass
-        
+        if conversation == None:
+            conversation = character_fst_message
+
+        MESSAGE_PROMPT: str = f"""
+        Используй вот эти "блоки" при составлении промпта
+        {character_name}
+        {character_description}
+        {conversation}
+        """ # опционально - {character_fst_message}

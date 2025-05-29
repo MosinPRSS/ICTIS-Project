@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ["email", "username", "password", "avatar", "description"]
+        fields = ["id", "email", "username", "password", "avatar", "description"]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {
@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         if "password" in validated_data:
             instance.set_password(validated_data.pop("password"))
         
+        # замена файла аватарки, чтобы на сервере не забивалось место под них
         new_avatar = validated_data.get('avatar', None)
         if new_avatar and instance.avatar:
             if instance.avatar.name != new_avatar.name and instance.avatar.storage.exists(instance.avatar.name):
