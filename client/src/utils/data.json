@@ -1,6 +1,7 @@
 [
     {
         "name": "Bot 1",
+        "id": 1,
         "description": "бот для общения, игр, шуток и прочего",
         "author": "author 1",
         "chatsCount": 1,
@@ -11,6 +12,7 @@
     },
     {
         "name": "Bot 2",
+        "id": 2,
         "description": "Bot 2 description",
         "author": "author 2",
         "chatsCount": 4,
@@ -21,6 +23,7 @@
     },
     {
         "name": "Bot 3",
+        "id": 3,
         "description": "Bot 3 description",
         "author": "author 3",
         "chatsCount": 3,
@@ -31,6 +34,7 @@
     },
     {
         "name": "Bot 4",
+        "id": 4,
         "description": "Bot 4 description",
         "author": "author 3",
         "chatsCount": 9,
@@ -41,6 +45,7 @@
     },
     {
         "name": "Bot 5",
+        "id": 5,
         "description": "Bot 5 description",
         "author": "author 4",
         "chatsCount": 6,
@@ -51,6 +56,7 @@
     },
     {
         "name": "Bot 6",
+        "id": 6,
         "description": "Bot 6 description",
         "author": "author 5",
         "chatsCount": 2,
@@ -61,6 +67,7 @@
     },
     {
         "name": "Bot 7",
+        "id": 7,
         "description": "Bot 7 description",
         "author": "author 6",
         "chatsCount": 8,
@@ -71,6 +78,7 @@
     },
     {
         "name": "Bot 8",
+        "id": 8,
         "description": "Bot 8 description",
         "author": "author 6",
         "chatsCount": 5,
@@ -81,6 +89,7 @@
     },
     {
         "name": "Bot 9",
+        "id": 9,
         "description": "Bot 9 description",
         "author": "author 6",
         "chatsCount": 7,
@@ -91,6 +100,7 @@
     },
     {
         "name": "Bot 10",
+        "id": 10,
         "description": "Bot 10 description",
         "author": "author 6",
         "chatsCount": 7,
@@ -101,6 +111,7 @@
     },
     {
         "name": "Bot 11",
+        "id": 11,
         "description": "Bot 11 description",
         "author": "author 6",
         "chatsCount": 7,
@@ -111,6 +122,7 @@
     },
     {
         "name": "Bot 12",
+        "id": 12,
         "description": "Bot 12 description",
         "author": "author 6",
         "chatsCount": 7,

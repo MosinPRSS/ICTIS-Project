@@ -1,14 +1,25 @@
 import { Route, Routes } from "react-router-dom";
-import Chat from "./pages/Chat";
+import ChatsPage from "./pages/ChatsPage";
 import MainPage from "./pages/MainPage";
-import { UserIsRegisteredContext } from "./context/UserIsRegisteredContext";
+import { useRegister, UserIsRegisteredContext } from "./context/UserIsRegisteredContext";
+import { useEffect } from "react";
+import CreateBotPage from "./pages/CreateBotPage";
+import UserBotsPage from "./pages/UserBotsPage";
+import HelpPage from "./pages/HelpPage";
 
 export default function App() {
+  const {theme} = useRegister()
+  useEffect(() => {
+    document.body.className = theme.options.bgColor
+  }, [theme])
   return (
     <UserIsRegisteredContext>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chats" element={<ChatsPage />} />
+        <Route path="/create" element={<CreateBotPage />} />
+        <Route path="/userbots" element={<UserBotsPage />} />
+        <Route path='/help' element={<HelpPage />} />
       </Routes>
     </UserIsRegisteredContext>
   )

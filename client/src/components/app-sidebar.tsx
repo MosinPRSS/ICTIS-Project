@@ -24,76 +24,15 @@ import {
 } from "../components/ui/sidebar"
 import { useRegister } from "../context/UserIsRegisteredContext"
 import NavGuest from "./nav-guest"
+import {user} from "../utils/data"
 
-const data = {
-  user: {
-    name: "Qua11ra",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Главная страница",
-      url: "#",
-      icon: LayoutDashboardIcon,
-    }
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: CameraIcon,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: FileTextIcon,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: FileCodeIcon,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-}
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const {isReg, theme} = useRegister()
 
   return (
-    <Sidebar className={`${theme.options.mgColor} z-10`} collapsible="icon" {...props}>
+    <Sidebar className={`${theme.options.mgColor} border-r z-10`} collapsible="icon" {...props}>
       <SidebarHeader className={`${theme.options.bgColor} rounded-xl`}>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -110,19 +49,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain />
+        <NavSecondary className="mt-auto" />
       </SidebarContent>
       <SidebarFooter
         className={cn(
           theme.options.bgColor,
           'rounded-xl pl-[2px] h-[60px] items-center cursor-pointer',
           {
-            [`${theme.options.hoverBgColor} ${theme.options.hoverTextColor} hover:border-3`]: !isReg
+            [`${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`]: !isReg
           }
         )}
       >
-        {isReg ? <NavUser user={data.user}/> : <NavGuest />}
+        {isReg ? <NavUser user={user}/> : <NavGuest />}
       </SidebarFooter>
     </Sidebar>
   )

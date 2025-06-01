@@ -1,1 +1,6 @@
 export const Categories: string[] = [ "Кухня", "Природа", "Увлечения", "Страшилки", "Психолог", "Школа", "Игры", "Путешествия", "Веселье", "Животные"]
+export const user = {
+    name: "Qua11ra",
+    email: "m@example.com",
+    avatar: "../../public/images/dashboardBackground.png",
+}

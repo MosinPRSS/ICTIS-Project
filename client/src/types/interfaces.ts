@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface HeaderProps {
   children?: React.ReactNode;
   className?: string;
@@ -9,4 +11,9 @@ export interface bot {
     image: string
     chatsCount: number
     tags: string[]
+}
+
+export interface chatProps {
+  chat: number,
+  chatFunc: Dispatch<SetStateAction<number>>
 }

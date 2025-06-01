@@ -12,10 +12,9 @@ export default function NavGuest() {
     const {wantRegFunc} = useRegister()
 
     return (
-        <SidebarMenu className="h-full justify-center ">
+        <SidebarMenu className="h-full justify-center">
             <SidebarMenuItem className="h-[35px]">
                 <SidebarMenuButton
-                tooltip="Quick Create"
                 onClick={() => wantRegFunc(true)}
                 className={cn(
                     'h-9 min-h-[36px] max-h-[36px]',
