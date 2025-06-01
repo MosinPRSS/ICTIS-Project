@@ -6,11 +6,19 @@ export interface HeaderProps {
 }
 export interface bot {
     name: string
+    id: string
     description: string
     author: string
     image: string
     chatsCount: number
     tags: string[]
+}
+
+export interface bot {
+  promt: string,
+  hello: string,
+  scenario: string,
+  isPublic: boolean,
 }
 
 export interface chatProps {

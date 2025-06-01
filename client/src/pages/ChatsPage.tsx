@@ -1,7 +1,6 @@
 import { AppSidebar } from "../components/app-sidebar"
 import Chat from "../components/Chat"
 import ChatsList from "../components/ChatsList"
-import Help from "../components/Help"
 import RegLog from "../components/RegLog"
 import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"

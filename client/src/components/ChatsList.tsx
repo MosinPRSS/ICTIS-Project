@@ -16,7 +16,7 @@ export default function ChatsList({chatFunc}: chatProps) {
     return (
         <div className={`border-r border-b rounded-sm ${!collapsed && 'w-[20%]'} ${theme.options.bgColor3} flex flex-col max-h-screen`}>
             <div className={`py-3 px-4 max-h-[56px] flex flex-row ${!collapsed ? 'justify-between' : 'justify-center'}`}>
-                {!collapsed && <p className="text-2xl">Чаты</p>}
+                {!collapsed && <p className="text-2xl ml-2">Чаты</p>}
                 <Button onClick={() => setCollapsed((collapsed) => !collapsed)} className={`border right-0 rounded-full p-0 ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer`}>
                     <MenuIcon className="rounded-full"/>
                 </Button>

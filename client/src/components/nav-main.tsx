@@ -14,7 +14,7 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import { Link } from "react-router-dom"
 
 export function NavMain() {
-  const {theme, page, isReg, wantRegFunc, pageFunc} = useRegister()
+  const {theme, page, isReg, wantRegFunc, pageFunc, chatFunc} = useRegister()
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -26,13 +26,13 @@ export function NavMain() {
                 className={`ml-[1px] min-h-[36px] cursor-not-allowed rounded-sm border-1 min-w-8 h-[36px] bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
               >
                 <PlusCircleIcon />
-                <span>Создать</span>
+                <span>Создать бота</span>
               </SidebarMenuButton> : <Link to='/create' className="w-full">
               <SidebarMenuButton
                 className={`ml-[1px] min-h-[36px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
               >
                 <PlusCircleIcon />
-                <span>Создать</span>
+                <span>Создать бота</span>
               </SidebarMenuButton>
             </Link> :
             <SidebarMenuButton
@@ -40,34 +40,36 @@ export function NavMain() {
               onClick={() => {pageFunc('/create'); wantRegFunc(true)}}
             >
                 <PlusCircleIcon />
-                <span>Создать</span>
+                <span>Создать бота</span>
               </SidebarMenuButton>}
-            {isReg ?
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <SidebarMenu>
+          <SidebarMenuItem>
+              {isReg ?
               page == '/chats' ?
-                <Button
-                  size="icon"
-                  className={`h-9 w-9 rounded-sm cursor-not-allowed shrink-0 group-data-[collapsible=icon]:opacity-0`}
+                <SidebarMenuButton
+                  className={`ml-[1px] min-h-[36px] cursor-not-allowed rounded-sm border-1 min-w-8 h-[36px] bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
                   variant='outline'
                 >
                   <MailIcon className="size-5"/>
-                </Button> : <Link to='/chats'>
-                <Button
-                  size="icon"
-                  className={`h-9 w-9 rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer shrink-0 group-data-[collapsible=icon]:opacity-0`}
+                  <span>Чаты</span>
+                </SidebarMenuButton> : <Link to='/chats'>
+                <SidebarMenuButton
+                  className={`ml-[1px] min-h-[36px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
+                  onClick={() => chatFunc(0)}
                 >
                   <MailIcon className="size-5"/>
-                </Button>
+                  <span>Чаты</span>
+                </SidebarMenuButton>
               </Link> :
-              <>
-                <Button
-                  size="icon"
-                  className={`h-9 w-9 rounded-sm shrink-0 group-data-[collapsible=icon]:opacity-0 ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer`}
+                <SidebarMenuButton
+                  className={`ml-[1px] min-h-[36px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
                   onClick={() => {pageFunc('/chats'); wantRegFunc(true)}}
                 >
                   <MailIcon className="size-5"/>
-                </Button>
-              </>
-            }
+                  <span>Чаты</span>
+                </SidebarMenuButton>}
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu className={`${page == '/' ? 'outline' : 'cursor-pointer'} rounded-md`}>

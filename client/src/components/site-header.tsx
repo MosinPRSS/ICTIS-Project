@@ -1,4 +1,4 @@
-import { DonutIcon, InspectionPanelIcon, Palette, TreeDeciduousIcon } from "lucide-react"
+import { DonutIcon, InspectionPanelIcon, TreeDeciduousIcon } from "lucide-react"
 import { Separator } from "../components/ui/separator"
 import { SidebarTrigger } from "../components/ui/sidebar"
 import { Button } from "./ui/button"
@@ -14,6 +14,11 @@ export function SiteHeader() {
   const [isPalette, setPalette] = useState(false)
   const paletteRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    document.body.className = theme.options.bgColor
+    console.log(theme)
+  }, [theme])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

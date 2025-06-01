@@ -24,20 +24,20 @@ export function NavSecondary({
   }[]
   collapsible?: "offcanvas" | "icon" | "none"
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const {helpFunc, theme, isReg, pageFunc, page, wantRegFunc} = useRegister()
+  const {theme, isReg, pageFunc, page, wantRegFunc} = useRegister()
 
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu className="flex items-start">
-            <SidebarMenuItem key="settings" className={`h-[39px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} rounded-sm`}>
+            <SidebarMenuItem key="settings" className={`h-[39px] rounded-sm ${page != '/userbots' && `${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}`}>
               {isReg ?
               
                 page == '/userbots' ?
                 <SidebarMenuButton
                   variant='outline'
                   className={cn(
-                    'h-9 min-h-[36px] max-h-[36px] outline',
+                    'h-9 min-h-[36px] max-h-[36px] border',
                     'ml-[1px] min-w-8 h-9 flex items-center cursor-not-allowed gap-2 px-2 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground',
                     'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9 outline'
                   )}
@@ -48,7 +48,7 @@ export function NavSecondary({
                 <Link to='/userbots'>
                 <SidebarMenuButton
                   className={cn(
-                    'h-9 min-h-[36px] max-h-[36px]',
+                    `h-9 min-h-[36px] max-h-[36px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`,
                     `ml-[1px] min-w-8 cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} h-9 flex items-center gap-2 px-2 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground`,
                     'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9',
                   )}
@@ -69,18 +69,30 @@ export function NavSecondary({
                   <span className="group-data-[collapsible=icon]:hidden+origin-left">Ваши боты</span>
                 </SidebarMenuButton>}
             </SidebarMenuItem>
-            <SidebarMenuItem key="help" className={`h-[39px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} rounded-sm`}>
-              <SidebarMenuButton
-                className={cn(
-                  'h-9 min-h-[36px] max-h-[36px]',
-                  'ml-[1px] min-w-8 h-9 flex items-center gap-2 px-2 cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground',
-                  'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9'
-                )}
-                onClick={() => helpFunc(true)}
-              >
-                <HelpCircleIcon className="w-5 h-5 shrink-0" />
-                <span className="group-data-[collapsible=icon]:hidden+origin-left">Нужна помощь?</span>
-              </SidebarMenuButton>
+            <SidebarMenuItem key="help" className={`h-[39px] rounded-sm ${page != '/help' && `${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}`}>
+              {page == '/help' ?
+                <SidebarMenuButton
+                  className={cn(
+                    'h-9 min-h-[36px] max-h-[36px] border',
+                    'ml-[1px] min-w-8 h-9 flex items-center gap-2 px-2 cursor-not-allowed bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground',
+                    'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9'
+                  )}
+                >
+                  <HelpCircleIcon className="w-5 h-5 shrink-0" />
+                  <span className="group-data-[collapsible=icon]:hidden+origin-left">Нужна помощь?</span>
+                </SidebarMenuButton> :
+                <Link to='/help'>
+                  <SidebarMenuButton
+                  className={cn(
+                    'h-9 min-h-[36px] max-h-[36px]',
+                    'ml-[1px] min-w-8 h-9 flex items-center gap-2 px-2 cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground',
+                    'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9'
+                  )}
+                >
+                  <HelpCircleIcon className="w-5 h-5 shrink-0" />
+                  <span className="group-data-[collapsible=icon]:hidden+origin-left">Нужна помощь?</span>
+                </SidebarMenuButton>
+                </Link>}
             </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>

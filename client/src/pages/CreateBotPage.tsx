@@ -18,7 +18,7 @@ export default function CreateBotPage() {
         <AppSidebar variant="inset" />
         <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
         <SiteHeader />
-            {isReg &&<CreateBotI />}
+            {isReg && <CreateBotI />}
         </SidebarInset>
         {wantToReg && <RegLog />}
         {isAccount && <Account />}

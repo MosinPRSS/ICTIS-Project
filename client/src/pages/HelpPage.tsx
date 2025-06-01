@@ -4,6 +4,7 @@ import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
 import Account from "../components/Account"
+import Help from "../components/Help"
 
 export default function HelpPage() {
   const {wantToReg, theme, paletteFunc, isAccount} = useRegister()
@@ -17,7 +18,7 @@ export default function HelpPage() {
       <AppSidebar variant="inset" />
       <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
       <SiteHeader />
-        
+        <Help />
       </SidebarInset>
       {wantToReg && <RegLog />}
       {isAccount && <Account />}
