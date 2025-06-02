@@ -1,12 +1,12 @@
 import { AppSidebar } from "../components/app-sidebar"
-import { DashBoard } from "../components/DashBoard"
 import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
 import Account from "../components/Account"
+import UserBotsList from "../components/UserBotsList"
 
-export default function MainPage() {
+export default function UserBotsPage() {
   const {wantToReg, theme, paletteFunc, isAccount} = useRegister()
 
   function setPalette() {
@@ -16,9 +16,9 @@ export default function MainPage() {
   return (
     <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
       <AppSidebar variant="inset" />
-      <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
+      <SidebarInset className={`${theme.options.bgColor} relative flex flex-col`} style={{margin: 0, padding: 0}}>
       <SiteHeader />
-        <DashBoard />
+        <UserBotsList />
       </SidebarInset>
       {wantToReg && <RegLog />}
       {isAccount && <Account />}

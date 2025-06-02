@@ -1,4 +1,4 @@
-import { DonutIcon, InspectionPanelIcon, Palette, TreeDeciduousIcon } from "lucide-react"
+import { DonutIcon, InspectionPanelIcon, TreeDeciduousIcon } from "lucide-react"
 import { Separator } from "../components/ui/separator"
 import { SidebarTrigger } from "../components/ui/sidebar"
 import { Button } from "./ui/button"
@@ -14,6 +14,11 @@ export function SiteHeader() {
   const [isPalette, setPalette] = useState(false)
   const paletteRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    document.body.className = theme.options.bgColor
+    console.log(theme)
+  }, [theme])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -56,10 +61,6 @@ export function SiteHeader() {
     }
   }
 
-  function switchPalette() {
-    paletteFunc(true)
-  }
-
   return (
     <header className={`fixed z-10 group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 w-full flex h-12 shrink-0 items-center gap-2 h-s border-b transition-[width,height] ease-linear bg-cover ${theme.options.mgColor}`}>
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -72,7 +73,7 @@ export function SiteHeader() {
           {getIcon(theme.theme)}
         </Button>
         {isPalette ? 
-          <div className={`absolute p-2 space-y-2 w-26 justify-center top-[50px] right-70 ${theme.options.bgColor2} ${theme.options.textColor2} rounded-sm`}
+          <div className={`fixed p-2 space-y-2 w-26 justify-center top-[50px] right-[25px] ${theme.options.bgColor2} ${theme.options.textColor2} rounded-sm`}
             ref={paletteRef}
 
           >

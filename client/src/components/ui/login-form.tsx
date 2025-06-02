@@ -11,13 +11,16 @@ import {
 } from "./card"
 import { Input } from "./input"
 import { Label } from "./label"
+import { useNavigate } from "react-router-dom"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const {regFunc, wantRegFunc, theme} = useRegister()
+  const {regFunc, wantRegFunc, theme, page} = useRegister()
   const [RegOrLog, setROL] = useState('log')
+
+  const navigate = useNavigate()
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -62,6 +65,8 @@ export function LoginForm({
                   onClick={() => {
                     regFunc(true)
                     wantRegFunc(false)
+                    localStorage.setItem('isReg', true)
+                    navigate(page)
                   }}  
                 >
                   {RegOrLog == 'log' ? 'Войти' : 'Зарегистрироваться'}
@@ -78,7 +83,7 @@ export function LoginForm({
             </div> :
             <div className="text-center text-sm">
               Есть аккаунт?{" "}
-              <Button onClick={() => setROL('log')} className="cursor-pointer underline underline-offset-4">
+              <Button onClick={() => {setROL('log')}} className="cursor-pointer underline underline-offset-4">
                 Вход
               </Button>
             </div> }

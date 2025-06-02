@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { SmileIcon, X } from "lucide-react";
+import { FrownIcon, X } from "lucide-react";
 import { useRegister } from "../context/UserIsRegisteredContext";
 
 interface Props {
@@ -41,8 +41,6 @@ const CategoryFilter: React.FC<Props> = ({ categories }) => {
   }
   return (
           <>
-            <div className="md:hidden">
-            </div>
             <div className="hidden w-[230px] gap-1 p-6 md:flex">
                 <div className="flex flex-col space-y-4 mb-4">
                     <h2 className="text-xl font-bold tracking-tight">Категории</h2>
@@ -74,7 +72,7 @@ const CategoryFilter: React.FC<Props> = ({ categories }) => {
                             </div>
                             )) : <div>
                               <p>Ничего не найдено</p>
-                              <SmileIcon />
+                              <FrownIcon />
                             </div>}
                         </div>
                     </div>
