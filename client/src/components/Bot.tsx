@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from "react"
 import { useRegister } from "../context/UserIsRegisteredContext"
 import { bot } from "../types/interfaces"
 import { autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating } from "@floating-ui/react"
+import { useNavigate } from "react-router-dom"
 
 
-export default function Bot({name, description, author, image, chatsCount, tags}: bot) {
-    const {isReg, wantRegFunc, theme} = useRegister()
+export default function Bot({name, id, description, author, image, chatsCount, tags}: bot) {
+    const {isReg, wantRegFunc, theme, pageFunc, chatFunc} = useRegister()
     const [desc, setDescription] = useState(false)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const { refs, floatingStyles, update } = useFloating({
@@ -36,6 +37,8 @@ export default function Bot({name, description, author, image, chatsCount, tags}
     whileElementsMounted: autoUpdate,
     });
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (!refs.reference.current || !refs.floating.current) return;
 
@@ -55,7 +58,12 @@ export default function Bot({name, description, author, image, chatsCount, tags}
     
     function regCheck() {
         if (!isReg) {
+            pageFunc('/chats')
             wantRegFunc(true)
+            chatFunc(id)
+        } else {
+            chatFunc(id)
+            navigate('/chats')
         }
     }
 

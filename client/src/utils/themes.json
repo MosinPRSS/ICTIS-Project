@@ -4,6 +4,7 @@
         "options": {
             "bgColor": "bg-violet-950",
             "bgColor2": "bg-violet-50",
+            "bgColor3": "bg-violet-900",
             "textColor": "text-white",
             "textColor2": "text-black",
             "mgColor": "bg-violet-900",
@@ -24,6 +25,7 @@
         "options": {
             "bgColor": "bg-green-950",
             "bgColor2": "bg-green-50",
+            "bgColor3": "bg-green-900",
             "textColor": "text-white",
             "textColor2": "text-black",
             "mgColor": "bg-green-900",
@@ -44,6 +46,7 @@
         "options": {
             "bgColor": "bg-gray-950",
             "bgColor2": "bg-gray-50",
+            "bgColor3": "bg-gray-900",
             "textColor": "text-white",
             "textColor2": "text-black",
             "mgColor": "bg-gray-900",

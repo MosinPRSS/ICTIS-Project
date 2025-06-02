@@ -1,35 +1,38 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { UserContextType, UserIsRegisteredContextProps } from "../types/types";
 import themes from "../utils/themes.json"
+import { useLocation } from "react-router-dom";
 
 export const UserContext = createContext<UserContextType>({
     isReg: false,
     wantToReg: false,
-    isSettings: false,
-    isHelp: false,
     isAccount: false,
     selected: [],
     theme: themes[0],
     isPalette: false,
+    page: '/',
+    chat: 0,
     regFunc: (e: boolean) => {},
     wantRegFunc: (e: boolean) => {},
-    settingsFunc: (e: boolean) => {},
-    helpFunc: (e: boolean) => {},
     selectFunc: (e: string[]) => {},
     accountFunc: (e: boolean) => {},
     themeFunc: (e: object) => {},
-    paletteFunc: (e: boolean) => {}
+    paletteFunc: (e: boolean) => {},
+    pageFunc: (e: string) => {},
+    chatFunc: (e: number) => {}
 })
 
 export function UserIsRegisteredContext({children}: UserIsRegisteredContextProps) {
     const [isReg, setReg] = useState(false)
     const [wantToReg, setUserWantToLog] = useState(false)
-    const [isSettings, setSettings] = useState(false)
     const [isPalette, setPalette] = useState(false)
-    const [isHelp, setHelp] = useState(false)
     const [isAccount, setAccount] = useState(false)
     const [selected, setSelected] = useState<string[]>([]);
     const [theme, setTheme] = useState<object>(themes[0])
+    const [page, setPage] = useState(useLocation().pathname)
+    const [chat, setChat] = useState(0)
+    const location = useLocation()
+    const reg = localStorage.getItem('isReg') == 'true' ? true : false
 
     function regFunc(e: boolean): void {
         setReg(e)
@@ -37,14 +40,6 @@ export function UserIsRegisteredContext({children}: UserIsRegisteredContextProps
 
     function wantRegFunc(e: boolean) {
         setUserWantToLog(e)
-    }
-
-    function settingsFunc(e: boolean) {
-        setSettings(e)
-    }
-
-    function helpFunc(e: boolean) {
-        setHelp(e)
     }
 
     function selectFunc(e: string[]) {
@@ -63,19 +58,30 @@ export function UserIsRegisteredContext({children}: UserIsRegisteredContextProps
         setPalette(e)
     }
 
+    function pageFunc(e: string) {
+        setPage(e)
+    }
+
+    function chatFunc(e: number) {
+        setChat(e)
+    }
+
     useEffect(() => {
         function LogLoad() {
-            setReg(false)
+            setReg(reg)
             setUserWantToLog(false)
-            setSettings(false)
-            setHelp(false)
             setTheme(themes[0])
             setPalette(false)
+            setPage(location.pathname)
         };
         LogLoad()
     }, [])
 
-    return <UserContext.Provider value={{theme, themeFunc, isPalette, paletteFunc, isReg, regFunc, wantToReg, wantRegFunc, isSettings, settingsFunc, isHelp, helpFunc, isAccount, accountFunc, selected, selectFunc}}>{children}</UserContext.Provider>
+    useEffect(() => {
+        setPage(location.pathname)
+    }, [location.pathname])
+
+    return <UserContext.Provider value={{page, pageFunc, chat, chatFunc, theme, themeFunc, isPalette, paletteFunc, isReg, regFunc, wantToReg, wantRegFunc, isAccount, accountFunc, selected, selectFunc}}>{children}</UserContext.Provider>
 }
 
 export function useRegister() {
