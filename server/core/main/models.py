@@ -54,13 +54,13 @@ class Chatbots(models.Model):
 
     rate = models.IntegerField(default=0)
     is_public = models.BooleanField(default=False)
-    hide_info = models.BooleanField(default=False)
+    hide_info = models.BooleanField(default=False) # TODO
     public_description = models.TextField() # no generation
 
 class Personas(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    avatar = models.ImageField(upload_to="img/personas/")
+    avatar = models.ImageField(upload_to="img/personas/", default="Default_Avatar.svg")
     description = models.TextField(max_length=8192)
 
 # rework 

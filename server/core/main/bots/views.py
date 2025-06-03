@@ -26,7 +26,7 @@ class UpdateBot(generics.UpdateAPIView):
         try:
             return self.get_queryset().get(id=bot_id)
         except Chatbots.DoesNotExist:
-            raise NotFound("This bot isnot yours.")
+            raise NotFound("This bot isnt yours.")
         
 class GetBot(generics.RetrieveAPIView):
     serializer_class = BotSerializer
@@ -40,7 +40,7 @@ class GetBot(generics.RetrieveAPIView):
         try:
             return self.get_queryset().get(id=bot_id)
         except Chatbots.DoesNotExist:
-            raise NotFound("Такого бота у Вас нет.")
+            raise NotFound("This bot isnt yours.")
 
 class ListPublicBots(generics.ListCreateAPIView): 
     serializer_class = BotSerializer
