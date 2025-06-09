@@ -1,10 +1,10 @@
 #################################################################
-#                !!! Актуально на 25.05.2025 !!!                #                                 
+#                !!! Актуально на 06.06.2025 !!!                #                                 
 # - Некоторые пояснения:                                        #
 #      bearer_required - требуется токен.                       # 
 #      Подается серверу в виде "Authorization: Bearer <token>"  #
 #                                                               #
-#      если в body-type указан "raw/json", то                   #
+#      если в body-type указан "content-type/json", то          #
 #      также может быть применен и form-data                    #
 #      однако к запросам, где используются файлы,               #
 #      необходимо использование ТОЛЬКО form-data                #
@@ -14,6 +14,11 @@
 #      неправильного использования, но для облегчения           #
 #      нагрузки сервера желательно и от фронтенда сделать       #
 #      обработчики тех или иных вещей перед отправкой серверу   #
+# - Фиксы (на 06.06.2025):                                      #
+#      Изменено с content-type/json на content-type/json для большей     #
+#      ясности                                                  #    
+#                                                               #
+#                                                               #
 #################################################################
 
 Auth:
@@ -23,7 +28,7 @@ Auth:
     bearer_required: false
     description: "Получение токена для входа в сервис"
     additional_description: "При получении токенов, необходимо refresh-токен хранить в более безопасном хранилище браузера"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: ['email', 'password']
     return_values: [
       'refresh', 
@@ -36,7 +41,7 @@ Auth:
     type: "POST"
     bearer_required: false
     description: "Проверка токена на подлинность. Если токен истек, используется метод refresh"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: ['token'] # речь о access-токене
     return_values: "code" # речь о кодах ответа.
 
@@ -46,7 +51,7 @@ Auth:
     type: "POST"
     bearer_required: false
     description: "Выдает новый токен пользователю, если предыдущий истек. Восстановление происходит по refresh-токену"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: ['refresh']
     return_values: "Ошибка об истекшем refresh-токене и требовании перезайти в систему ИЛИ новый access-токен"
 
@@ -59,7 +64,7 @@ User:
     type: "POST"
     bearer_required: false
     description: "Создание нового пользователя."
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: ['email', 'username', 'password']
     return_values: ['id', 'email', 'username', 'avatar', 'description']
 
@@ -68,7 +73,7 @@ User:
     type: "GET"
     bearer_required: true
     description: "Получение данных о пользователе. Речь идет о самом пользователе, который это запрашивает"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: null
     return_values: ['id', 'email', 'username', 'avatar', 'description']
 
@@ -88,7 +93,7 @@ User:
     bearer_required: true
     description: "Удаление аккаунта пользователя. Вместе с этим уничтожаются его токены из браузерного хранилища и пользователь выходит из системы навсегда"
     add_description: "Для успешного удаления потребуется сделать /read-запрос, чтобы получить id"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: "id" # id пользователя
 Bot:
   create:
@@ -106,7 +111,7 @@ Bot:
     type: "DELETE"
     bearer_required: true
     description: "Удаляет бота пользователя. Есть защита от удаления чужих ботов"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: "id"
 
   read:
@@ -114,7 +119,7 @@ Bot:
     type: "GET"
     bearer_required: true
     description: "Получение информации о боте, принадлежащему пользователю, который это запрашивает"
-    body-type: "raw/json"
+    body-type: "content-type/json"
     required_fields: "id"
 
   list:
@@ -123,7 +128,7 @@ Bot:
       type: "GET"
       bearer_required: true
       description: "Получение списка ботов, доступных публично"
-      body-type: "raw/json"
+      body-type: "content-type/json"
       required_fields: null
 
     public/non-registered:
@@ -131,7 +136,7 @@ Bot:
       type: "GET"
       bearer_required: false
       description: "Получение списка ботов, доступных публично. ТОЛЬКО ДЛЯ НЕЗАРЕГИСТРИРОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ ДЛЯ ОЗНАКОМЛЕНИЯ"
-      body-type: "raw/json"
+      body-type: "content-type/json"
       required_fields: null
 
     user:
@@ -139,7 +144,7 @@ Bot:
       type: "GET"
       bearer_required: true
       description: "Получение списка ботов пользователя, который это запрашивает"
-      body-type: "raw/json"
+      body-type: "content-type/json"
       required_fields: null
 
   update:

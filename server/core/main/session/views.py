@@ -8,3 +8,6 @@ class CreateSession(generics.CreateAPIView):
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
 
+class GenerateAnswer(generics.CreateAPIView):
+    ...
+

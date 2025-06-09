@@ -1,5 +1,5 @@
 from ..models import *
-
+# OUTDATED
 class data_prepare:
     """
     Сериализация, подготовка данных...

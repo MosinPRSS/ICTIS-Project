@@ -6,9 +6,9 @@ from main.session import urls as session_urls
 from main.persona import urls as persona_urls
 
 urlpatterns = [
-    path("bot/", include(bot_urls)),
-    path("auth/", include(auth_urls)),
-    path("user/", include(user_urls)),
+    path("b/", include(bot_urls)), # bots
+    path("a/", include(auth_urls)), # auth
+    path("u/", include(user_urls)), # users
     path("c/", include(session_urls)), # chats
     path("p/", include(persona_urls))  # personas
 ]

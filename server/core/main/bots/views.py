@@ -28,8 +28,8 @@ class UpdateBot(generics.UpdateAPIView):
         except Chatbots.DoesNotExist:
             raise NotFound("This bot isnt yours.")
         
-class GetBot(generics.RetrieveAPIView):
-    serializer_class = BotSerializer
+class GetUserBot(generics.RetrieveAPIView):
+    serializer_class = ShowBotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -43,29 +43,28 @@ class GetBot(generics.RetrieveAPIView):
             raise NotFound("This bot isnt yours.")
 
 class ListPublicBots(generics.ListCreateAPIView): 
-    serializer_class = BotSerializer
+    serializer_class = ShowBotSerializer
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to')
-    
+
 class ListPublicBotsToNotRegistered(generics.ListCreateAPIView): 
-    serializer_class = PublicBotSerializerNotRegistered
+    serializer_class = ShowBotSerializer
     permission_classes = [AllowAny]
     
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to').only('id', 'name', 'public_description', 'avatar', 'belongs_to__username', 'belongs_to__avatar')
-
-        
+    
 class ListUserBots(generics.ListCreateAPIView):
-    serializer_class = BotUpdateSerializer
+    serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Chatbots.objects.filter(belongs_to=self.request.user)
     
 class SearchBots(generics.ListCreateAPIView):
-    serializer_class = BotSerializer
+    serializer_class = ShowBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -77,7 +76,7 @@ class SearchBots(generics.ListCreateAPIView):
             return f"Nothing found: {e}"
 
 class DeleteBot(generics.DestroyAPIView):
-    serializer_class = BotSerializer
+    serializer_class = ShowBotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

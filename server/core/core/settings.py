@@ -46,6 +46,7 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
+    'taggit',
     'daphne',
     'main',
     'django.contrib.admin',
@@ -57,6 +58,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  
 ]
+
+TAGGIT_TAGS_FROM_STRING = "taggit.utils.default_stringify"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

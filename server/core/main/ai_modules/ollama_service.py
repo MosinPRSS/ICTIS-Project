@@ -7,17 +7,21 @@
 
 import asyncio, aiohttp, typing, datetime
 
-API_HOST: str = "http://localhost:11434/chat/" 
+API_HOST: str = "http://localhost:11434/api/generate" 
 
 SYSTEM_PROMPT: str = """
 
 """
 
-MODEL_NAME: str = "llama3.1"
+MODEL_NAME: str = "qwen3"
+
+PAYLOAD = {
+    # there is will be prompt w/ persona
+}
 
 async def send_message():
     async with aiohttp.ClientSession() as session:
-        async with session.post(API_HOST) as response:
+        async with session.post(url=API_HOST, json=PAYLOAD) as response:
             status = response.status
             time_now = datetime.datetime.now()
             print(f"[LOG]: OLLAMA ({MODEL_NAME}) - {time_now} - STATUS: {status}")

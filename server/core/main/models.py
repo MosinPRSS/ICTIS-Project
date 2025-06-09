@@ -3,12 +3,15 @@ from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
 from django.conf import settings
 import random, string
+from typing import Optional
+from taggit.managers import TaggableManager
+
 
 # Отсюда будут браться компоненты для отправки сообщений.
 # Возможно, будем использовать и другие модели, поэтому сделаем свою реализацию взаимодействия
 # подобно ollama-lib и другим.
-# from .ai_modules.response import *
 import asyncio
+from .ai_modules.ollama_service import *
 
 class User(AbstractBaseUser):
     email = models.EmailField('email address', unique=True)
@@ -57,6 +60,8 @@ class Chatbots(models.Model):
     hide_info = models.BooleanField(default=False) # TODO
     public_description = models.TextField() # no generation
 
+    tags = TaggableManager(blank=True)
+
 class Personas(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -68,21 +73,40 @@ class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
     session_code = models.CharField(max_length=32)
+    persona = models.ForeignKey(to=Personas, on_delete=models.SET_NULL, null=True)
 
     # time working
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    messages = models.JSONField(null=True)
+    # options part
+    temperatute = models.FloatField(default=0.7)
+    tokens = models.IntegerField(default=2000)
+    # top_k = models.FloatField()
+    # top_p = models.FloatField()
     
     async def _prepare_message(
-            self, message: str, role: str = "user",
+            self, message: str, role: Optional[str] = None,
             ) -> str:
+        if role is None:
+            if self.persona and self.persona.name:
+                role = self.persona.name
+            else:
+                role = self.belongs_to.username
+
+        return f"{role}: {message}"
+    
+    async def _handle(self, message):
         """
         Пользователь отправляет сообщение...
         """
-        return f"{role}: {message}"
-    async def _handle(self, message):
         user_message = self._prepare_message(message=message)
         
         # take all messages and etc...
+
+class Messages(models.Model):
+    session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
+    content = models.TextField()
+    previous_versions = models.TextField()
+    role = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
