@@ -31,7 +31,7 @@ class ListUserPersonas(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
+        return Personas.objects.filter(belongs_to=self.request.user)
     
 class UpdatePersona(generics.UpdateAPIView):
     serializer_class = PersonaSerializer

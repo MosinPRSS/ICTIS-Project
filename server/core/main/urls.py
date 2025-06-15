@@ -11,4 +11,5 @@ urlpatterns = [
     path("u/", include(user_urls)), # users
     path("c/", include(session_urls)), # chats
     path("p/", include(persona_urls))  # personas
+    # path("s/", include(server_urls)) # server administration
 ]

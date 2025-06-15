@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
 from django.conf import settings
 import random, string
-from typing import Optional
+from typing import *
 from taggit.managers import TaggableManager
 
 
@@ -110,3 +110,8 @@ class Messages(models.Model):
     previous_versions = models.TextField()
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class Logging(models.Model):
+    type = models.TextField()
+    code = models.IntegerField()
+
