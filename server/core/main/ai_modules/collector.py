@@ -25,7 +25,7 @@ class PromptTools():
         persona_description: str
     ) -> str:
 
-        def replacer(match):
+        def replacer(match: str) -> str:
             key = match.group(1).strip().lower()
             if key == "user":
                 return persona_name
@@ -122,4 +122,3 @@ class PromptTools():
         )
 
         return result
-    

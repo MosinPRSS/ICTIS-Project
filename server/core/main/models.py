@@ -11,7 +11,6 @@ from taggit.managers import TaggableManager
 # Возможно, будем использовать и другие модели, поэтому сделаем свою реализацию взаимодействия
 # подобно ollama-lib и другим.
 import asyncio
-from .ai_modules.ollama_service import *
 
 class User(AbstractBaseUser):
     email = models.EmailField('email address', unique=True)
@@ -81,28 +80,9 @@ class AiSession(models.Model):
 
     # options part
     temperatute = models.FloatField(default=0.7)
-    tokens = models.IntegerField(default=2000)
+    tokens = models.IntegerField(default=100)
     # top_k = models.FloatField()
     # top_p = models.FloatField()
-    
-    async def _prepare_message(
-            self, message: str, role: Optional[str] = None,
-            ) -> str:
-        if role is None:
-            if self.persona and self.persona.name:
-                role = self.persona.name
-            else:
-                role = self.belongs_to.username
-
-        return f"{role}: {message}"
-    
-    async def _handle(self, message):
-        """
-        Пользователь отправляет сообщение...
-        """
-        user_message = self._prepare_message(message=message)
-        
-        # take all messages and etc...
 
 class Messages(models.Model):
     session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
@@ -111,7 +91,9 @@ class Messages(models.Model):
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-class Logging(models.Model):
-    type = models.TextField()
+class AiLogging(models.Model):
     code = models.IntegerField()
+    description = models.CharField(max_length=64, default="null")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 
