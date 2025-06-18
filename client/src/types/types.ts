@@ -3,20 +3,22 @@ import { ReactNode } from "react";
 export type UserContextType = {
   isReg: boolean,
   wantToReg: boolean,
-  isAccount: boolean,
   selected: string[],
   theme: object,
   isPalette: boolean,
   page: string,
   chat: number,
+  isColapsible: boolean,
+  userview: string,
   regFunc: (e: boolean) => void,
   wantRegFunc: (e: boolean) => void,
   selectFunc: (e: string[]) => void,
-  accountFunc: (e: boolean) => void,
   themeFunc: (e: object) => void,
   paletteFunc: (e: boolean) => void,
   pageFunc: (e: string) => void,
-  chatFunc: (e: number) => void
+  chatFunc: (e: number) => void,
+  collapseFunc: (e: boolean) => void,
+  setUserViewFunc: (e: string) => void
 };
 
 export type UserIsRegisteredContextProps = {

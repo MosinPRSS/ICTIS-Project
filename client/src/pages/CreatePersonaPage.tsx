@@ -3,11 +3,10 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import UserBotsList from "../components/UserBotsList"
-import EnhancedBotsPage from "../ai/UserBots"
+import { CreatePersonaI } from "../components/CreatePersonaI"
 
-export default function UserBotsPage() {
-  const {wantToReg, theme, paletteFunc} = useRegister()
+export default function CreatePersonaPage() {
+  const {wantToReg, isReg, theme, paletteFunc} = useRegister()
 
   function setPalette() {
     paletteFunc(false)
@@ -15,12 +14,12 @@ export default function UserBotsPage() {
 
   return (
     <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
-      <AppSidebar variant="inset" />
-      <SidebarInset className={`${theme.options.bgColor} relative flex flex-col`} style={{margin: 0, padding: 0}}>
-      <SiteHeader />
-        <EnhancedBotsPage />
-      </SidebarInset>
-      {wantToReg && <RegLog />}
+        <AppSidebar variant="inset" />
+        <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
+        <SiteHeader />
+            {isReg && <CreatePersonaI />}
+        </SidebarInset>
+        {wantToReg && <RegLog />}
     </SidebarProvider>
   )
 }

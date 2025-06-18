@@ -1,0 +1,240 @@
+[
+    {
+        "id": 1,
+        "name": "author 1",
+        "email": "user1@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 1 description",
+        "bots": [{
+            "name": "Bot 1",
+            "id": 1,
+            "description": "бот для общения, игр, шуток и прочего",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chatsCount": 1,
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Кухня", "Веселье", "Увлечения"
+            ]
+        }]
+    },
+    {
+        "id": 2,
+        "name": "author 2",
+        "email": "user2@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 2 description",
+        "bots": [
+            {
+                "name": "Bot 2",
+                "id": 2,
+                "description": "Bot 2 description",
+                "author": "author 2",
+                "promt": "bot 1 promt",
+                "hello": "bot 1 hello",
+                "scenario": "bot 1 scenario",
+                "isPublic": true,
+                "chats": ["chat1", "chat2"],
+                "image": "/images/dashboardBackground.png",
+                "tags": [
+                    "Природа", "Животные"
+                ],
+                "writeCount": 1
+            },
+            {
+                "name": "Bot 9",
+                "id": 9,
+                "description": "Bot 9 description",
+                "author": "author 6",
+                "promt": "bot 1 promt",
+                "hello": "bot 1 hello",
+                "scenario": "bot 1 scenario",
+                "isPublic": true,
+                "chats": ["chat1", "chat2", "chat3", "chat4", "chat5"],
+                "image": "/images/dashboardBackground.png",
+                "tags": [
+                    "Школа", "Животные"
+                ],
+                "writeCount": 6
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "author 3",
+        "email": "user3@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 3 description",
+        "bots": [{
+                "name": "Bot 3",
+                "id": 3,
+                "description": "Bot 3 description",
+                "author": "author 3",
+                "promt": "bot 1 promt",
+                "hello": "bot 1 hello",
+                "scenario": "bot 1 scenario",
+                "isPublic": true,
+                "chats": ["chat1"],
+                "image": "/images/dashboardBackground.png",
+                "tags": [
+                    "Страшилки", "Школа", "Веселье"
+                ],
+                "writeCount": 1
+            },
+            {
+                "name": "Bot 4",
+                "id": 4,
+                "description": "Bot 4 description",
+                "author": "author 3",
+                "promt": "bot 1 promt",
+                "hello": "bot 1 hello",
+                "scenario": "bot 1 scenario",
+                "isPublic": true,
+                "chats": ["chat1"],
+                "image": "/images/dashboardBackground.png",
+                "tags": [
+                    "Школа", "Психолог"
+                ],
+                "writeCount": 3
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "author 4",
+        "email": "user4@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 4 description",
+        "bots": [{
+            "name": "Bot 5",
+            "id": 5,
+            "description": "Bot 5 description",
+            "author": "author 4",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1", "chat2", "chat3"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Игры"
+            ],
+            "writeCount": 4
+        }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "author 5",
+        "email": "user5@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 5 description",
+        "bots": [{
+            "name": "Bot 6",
+            "id": 6,
+            "description": "Bot 6 description",
+            "author": "author 5",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1", "chat2"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Природа", "Путешествия", "Веселье", "Кухня", "Животные"
+            ],
+            "writeCount": 1
+        },
+        {
+            "name": "Bot 10",
+            "id": 10,
+            "description": "Bot 10 description",
+            "author": "author 5",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Увлечения", "Страшилки"
+            ],
+            "writeCount": 4
+        },
+        {
+            "name": "Bot 12",
+            "id": 12,
+            "description": "Bot 12 description",
+            "author": "author 5",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1", "chat2"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Страшилки", "Кухня"
+            ],
+            "writeCount": 3
+        }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "author 6",
+        "email": "user6@mail.com",
+        "avatar": "../../public/images/dashboardBackground.png",
+        "description": "user 6 description",
+        "bots": [{
+            "name": "Bot 7",
+            "id": 7,
+            "description": "Bot 7 description",
+            "author": "author 6",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1", "chat2", "chat3", "chat4"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "кухня"
+            ],
+            "writeCount": 2
+        },
+        {
+            "name": "Bot 8",
+            "id": 8,
+            "description": "Bot 8 description",
+            "author": "author 6",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Страшилки", "Психолог", "Увлечения", "Игры"
+            ],
+            "writeCount": 1
+        },
+        {
+            "name": "Bot 11",
+            "id": 11,
+            "description": "Bot 11 description",
+            "author": "author 6",
+            "promt": "bot 1 promt",
+            "hello": "bot 1 hello",
+            "scenario": "bot 1 scenario",
+            "isPublic": true,
+            "chats": ["chat1"],
+            "image": "/images/dashboardBackground.png",
+            "tags": [
+                "Природа", "Игры"
+            ],
+            "writeCount": 8
+        }
+        ]
+    }
+]

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { BotMessageSquareIcon, HelpCircleIcon, LucideIcon } from "lucide-react"
+import { BotMessageSquareIcon, HelpCircleIcon, LucideIcon, UserIcon } from "lucide-react"
 
 import {
   SidebarGroup,
@@ -24,51 +24,11 @@ export function NavSecondary({
   }[]
   collapsible?: "offcanvas" | "icon" | "none"
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const {theme, isReg, pageFunc, page, wantRegFunc} = useRegister()
-
+  const {theme, page} = useRegister()
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu className="flex items-start">
-            <SidebarMenuItem key="settings" className={`h-[39px] rounded-sm ${page != '/userbots' && `${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}`}>
-              {isReg ?
-              
-                page == '/userbots' ?
-                <SidebarMenuButton
-                  variant='outline'
-                  className={cn(
-                    'h-9 min-h-[36px] max-h-[36px] border',
-                    'ml-[1px] min-w-8 h-9 flex items-center cursor-not-allowed gap-2 px-2 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground',
-                    'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9 outline'
-                  )}
-                >
-                  <BotMessageSquareIcon className="w-5 h-5 shrink-0" />
-                  <span className="group-data-[collapsible=icon]:hidden+origin-left">Ваши боты</span>
-                </SidebarMenuButton> :
-                <Link to='/userbots'>
-                <SidebarMenuButton
-                  className={cn(
-                    `h-9 min-h-[36px] max-h-[36px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`,
-                    `ml-[1px] min-w-8 cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} h-9 flex items-center gap-2 px-2 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground`,
-                    'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9',
-                  )}
-                >
-                  <BotMessageSquareIcon className="w-5 h-5 shrink-0" />
-                  <span className="group-data-[collapsible=icon]:hidden+origin-left">Ваши боты</span>
-                </SidebarMenuButton> </Link>
-               :
-              <SidebarMenuButton
-                  className={cn(
-                    'h-9 min-h-[36px] max-h-[36px]',
-                    `ml-[1px] min-w-8 cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} h-9 flex items-center gap-2 px-2 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground`,
-                    'group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:w-9',
-                  )}
-                  onClick={() => {pageFunc('/userbots'); wantRegFunc(true)}}
-                >
-                  <BotMessageSquareIcon className="w-5 h-5 shrink-0" />
-                  <span className="group-data-[collapsible=icon]:hidden+origin-left">Ваши боты</span>
-                </SidebarMenuButton>}
-            </SidebarMenuItem>
             <SidebarMenuItem key="help" className={`h-[39px] rounded-sm ${page != '/help' && `${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}`}>
               {page == '/help' ?
                 <SidebarMenuButton

@@ -10,15 +10,16 @@ import { useEffect, useRef, useState } from "react"
 const ThemeIcon: ThemeIcons[] = [['Violet', <DonutIcon className="size-5" />], ['Green', <TreeDeciduousIcon className="size-5" />], ['Gray', <InspectionPanelIcon className="size-5" />]]
 
 export function SiteHeader() {
-  const {theme, themeFunc} = useRegister()
+  const {theme, themeFunc, collapseFunc, isColapsible} = useRegister()
   const [isPalette, setPalette] = useState(false)
   const paletteRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     document.body.className = theme.options.bgColor
-    console.log(theme)
   }, [theme])
+  useEffect(() => {
+  }, [isColapsible])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -64,10 +65,11 @@ export function SiteHeader() {
   return (
     <header className={`fixed z-10 group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 w-full flex h-12 shrink-0 items-center gap-2 h-s border-b transition-[width,height] ease-linear bg-cover ${theme.options.mgColor}`}>
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className={`-ml-1 siz cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`} />
+        <SidebarTrigger  onClick={() => collapseFunc(isColapsible => !isColapsible)} className={`-ml-1 siz cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`} />
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
+         
         />
         <Button className={`fixed right-0 mr-6 cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`} onClick={() => setPalette((isPalette) => !isPalette)} ref={buttonRef}>
           {getIcon(theme.theme)}

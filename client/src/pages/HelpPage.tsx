@@ -3,11 +3,10 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import Account from "../components/Account"
 import Help from "../components/Help"
 
 export default function HelpPage() {
-  const {wantToReg, theme, paletteFunc, isAccount} = useRegister()
+  const {wantToReg, theme, paletteFunc} = useRegister()
 
   function setPalette() {
     paletteFunc(false)
@@ -21,7 +20,6 @@ export default function HelpPage() {
         <Help />
       </SidebarInset>
       {wantToReg && <RegLog />}
-      {isAccount && <Account />}
     </SidebarProvider>
   )
 }
