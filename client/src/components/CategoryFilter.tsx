@@ -102,5 +102,4 @@ const CategoryFilter: React.FC<Props> = ({
     </div>
   );
 };
-
 export default CategoryFilter;
