@@ -3,10 +3,6 @@
 import * as React from "react"
 import cn from 'classnames'
 import {
-  CameraIcon,
-  FileCodeIcon,
-  FileTextIcon,
-  LayoutDashboardIcon,
   TriangleIcon,
 } from "lucide-react"
 
@@ -25,20 +21,22 @@ import {
 import { useRegister } from "../context/UserIsRegisteredContext"
 import NavGuest from "./nav-guest"
 import {user} from "../utils/data"
+import { useNavigate } from "react-router-dom"
 
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {isReg, theme} = useRegister()
-
+  const {isReg, theme, pageFunc, page} = useRegister()
+  const navigate = useNavigate()
   return (
     <Sidebar className={`${theme.options.mgColor} border-r z-10`} collapsible="icon" {...props}>
-      <SidebarHeader className={`${theme.options.bgColor} rounded-xl`}>
+      <SidebarHeader className={`${theme.options.bgColor} rounded-xl ${page == '/' ? '' : `${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer`} `}>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
+              onClick={() => {pageFunc('/'); navigate('/')}}
             >
               <div>
                 <TriangleIcon className="h-10 w-10 ml-[3px]" />

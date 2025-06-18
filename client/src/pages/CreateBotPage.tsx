@@ -3,11 +3,10 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import Account from "../components/Account"
 import { CreateBotI } from "../components/CreateBotI"
 
 export default function CreateBotPage() {
-  const {wantToReg, isReg, theme, paletteFunc, isAccount} = useRegister()
+  const {wantToReg, isReg, theme, paletteFunc} = useRegister()
 
   function setPalette() {
     paletteFunc(false)
@@ -21,7 +20,6 @@ export default function CreateBotPage() {
             {isReg && <CreateBotI />}
         </SidebarInset>
         {wantToReg && <RegLog />}
-        {isAccount && <Account />}
     </SidebarProvider>
   )
 }

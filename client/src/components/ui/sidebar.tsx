@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip"
+import { useRegister } from "../../context/UserIsRegisteredContext"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -164,6 +165,7 @@ function Sidebar({
   collapsible?: "offcanvas" | "icon" | "none"
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const {theme} = useRegister()
 
   if (collapsible === "none") {
     return (
@@ -187,7 +189,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-violet-950 text-white w-(--sidebar-width) p-0 [&>button]:hidden"
+          className={`${theme.options.mgColor} ${theme.options.textColor} w-(--sidebar-width) p-0 [&>button]:hidden`}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,

@@ -3,10 +3,10 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import UserBotsList from "../components/UserBotsList"
-import EnhancedBotsPage from "../ai/UserBots"
+import UserInfo from "../components/UserInfo"
+import UserProfile from "../ai/OhChat"
 
-export default function UserBotsPage() {
+export default function UserPage() {
   const {wantToReg, theme, paletteFunc} = useRegister()
 
   function setPalette() {
@@ -16,9 +16,11 @@ export default function UserBotsPage() {
   return (
     <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
       <AppSidebar variant="inset" />
-      <SidebarInset className={`${theme.options.bgColor} relative flex flex-col`} style={{margin: 0, padding: 0}}>
+      <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
       <SiteHeader />
-        <EnhancedBotsPage />
+      <div className="absolute top-[48px] left-0 right-0 bottom-0 flex flex-row">
+        <UserProfile />
+      </div>
       </SidebarInset>
       {wantToReg && <RegLog />}
     </SidebarProvider>

@@ -5,10 +5,11 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import { bot } from "../types/interfaces"
 import { autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating } from "@floating-ui/react"
 import { useNavigate } from "react-router-dom"
+import { bots } from "../ai/Chat"
 
 
 export default function Bot({name, id, description, author, image, chatsCount, tags}: bot) {
-    const {isReg, wantRegFunc, theme, pageFunc, chatFunc} = useRegister()
+    const {isReg, wantRegFunc, theme, pageFunc, chatFunc, setAuthorFunc} = useRegister()
     const [desc, setDescription] = useState(false)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const { refs, floatingStyles, update } = useFloating({
@@ -60,15 +61,70 @@ export default function Bot({name, id, description, author, image, chatsCount, t
         if (!isReg) {
             pageFunc('/chats')
             wantRegFunc(true)
-            chatFunc(id)
+            if (!bots.includes({
+                    id: id,
+                    name: name,
+                    avatar: image,
+                    author: author,
+                    description: description,
+                    tags: tags,
+                    lastMessage: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
+                    lastMessageTime: 'Сейчас',
+                    isOnline: true,
+                    messageCount: chatsCount
+                })) bots.unshift(
+                {
+                    id: id,
+                    name: name,
+                    avatar: image,
+                    author: author,
+                    description: description,
+                    tags: tags,
+                    lastMessage: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
+                    lastMessageTime: 'Сейчас',
+                    isOnline: true,
+                    messageCount: chatsCount
+                }
+            )
         } else {
-            chatFunc(id)
+            if (!bots.includes({
+                    id: id,
+                    name: name,
+                    avatar: image,
+                    author: author,
+                    description: description,
+                    tags: tags,
+                    lastMessage: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
+                    lastMessageTime: 'Сейчас',
+                    isOnline: true,
+                    messageCount: chatsCount
+                })) bots.unshift(
+                {
+                    id: id,
+                    name: name,
+                    avatar: image,
+                    author: author,
+                    description: description,
+                    tags: tags,
+                    lastMessage: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
+                    lastMessageTime: 'Сейчас',
+                    isOnline: true,
+                    messageCount: chatsCount
+                })
+            }
             navigate('/chats')
-        }
+    }
+
+    function viewUser(e) {
+        e.stopPropagation()
+        setAuthorFunc(author)
+        localStorage.setItem('viewUser', author)
+        pageFunc('/watchuserinfo')
+        navigate('/watchuserinfo')
     }
 
     return (
-        <div className="relative w-[200px] cursor-pointer" onClick={() => regCheck()}>
+        <div className="relative w-[200px] cursor-pointer">
             <div 
                 ref={refs.setReference}
                 key={name} 
@@ -76,12 +132,14 @@ export default function Bot({name, id, description, author, image, chatsCount, t
                 onMouseEnter={() => setDescription(true)}
                 onMouseLeave={() => setDescription(false)}
             >
-                <div className="w-full">
+                <div className="w-full" onClick={() => regCheck()}>
                   <div className="h-40"><img className="h-full w-full" src={image} alt={name}></img></div>
                   <div className={`flex flex-col p-3 pb-[5px] h-25 ${theme.options.bgColor2} ${theme.options.textColor2}`}>
-                    <p className="text-sm">{name}</p>
-                    <p className="text-xs break-words">{description}</p>
-                    <div className="flex mt-auto flex-row space-x-2">
+                    <div>
+                        <p className="text-sm">{name}</p>
+                        <p className="text-xs break-words">{description}</p>
+                    </div>
+                    <div className="flex mt-auto flex-row space-x-2" onClick={viewUser}>
                       <Avatar 
                       className='rounded-4xl h-5 w-5'>
                         <AvatarImage className='w-full h-full' src={image} alt={name} />
@@ -92,7 +150,7 @@ export default function Bot({name, id, description, author, image, chatsCount, t
                       </p>
                       <MessageCircle className="ml-14 w-[20px] h-[20px]"/>
                       {chatsCount}
-                      </div>
+                    </div>
                   </div>
                 </div>
                 {desc ?

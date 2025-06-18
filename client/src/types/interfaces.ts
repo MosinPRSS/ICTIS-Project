@@ -15,13 +15,28 @@ export interface bot {
 }
 
 export interface bot {
+  id: number,
+  name: string,
+  description: string,
+  author: string,
   promt: string,
   hello: string,
   scenario: string,
   isPublic: boolean,
+  chatsCount: number,
+  chats: string[],
+  image: string,
+  tags: string[],
+  writeCount: number
+
 }
 
 export interface chatProps {
   chat: number,
   chatFunc: Dispatch<SetStateAction<number>>
+}
+
+export interface collapseProps {
+    isCollapsed: boolean
+    collapseFunc: Dispatch<React.SetStateAction<boolean>>
 }

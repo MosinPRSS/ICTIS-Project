@@ -20,7 +20,6 @@ import {
 import { Button } from "./ui/button"
 import { useRegister } from "../context/UserIsRegisteredContext"
 import { cn } from "../lib/utils"
-import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function NavUser({
@@ -32,7 +31,7 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const {regFunc, theme, accountFunc} = useRegister()
+  const {regFunc, theme, pageFunc, page} = useRegister()
   const navigate = useNavigate()
 
   function redirectFunc() {
@@ -44,7 +43,8 @@ export function NavUser({
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex flex-row p-1 space-x-2 items-center">
+            <div className="flex flex-row items-center mb-10">
+              <div onClick={() => {pageFunc('/user'); navigate('/user')}} className={`flex flex-row p-1 space-x-2 items-center content-center rounded-sm mr-24 ${page == '/user' ? `cursor-not-allowed` : `${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer`}`}>
               <Avatar 
                 className={cn(
                   'flex-shrink-0', // Добавьте это
@@ -56,13 +56,14 @@ export function NavUser({
                   "hover:bg-primary/90 hover:text-primary-foreground",
                   "active:bg-primary/90 active:text-primary-foreground"
                 )}
-                onClick={() => accountFunc(true)}  
+                
               >
                 <AvatarImage className="object-cover h-full w-full" src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">{user.name}</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight flex-row" onClick={() => accountFunc(true)}>
+              <div className="grid flex-1 text-left text-sm leading-tight flex-row">
                   <span className="truncate font-medium">{user.name}</span>
+              </div>
               </div>
               <Button onClick = {() => {regFunc(false); localStorage.setItem('isReg', false); redirectFunc()}} className={`w-[10px] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} outline rounded-sm cursor-pointer group-data-[collapsible=icon]:hidden origin-left`}>
                 <LogOutIcon className="ml-auto size-5" />

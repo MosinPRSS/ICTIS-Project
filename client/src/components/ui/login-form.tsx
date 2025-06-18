@@ -35,6 +35,16 @@ export function LoginForm({
           <form>
             <div className="grid gap-6">
               <div className="grid gap-6">
+                {RegOrLog == 'reg' && <div className="grid gap-2">
+                  <Label htmlFor="email">Имя пользователя</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Придумайте себе имя"
+                    className={`${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`}
+                    required
+                  />
+                </div>}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Почта</Label>
                   <Input
@@ -48,17 +58,22 @@ export function LoginForm({
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Пароль</Label>
-                    {RegOrLog == 'log' ?
+                    {RegOrLog == 'log' &&
                       <a
                         href="#"
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
                         Забыли пароль?
-                      </a>
-                    : <></>}
+                      </a>}
                   </div>
                   <Input id="password" type="password" className={`${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`} placeholder="Введите пароль" required />
                 </div>
+                {RegOrLog == 'reg' && 
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                  </div>
+                  <Input id="password" type="password" className={`${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`} placeholder="Повторите пароль" required />
+                </div>}
                 <Button 
                   type="submit" 
                   className={`w-full outline ${theme.options.regButtonColor} outline-black cursor-pointer ${theme.options.regHoverBgColor} ${theme.options.regHoverTextColor}`}

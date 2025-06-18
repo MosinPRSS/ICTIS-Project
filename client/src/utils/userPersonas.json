@@ -1,0 +1,20 @@
+[
+    {
+        "name": "persona1",
+        "id": 1,
+        "description": "persona1 description",
+        "image": "persona1 image"
+    },
+    {
+        "name": "persona2",
+        "id": 2,
+        "description": "persona2 description",
+        "image": "persona1 image"
+    },
+    {
+        "name": "persona3",
+        "id": 3,
+        "description": "persona3 description",
+        "image": "persona1 image"
+    }
+]
