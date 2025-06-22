@@ -4,10 +4,9 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import Account from "../components/Account"
 
 export default function MainPage() {
-  const {wantToReg, theme, paletteFunc, isAccount} = useRegister()
+  const {wantToReg, theme, paletteFunc} = useRegister()
 
   function setPalette() {
     paletteFunc(false)
@@ -17,11 +16,10 @@ export default function MainPage() {
     <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>
       <AppSidebar variant="inset" />
       <SidebarInset className={`${theme.options.bgColor} relative`} style={{margin: 0, padding: 0}}>
-      <SiteHeader />
+        <SiteHeader />
         <DashBoard />
       </SidebarInset>
       {wantToReg && <RegLog />}
-      {isAccount && <Account />}
     </SidebarProvider>
   )
 }
