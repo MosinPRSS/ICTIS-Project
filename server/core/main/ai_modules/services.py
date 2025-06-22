@@ -7,6 +7,7 @@
 
 import asyncio, aiohttp, typing, datetime
 from .collector import PromptTools as pt
+from ..logging.ai_logs import AiLogs as log
 
 class Common():
     ...
@@ -43,9 +44,10 @@ class OllamaAPI():
                 ...
             )) as response:
                 status = response.status 
-                time_now = datetime.datetime.now()
-                print(f"[LOG] OLLAMA ({self.MODEL_NAME}) - {time_now} - STATUS: {status}")
+                log.create_log(status)
                 print(response)
 
+if __name__ == "__main__":
+    asyncio.run(OllamaAPI.send_message())
 
 
