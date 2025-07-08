@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ..models import *
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
+from taggit.models import Tag
 
 class BotSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
@@ -93,3 +94,18 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         extra_kwargs = {
             field: {'required': False} for field in fields 
         }
+
+
+class TagSerializer(serializers.ModelSerializer):
+    # will try to return most used tags
+    num_times = serializers.IntegerField()
+    class Meta:
+        model = Tag
+        fields = [
+            'name',
+            'num_times'
+        ]
+        extra_kwargs = {
+            'num_times': {"write_only": True}
+        }
+

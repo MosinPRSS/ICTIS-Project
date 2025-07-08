@@ -10,37 +10,76 @@ from .collector import PromptTools as pt
 from ..logging.ai_logs import AiLogs as log
 
 class Common():
-    ...
-class OllamaAPI():
-    API_HOST: str = "http://localhost:11434/api/generate" 
+    async def ollama_payload(
+            MODEL: str,
+            PROMPT: str,
+            THINK: bool,
+            **kwargs
+    ) -> dict:
+        payload: dict = {
+            "model": MODEL,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": ""
+                }
+            ],
+            "options": {},
+            "think": THINK,
+            "stream": False
+        }
+        options: dict = {}
+        character_name:        str = str()
+        character_description: str = str()
+        character_scenario:    str = str()
+        persona_name:          str = str()
+        persona_description:   str = str()
+        
+        for key, val in kwargs.items():
+            # options
+            if key == "temperature":
+                options["temperature"] = val
+            if key == "tokens":
+                options["max_predict"] = val
+            if key == "top_p":
+                options["top_p"]       = val
+            if key == "top_k":
+                options["top_k"]       = val
+            
+            # prompt preparation
+            if key == "char_name":
+                character_name         = val
+            if key == "char_desc":
+                character_description  = val
+            if key == "char_scenario":
+                character_scenario     = val
+            if key == "pers_name":
+                persona_name           = val
+            if key == "pers_desc":
+                persona_description    = val
 
+        completed_prompt: str = pt.collect_prompt(
+            PROMPT, 
+            character_name, 
+            character_description,
+            character_scenario,
+            persona_name,
+            persona_description
+        )
+        payload["options"] = options
+        payload["messages"][0]["content"] = completed_prompt
+            
+class OllamaAPI():
+    API_HOST: str = "http://localhost:11434/api/chat"
     PROMPT: str = """
     """
 
     MODEL_NAME: str = str()
 
-    async def create_payload(
-            MODEL: str,
-            PROMPT: str,
-
-            **kwargs
-    ) -> dict:
-        payload: dict = {}
-        options: dict = {}
-        new_prompt: str = pt.collect_prompt(
-            PROMPT,
-        )
-
-        for key, val in kwargs.items():
-            if key == "temperature":
-                options["temperatute"] = val
-            if key == "tokens":
-                options["max_predict"] = val
-
 
     async def send_message(self):
         async with aiohttp.ClientSession() as session:
-            async with session.post(url=self.API_HOST, json=self.create_payload(
+            async with session.post(url=self.API_HOST, json=Common.ollama_payload(
                 ...
             )) as response:
                 status = response.status 

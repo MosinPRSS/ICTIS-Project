@@ -12,6 +12,10 @@ from taggit.managers import TaggableManager
 # подобно ollama-lib и другим.
 import asyncio
 
+# class PublicDescription(models.Model)
+#   belongs_to = bot | user
+#   for users and bots
+
 class User(AbstractBaseUser):
     email = models.EmailField('email address', unique=True)
     username = models.CharField('username')
@@ -60,6 +64,7 @@ class Chatbots(models.Model):
     public_description = models.TextField() # no generation
 
     tags = TaggableManager(blank=True)
+    
 
 class Personas(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -67,7 +72,6 @@ class Personas(models.Model):
     avatar = models.ImageField(upload_to="img/personas/", default="Default_Avatar.svg")
     description = models.TextField(max_length=8192)
 
-# rework 
 class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
@@ -80,7 +84,7 @@ class AiSession(models.Model):
 
     # options part
     temperatute = models.FloatField(default=0.7)
-    tokens = models.IntegerField(default=100)
+    tokens = models.IntegerField(default=1000)
     # top_k = models.FloatField()
     # top_p = models.FloatField()
 
@@ -90,6 +94,12 @@ class Messages(models.Model):
     previous_versions = models.TextField()
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def create_message(role: str, content: str):
+        return Messages.objects.create(
+            role=role, 
+            content=content
+        )
 
 class AiLogging(models.Model):
     code = models.IntegerField()

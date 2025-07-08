@@ -1,5 +1,5 @@
 #################################################################
-#                !!! Актуально на 06.06.2025 !!!                #                                 
+#                !!! Актуально на 07.07.2025 !!!                #                                 
 # - Некоторые пояснения:                                        #
 #      bearer_required - требуется токен.                       # 
 #      Подается серверу в виде "Authorization: Bearer <token>"  #
@@ -15,15 +15,23 @@
 #      нагрузки сервера желательно и от фронтенда сделать       #
 #      обработчики тех или иных вещей перед отправкой серверу   #
 # - Фиксы (на 06.06.2025):                                      #
-#      Изменено с content-type/json на content-type/json для большей     #
+#      Изменено с content-type/json на content-type/json        #
+#      для большей                                              #
 #      ясности                                                  #    
 #                                                               #
 #                                                               #
 #################################################################
 
+# Описание "веток"
+# a/ - Аутенфикация пользователя. В основном для получения API-токена
+# u/ - Взаимодействие с пользователями 
+# b/ - Взаимодействие с ботами
+# c/ - Взаимодействие с чатами 
+# p/ - Взаимодействие с персонами
+
 Auth:
   get-token:
-    link: "http://127.0.0.1:8000/api/auth/api-token"
+    link: "http://127.0.0.1:8000/api/a/api-token"
     type: "POST"
     bearer_required: false
     description: "Получение токена для входа в сервис"
@@ -37,7 +45,7 @@ Auth:
       ]
 
   verify-token:
-    link: "http://127.0.0.1:8000/api/auth/api-token/verify"
+    link: "http://127.0.0.1:8000/api/a/api-token/verify"
     type: "POST"
     bearer_required: false
     description: "Проверка токена на подлинность. Если токен истек, используется метод refresh"
@@ -47,7 +55,7 @@ Auth:
 
   refresh-token:
     # ПРИМЕЧАНИЕ: не тестировано
-    link: "http://127.0.0.1:8000/api/auth/api-token/refresh"
+    link: "http://127.0.0.1:8000/api/a/api-token/refresh"
     type: "POST"
     bearer_required: false
     description: "Выдает новый токен пользователю, если предыдущий истек. Восстановление происходит по refresh-токену"
@@ -60,7 +68,7 @@ User:
     # ПРИМЕЧАНИЕ: в сериализаторе вложено также добавление
     # аватара и описания. При создании пользователя не 
     # давать эту возможность в целях безопасности 
-    link: "http://127.0.0.1:8000/api/user/create"
+    link: "http://127.0.0.1:8000/api/u/create"
     type: "POST"
     bearer_required: false
     description: "Создание нового пользователя."
@@ -69,7 +77,7 @@ User:
     return_values: ['id', 'email', 'username', 'avatar', 'description']
 
   read:
-    link: "http://127.0.0.1:8000/api/user/read"
+    link: "http://127.0.0.1:8000/api/u/read"
     type: "GET"
     bearer_required: true
     description: "Получение данных о пользователе. Речь идет о самом пользователе, который это запрашивает"
@@ -79,7 +87,7 @@ User:
 
   update:
     # TODO: эндпоинт для сравнения пароля при его обновлении
-    link: "http://127.0.0.1:8000/api/user/update"
+    link: "http://127.0.0.1:8000/api/u/update"
     type: "PATCH"
     bearer_required: true
     description: "Обновление данных о пользователе. Могут подлежать обновлению все поля."
@@ -88,7 +96,7 @@ User:
     return_values: ['id', 'email', 'username', 'avatar', 'description']
 
   delete:
-    link: "http://127.0.0.1:8000/api/user/delete/<int>"
+    link: "http://127.0.0.1:8000/api/u/delete/<int>"
     type: "DELETE"
     bearer_required: true
     description: "Удаление аккаунта пользователя. Вместе с этим уничтожаются его токены из браузерного хранилища и пользователь выходит из системы навсегда"
@@ -97,17 +105,19 @@ User:
     required_fields: "id" # id пользователя
 Bot:
   create:
-    link: "http://127.0.0.1:8000/api/bot/create"
+    link: "http://127.0.0.1:8000/api/b/create"
     type: "POST"
     bearer_required: true
     description: "Создает бота для пользователя, который это запрашивает"
     body-type: "form-data"
-    required_fields: ['name', 'description', 'first_message', 'is_public']
-    # is_public - булева значение
+    required_fields: ['name', 'description', 'first_message', 'is_public', 'tags']
+    # НОВОЕ: Теперь доступно добавление тегов, однако они обязательны
+    # для добавления. Добавляются в виде массива.
+    # is_public - булева значение.
     additional_fields: ['avatar', 'scenario', 'public_description']
 
   delete:
-    link: "http://127.0.0.1:8000/api/bot/delete/<int>"
+    link: "http://127.0.0.1:8000/api/b/delete/<int>"
     type: "DELETE"
     bearer_required: true
     description: "Удаляет бота пользователя. Есть защита от удаления чужих ботов"
@@ -115,16 +125,16 @@ Bot:
     required_fields: "id"
 
   read:
-    link: "http://127.0.0.1:8000/api/bot/read/<int>"
+    link: "http://127.0.0.1:8000/api/b/read/<int>"
     type: "GET"
     bearer_required: true
     description: "Получение информации о боте, принадлежащему пользователю, который это запрашивает"
     body-type: "content-type/json"
     required_fields: "id"
-
+    # НОВОЕ: Возвращают массив тегов бота.
   list:
     public:
-      link: "http://127.0.0.1:8000/api/bot/list/public"
+      link: "http://127.0.0.1:8000/api/b/list/public"
       type: "GET"
       bearer_required: true
       description: "Получение списка ботов, доступных публично"
@@ -132,7 +142,7 @@ Bot:
       required_fields: null
 
     public/non-registered:
-      link: "http://127.0.0.1:8000/api/bot/list/public/non-registered"
+      link: "http://127.0.0.1:8000/api/b/list/public/non-registered"
       type: "GET"
       bearer_required: false
       description: "Получение списка ботов, доступных публично. ТОЛЬКО ДЛЯ НЕЗАРЕГИСТРИРОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ ДЛЯ ОЗНАКОМЛЕНИЯ"
@@ -140,7 +150,7 @@ Bot:
       required_fields: null
 
     user:
-      link: "http://127.0.0.1:8000/api/bot/list/user"
+      link: "http://127.0.0.1:8000/api/b/list/user"
       type: "GET"
       bearer_required: true
       description: "Получение списка ботов пользователя, который это запрашивает"
@@ -148,21 +158,28 @@ Bot:
       required_fields: null
 
   update:
-    link: "http://127.0.0.1:8000/api/bot/update/<int>"
+    link: "http://127.0.0.1:8000/api/b/update/<int>"
     type: "PATCH"
     bearer_required: true
     description: "Обновляет бота с id в запросе пользователя, чей бот принадлежит"
     body-type: "form-data"
     fields: ['name', 'avatar', 'description', 'scenario', 'first_message', 'is_public', 'public_description']
   search:
-    link: "http://127.0.0.1:8000/api/bot/search?query=<str>"
+    link: "http://127.0.0.1:8000/api/b/search?query=<str>"
     type: "GET"
     bearer_required: false
     description: "Поиск бота по его имени или публичному описанию."
-    body-type: null
+    body-type: "content-type/json"
     fields: null # в ?query= записывается
 
-
+Persona:
+  create:
+    link: "http://127.0.0.1:8000/api/p/create"
+    type: "POST"
+    bearer_required: true
+    description: "Создание персоны пользователя."
+    body-type: "raw/json"
+    fields: ['name', '']
 
 Session:
   # wip

@@ -12,5 +12,7 @@ urlpatterns = [
     path("list/user", ListUserBots.as_view(), name="user-bots"),
     path("search", SearchBots.as_view(), name="search-by-name-desc"),
     # "update"
-    path("update/<int:pk>", UpdateBot.as_view(), name="update-bot")
+    path("update/<int:pk>", UpdateBot.as_view(), name="update-bot"),
+    # services
+    path("tags/<int:pk>", GetTopTags.as_view(), name="show-tags")
 ]

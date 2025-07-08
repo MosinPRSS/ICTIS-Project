@@ -47,9 +47,8 @@ class SessionSerializer(serializers.ModelSerializer):
             persona.name
         )
         if fst_message:
-            Messages.objects.create(
-                session=session,
-                role=f"{chatbot.name} (BOT)",
+            Messages.create_message(
+                role="assistant",
                 content=fst_message
             )
         return session

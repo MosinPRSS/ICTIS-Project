@@ -3,8 +3,9 @@ from ..models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
 from django.contrib.postgres.search import SearchVector
-from django.db.models import Q
+from django.db.models import Q, Count
 
 class CreateBot(generics.CreateAPIView):
     queryset = Chatbots.objects.all()
@@ -81,3 +82,29 @@ class DeleteBot(generics.DestroyAPIView):
 
     def get_queryset(self):
         return Chatbots.objects.filter(belongs_to=self.request.user)
+    
+
+# services
+class GetTopTags(generics.ListCreateAPIView):
+    serializer_class = TagSerializer
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            num = self.kwargs.get("pk")
+        except:
+            return Response({"error": "What the Fuck."})
+        finally: 
+            try:
+                tags = Tag.objects.annotate(
+                    num_times=Count('taggit_taggeditem_items')
+                ).filter(
+                    taggit_taggeditem_items__content_type__model='chatbots'
+                ).order_by('-num_times')[:num]
+                serializer = TagSerializer(tags, many=True)
+                return Response(serializer.data)
+            except AssertionError as e:
+                return Response({
+                    "error": f"Error has occured",
+                    "content": f"{e}"
+                    })

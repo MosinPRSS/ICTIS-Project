@@ -42,7 +42,7 @@ class PromptTools():
             else:
                 return match.group(0)
 
-        pattern = r'\{\{\s*(.*?)\s*\}\}'
+        pattern = r'\{\{\s*(.*?)\s*\}\}' # means {{name}}
         return re.sub(pattern, replacer, text, flags=re.IGNORECASE)
     
 
