@@ -30,7 +30,7 @@ class BotSerializer(TaggitSerializer, serializers.ModelSerializer):
             "first_message" : {"required": True},
             "scenario": {"required": False},
             "public_description": {"required": False},
-            "tags": {"required": False}
+            "tags": {"required": False},
         }
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user
@@ -56,7 +56,7 @@ class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
             "tags",
             "bot_owner",
             "avatar_owner",
-            "user_id"
+            "user_id",
         ]
         extra_kwargs = {
             "id": {"read_only": True},
@@ -68,7 +68,7 @@ class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
             "first_message" : {"required": True},
             "scenario": {"required": False},
             "public_description": {"required": False},
-            "tags": {"required": False}
+            "tags": {"required": False},
         }
     def create(self, validated_data):
         validated_data["belongs_to"] = self.context["request"].user
@@ -109,3 +109,13 @@ class TagSerializer(serializers.ModelSerializer):
             'num_times': {"write_only": True}
         }
 
+class SessionSerializer(serializers.ModelSerializer):
+    num_times = serializers.IntegerField()
+    class Meta:
+        model = AiSession
+        fields = [
+            "num_times"
+        ]
+        extra_kwargs = {
+            'num_times': {'write_only': True}
+        }

@@ -97,7 +97,7 @@ class Messages(models.Model):
 
     def create_message(role: str, content: str):
         return Messages.objects.create(
-            role=role, 
+            role=role,
             content=content
         )
 

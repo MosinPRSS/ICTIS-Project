@@ -11,9 +11,9 @@ from ..logging.ai_logs import AiLogs as log
 
 class Common():
     async def ollama_payload(
-            MODEL: str,
+            MODEL:  str,
             PROMPT: str,
-            THINK: bool,
+            THINK:  bool,
             **kwargs
     ) -> dict:
         payload: dict = {
@@ -41,10 +41,6 @@ class Common():
                 options["temperature"] = val
             if key == "tokens":
                 options["max_predict"] = val
-            if key == "top_p":
-                options["top_p"]       = val
-            if key == "top_k":
-                options["top_k"]       = val
             
             # prompt preparation
             if key == "char_name":
