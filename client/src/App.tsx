@@ -10,6 +10,7 @@ import UserPersonasPage from "./pages/UserPersonasPage";
 import CreatePersonaPage from "./pages/CreatePersonaPage";
 import UserViewPage from "./pages/UserViewPage";
 import NumberGuessingGame from "./ai/game";
+import BotInfoPage from "./pages/BotInfoPage";
 
 export default function App() {
 
@@ -26,6 +27,7 @@ export default function App() {
         <Route path='/userpersonas' element={<UserPersonasPage />} />
         <Route path="/createper" element={<CreatePersonaPage />} />
         <Route path="/userview" element={<UserViewPage />} />
+        <Route path="/bot" element={<BotInfoPage />} />
       </Routes>
     </UserIsRegisteredContext>
   )

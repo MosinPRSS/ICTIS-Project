@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { BotMessageSquareIcon, HelpCircleIcon, LucideIcon, UserIcon } from "lucide-react"
+import { HelpCircleIcon, LucideIcon } from "lucide-react"
 
 import {
   SidebarGroup,
@@ -15,9 +15,10 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import { Link } from "react-router-dom"
 
 export function NavSecondary({
+  items,
   ...props
 }: {
-  items: {
+  items?: {
     title: string
     is: boolean
     icon: LucideIcon

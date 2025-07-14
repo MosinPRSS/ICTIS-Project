@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import { Edit2, Trash2, UserPlus, Users } from 'lucide-react';
 import { useRegister } from '../context/UserIsRegisteredContext';
 import { useNavigate } from 'react-router-dom';
-
-interface Subscription {
-  id: string;
-  username: string;
-  email: string;
-  avatar: string;
-  subscribedAt: string;
-}
+import { Subscription } from '../types/interfaces';
 
 const UserProfile: React.FC = () => {
   const [profile, setProfile] = useState({
@@ -219,10 +212,6 @@ const UserProfile: React.FC = () => {
                 ({subscriptions.length})
               </span>
             </h2>
-            <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200">
-              <UserPlus size={16} />
-              Найти авторов
-            </button>
           </div>
 
           {subscriptions.length === 0 ? (

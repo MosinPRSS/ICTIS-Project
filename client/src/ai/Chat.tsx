@@ -8,8 +8,6 @@ import {
   Trash2, 
   Send, 
   Star,
-  Archive,
-  Settings,
   MessageSquare,
   Bot,
   ChevronLeft,
@@ -20,37 +18,9 @@ import {
 } from 'lucide-react';
 import { useRegister } from '../context/UserIsRegisteredContext';
 import { useNavigate } from 'react-router-dom';
+import { ChatBot, Chat, ChatMessage as Message } from '../types/interfaces';
 
-interface Bot {
-  id: string;
-  name: string;
-  avatar: string;
-  author: string;
-  description: string;
-  tags: string[];
-  lastMessage?: string;
-  lastMessageTime?: string;
-  messageCount: number;
-}
-
-interface Chat {
-  id: string;
-  name: string;
-  botId: string;
-  messages: Message[];
-  createdAt: string;
-  updatedAt: string;
-  isPinned: boolean;
-}
-
-interface Message {
-  id: string;
-  content: string;
-  isBot: boolean;
-  timestamp: string;
-}
-
-export let bots: Bot[] = [
+export let bots: ChatBot[] = [
     {
       id: '11',
       name: 'Bot 11',
@@ -87,9 +57,9 @@ export let bots: Bot[] = [
 ];
 
 const ChatInterface: React.FC = () => {
-  const {theme, pageFunc, setAuthorFunc} = useRegister()
+  const {theme, pageFunc} = useRegister()
   const navigate = useNavigate()
-  const [selectedBot, setSelectedBot] = useState<Bot | null>(null);
+  const [selectedBot, setSelectedBot] = useState<ChatBot | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [showChatList, setShowChatList] = useState(false);
   const [showBotInfo, setShowBotInfo] = useState(false);
@@ -184,8 +154,7 @@ const ChatInterface: React.FC = () => {
     }
   };
 
-  function viewUser(author) {
-        setAuthorFunc(author)
+  function viewUser(author: string) {
         localStorage.setItem('viewUser', author)
         pageFunc('/watchuserinfo')
         navigate('/watchuserinfo')
@@ -599,18 +568,7 @@ const ChatInterface: React.FC = () => {
   );
 };
 
-interface ChatItemProps {
-  chat: Chat;
-  isSelected: boolean;
-  onSelect: (chat: Chat) => void;
-  onEdit: (chatId: string) => void;
-  onDelete: (chatId: string) => void;
-  onTogglePin: (chatId: string) => void;
-  editingChatId: string | null;
-  editingChatName: string;
-  setEditingChatName: (name: string) => void;
-  updateChatName: (chatId: string, name: string) => void;
-}
+import { ChatItemProps } from '../types/interfaces';
 
 const ChatItem: React.FC<ChatItemProps> = ({
   chat,

@@ -1,14 +1,16 @@
+// ⚠️ НЕИСПОЛЬЗУЕМЫЙ КОМПОНЕНТ - Этот файл не импортируется нигде в приложении
+// Можно удалить или переименовать с префиксом UNUSED_
 import { MessageCircle } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useEffect, useRef, useState } from "react"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import { bot } from "../types/interfaces"
+import { Bot } from "../types/interfaces"
 import { autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating } from "@floating-ui/react"
 import { useNavigate } from "react-router-dom"
 import { bots } from "../ai/Chat"
 
 
-export default function Bot({name, id, description, author, image, chatsCount, tags}: bot) {
+export default function Bot({name, id, description, author, image, chatsCount, tags}: Bot) {
     const {isReg, wantRegFunc, theme, pageFunc, chatFunc, setAuthorFunc} = useRegister()
     const [desc, setDescription] = useState(false)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,7 +72,6 @@ export default function Bot({name, id, description, author, image, chatsCount, t
                     tags: tags,
                     lastMessage: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
                     lastMessageTime: 'Сейчас',
-                    isOnline: true,
                     messageCount: chatsCount
                 })) bots.unshift(
                 {

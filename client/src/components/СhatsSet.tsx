@@ -1,19 +1,19 @@
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import { bot } from "../types/interfaces"
+import { Bot, ChatsSetProps } from "../types/interfaces"
 import { Button } from "./ui/button"
 import { PenIcon, TrashIcon, X } from "lucide-react"
 import { useState } from "react"
 import { Input } from "./ui/input"
 
-export default function СhatsSet({bot, isChatFunc, setChatFunc}) {
-    const {theme, chatFunc} = useRegister()
+export default function ChatsSet({ bot, isChatFunc, setChatFunc }: ChatsSetProps) {
+  const { theme, chatFunc } = useRegister()
     const [reduct, setReduct] = useState('')
     
-    function handleClick(e: bot, chat: string) {
+  function handleClick(e: Bot, chat: string) {
         isChatFunc(false)
         setChatFunc(chat)
-        chatFunc(e.id)
+    chatFunc(Number(e.id))
     }
 
     return (
@@ -29,7 +29,7 @@ export default function СhatsSet({bot, isChatFunc, setChatFunc}) {
                 </div>
                 <div className="p-6 mr-10 flex flex-col mt-20">
                     <div className={`flex items-start ${theme.options.mgColor} outline rounded-2xl flex-col shadow-md p-10`}>
-                        {bot.chats.map((chat) => (
+                        {bot.chats?.map((chat) => (
                             <div key={chat} className="flex flex-row w-full space-y-5 space-x-2">
                                 {reduct != chat ? 
                                 <Button variant='outline' onClick={() => handleClick(bot, chat)} className={`h-[50px] w-[20dvw] ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} cursor-pointer justify-start`}>

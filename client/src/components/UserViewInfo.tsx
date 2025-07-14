@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { User, Mail, Calendar, Bot, Heart, MessageCircle, Star, Share2, Settings } from 'lucide-react';
+import { User, Mail, Calendar, Bot, Heart, MessageCircle, Share2 } from 'lucide-react';
 import users from '../utils/users.json'
 import { useRegister } from '../context/UserIsRegisteredContext';
+import { LikedBot } from '../types/interfaces';
 
-  const likedBots: Bot[] = [
+  const likedBots: LikedBot[] = [
     {
       id: '5',
       name: 'Ария',
@@ -29,8 +30,8 @@ import { useRegister } from '../context/UserIsRegisteredContext';
 export default function UserViewInfo() {
     const [activeTab, setActiveTab] = useState('bots');
     const {userview} = useRegister()
-    const user = Bot[0]
-    const userBots = user?.bots
+    const user = users.find(u => u.name === userview)
+    const userBots = user?.bots || []
 
     const currentBots = activeTab === 'bots' ? userBots : likedBots;
 

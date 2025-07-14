@@ -4,16 +4,9 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FrownIcon, X } from "lucide-react";
 import { useRegister } from "../context/UserIsRegisteredContext";
+import { CategoryFilterProps } from "../types/interfaces";
 
-interface Props {
-  categories: string[];
-  selectedCategories: string[];
-  onCategoryToggle: (category: string) => void;
-  onCategoryRemove: (category: string) => void;
-  onResetAll: () => void;
-}
-
-const CategoryFilter: React.FC<Props> = ({ 
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
   categories, 
   selectedCategories, 
   onCategoryToggle, 
@@ -42,47 +35,50 @@ const CategoryFilter: React.FC<Props> = ({
     setUnselectedCategories(filtered);
   };
 
+  const themeOptions = theme?.options || {};
+
   return (
-    <div className="hidden w-[230px] gap-1 p-6 md:flex">
-      <div className="flex flex-col space-y-4 mb-4">
-        <h2 className="text-xl font-bold tracking-tight">Теги</h2>
+    <div className="w-full lg:w-[230px] gap-1 p-3 sm:p-4 lg:p-6 flex flex-col">
+      <div className="flex flex-col space-y-3 sm:space-y-4 mb-3 sm:mb-4">
+        <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-white">Теги</h2>
         <Input 
           placeholder="Найти тег" 
           value={searchTerm}
           onChange={handleSearch}
-          className={`${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}
+          className={`${themeOptions.hoverBgColor || 'bg-gray-800'} ${themeOptions.hoverTextColor || 'text-white'}`}
         />
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {selectedCategories.length > 0 && (
             <Button 
-              className="border-1 rounded-sm cursor-pointer hover:bg-white hover:text-black" 
+              className="border-1 rounded-sm cursor-pointer hover:bg-white hover:text-black w-full lg:w-auto text-sm sm:text-base" 
               onClick={onResetAll}
             >
-              <X />Сбросить всё
+              <X className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="ml-1">Сбросить всё</span>
             </Button>
           )}
           
-          <div className="flex flex-wrap gap-2 border-b-1 pb-5">
+          <div className="flex flex-wrap gap-1 sm:gap-2 border-b border-gray-600 pb-3 sm:pb-5">
             {selectedCategories.map((category) => (
               <span
                 key={category}
-                className={`${theme.options.regButtonColor} ${theme.options.regTextColor} px-3 py-1 rounded-full text-sm flex items-center gap-1`}
+                className={`${themeOptions.regButtonColor || 'bg-purple-100'} ${themeOptions.regTextColor || 'text-black'} px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm flex items-center gap-1`}
               >
                 {category}
                 <X
-                  className="cursor-pointer backdrop-blur-xl h-4 w-4 border-1 rounded-4xl text-blue-600 hover:text-red-500"
+                  className="cursor-pointer backdrop-blur-xl h-3 w-3 sm:h-4 sm:w-4 border-1 rounded-4xl text-blue-600 hover:text-red-500"
                   onClick={() => onCategoryRemove(category)}
                 />
               </span>
             ))}
           </div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1 sm:gap-2">
             {unselectedCategories.length > 0 ? (
               unselectedCategories.map((category) => (
                 <div
                   key={category}
-                  className={`cursor-pointer border border-gray-300 px-3 py-1 rounded-full text-sm ${theme.options.hoverBgColor2} ${theme.options.textColor2} ${theme.options.regButtonColor} ${theme.options.hoverTextColor2} transition`}
+                  className={`cursor-pointer border border-gray-300 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm ${themeOptions.hoverBgColor2 || 'hover:bg-black'} ${themeOptions.textColor2 || 'text-black'} ${themeOptions.regButtonColor || 'bg-purple-100'} ${themeOptions.hoverTextColor2 || 'hover:text-white'} transition`}
                   onClick={() => onCategoryToggle(category)}
                 >
                   {category}
@@ -90,8 +86,8 @@ const CategoryFilter: React.FC<Props> = ({
               ))
             ) : (
               searchTerm && (
-                <div className="flex items-center gap-2 text-gray-400">
-                  <FrownIcon />
+                <div className="flex items-center gap-2 text-gray-400 text-sm sm:text-base">
+                  <FrownIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   <p>Ничего не найдено</p>
                 </div>
               )
@@ -102,4 +98,5 @@ const CategoryFilter: React.FC<Props> = ({
     </div>
   );
 };
+
 export default CategoryFilter;

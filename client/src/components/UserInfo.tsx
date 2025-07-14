@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserInfo() {
-    const {theme, pageFunc} = useRegister()
+    const {theme, regFunc} = useRegister()
     const [isDelete, setDelete] = useState(false)
     const [reduct, setReduct] = useState(false)
     const navigate = useNavigate()
@@ -101,7 +101,7 @@ export default function UserInfo() {
                         <div className={`flex flex-row ${theme.options.textColor} items-center space-x-5`}>
                           <Button
                             className={`ml-[1px] min-h-[36px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
-                            onClick={() => {setDelete(false); accountFunc(false); regFunc(false); navigate('/')}}
+                            onClick={() => {setDelete(false); regFunc(false); navigate('/')}}
                             variant='outline'
                           >
                             <span>Подтвердить</span>

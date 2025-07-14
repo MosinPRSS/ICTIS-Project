@@ -2,22 +2,22 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import { Button } from "./ui/button"
 import ava from '../../public/images/dashboardBackground.png'
 import BotsData from '../utils/data.json'
-import { Dispatch, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { MenuIcon, SearchIcon } from "lucide-react"
 import { Input } from "./ui/input"
-import { bot } from "../types/interfaces"
+import { Bot, ChatsListProps } from "../types/interfaces"
 
-export default function ChatsList({isChatsFunc}: Dispatch<React.SetStateAction<boolean>>) {
-    const BotsDataSort = BotsData.toSorted((a, b) => b.writeCount - a.writeCount)
+export default function ChatsList({ isChatsFunc }: ChatsListProps) {
+    const BotsDataSort = [...BotsData].sort((a, b) => (b.writeCount || 0) - (a.writeCount || 0))
     const {theme, chatFunc} = useRegister()
     const [collapsed, setCollapsed] = useState(false)
     const [botsList, setBotsList] = useState(BotsDataSort)
     const [find, setFind] = useState('')
     
 
-    function handleClick(e: bot) {
+    function handleClick(e: Bot) {
         isChatsFunc(false)
-        chatFunc(e.id)
+        chatFunc(Number(e.id))
     }
 
     useEffect(() => {

@@ -3,8 +3,8 @@ import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import UserInfo from "../components/UserInfo"
-import UserProfile from "../ai/OhChat"
+
+import UserProfile from "../ai/User"
 
 export default function UserPage() {
   const {wantToReg, theme, paletteFunc} = useRegister()

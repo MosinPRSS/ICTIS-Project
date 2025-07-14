@@ -1,61 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, User, Settings, ArrowLeft, Save, X, Upload, Eye, EyeOff, Zap } from 'lucide-react';
-import { FloatingPortal } from '@floating-ui/react';
-import { Button } from '../components/ui/button';
+import { Plus, Edit2, Trash2, Save, X, Upload, Zap } from 'lucide-react';
 import { useRegister } from '../context/UserIsRegisteredContext';
-
-interface Bot {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  avatar: string;
-  settings: {
-    temperature: number;
-    maxTokens: number;
-    isPublic: boolean;
-  };
-}
+import { UserBotWithSettings as Bot } from '../types/interfaces';
+import UserBots from '../utils/userBots.json';
 
 const EnhancedBotsPage: React.FC = () => {
-  const [bots, setBots] = useState<Bot[]>([
-    {
-      id: 1,
-      name: 'Ассистент по программированию',
-      description: 'Помогает с написанием и оптимизацией кода',
-      category: 'Разработка',
-      avatar: '',
-      settings: {
-        temperature: 0.5,
-        maxTokens: 2000,
-        isPublic: false
-      }
-    },
-    {
-      id: 2,
-      name: 'Маркетолог',
-      description: 'Генерирует креативные маркетинговые идеи',
-      category: 'Маркетинг',
-      avatar: '',
-      settings: {
-        temperature: 0.8,
-        maxTokens: 2500,
-        isPublic: true
-      }
-    },
-    {
-      id: 3,
-      name: 'Юридический консультант',
-      description: 'Дает базовые юридические консультации',
-      category: 'Юриспруденция',
-      avatar: '',
-      settings: {
-        temperature: 0.3,
-        maxTokens: 1500,
-        isPublic: false
-      }
-    }
-  ]);
+  const [bots, setBots] = useState<Bot[]>(UserBots as Bot[]);
 
   const {theme} = useRegister()
   const [selectedBot, setSelectedBot] = useState<Bot | null>(null);
@@ -101,8 +51,6 @@ const EnhancedBotsPage: React.FC = () => {
       category: 'Другое',
       avatar: '',
       settings: {
-        temperature: 0.7,
-        maxTokens: 2000,
         isPublic: false
       }
     };
@@ -184,21 +132,11 @@ const EnhancedBotsPage: React.FC = () => {
                     <p className="text-white/60 text-sm truncate">{bot.description}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs px-2 py-0.5 bg-white/10 rounded-full">{bot.category}</span>
-                      {bot.settings.isPublic && (
+                      {bot.isPublic && (
                         <span className="text-xs px-2 py-0.5 bg-green-500/20 rounded-full">Публичный</span>
                       )}
                     </div>
                   </div>
-                  
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setDelete(true);
-                    }}
-                    className="p-1 cursor-pointer text-white/40 hover:text-red-400 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
             ))}
@@ -295,21 +233,54 @@ const EnhancedBotsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-white font-medium mb-2">Категория</label>
+                    <label className="block text-white font-medium mb-2">Теги</label>
                     {isEditing ? (
-                      <select
-                        value={selectedBot.category}
-                        onChange={(e) => setSelectedBot({...selectedBot, category: e.target.value})}
-                        className="w-full p-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
-                      >
-                        <option value="Разработка">Разработка</option>
-                        <option value="Маркетинг">Маркетинг</option>
-                        <option value="Юриспруденция">Юриспруденция</option>
-                        <option value="Образование">Образование</option>
-                        <option value="Другое">Другое</option>
-                      </select>
+                      <div className="flex flex-wrap gap-2 mb-2 max-w-full">
+                        {selectedBot.tags && selectedBot.tags.map((tag, idx) => (
+                          <span key={idx} className="flex items-center bg-purple-700/30 text-white px-2 py-1 rounded-full text-xs max-w-full break-words flex-grow">
+                            <input
+                              type="text"
+                              value={tag}
+                              onChange={e => {
+                                const newTags = [...selectedBot.tags];
+                                newTags[idx] = e.target.value;
+                                setSelectedBot({ ...selectedBot, tags: newTags });
+                              }}
+                              className="bg-transparent border-none outline-none min-w-16 max-w-full text-xs text-white px-1 overflow-x-auto flex-grow"
+                              style={{width: `${Math.max(32, Math.min(220, tag.length * 11))}px`}}
+                            />
+                            <button
+                              className="ml-1 text-red-400 hover:text-red-600"
+                              onClick={e => {
+                                e.preventDefault();
+                                const newTags = selectedBot.tags.filter((_, i) => i !== idx);
+                                setSelectedBot({ ...selectedBot, tags: newTags });
+                              }}
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                        <button
+                          className="px-2 py-1 bg-green-600 text-white rounded-full text-xs hover:bg-green-700"
+                          onClick={e => {
+                            e.preventDefault();
+                            setSelectedBot({ ...selectedBot, tags: [...(selectedBot.tags || []), ""] });
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
                     ) : (
-                      <div className="p-3 bg-white/5 rounded-lg text-white">{selectedBot.category}</div>
+                      <div className="flex flex-wrap gap-2 max-w-full">
+                        {selectedBot.tags && selectedBot.tags.length > 0 ? (
+                          selectedBot.tags.map((tag, idx) => (
+                            <span key={idx} className="bg-purple-700/30 text-white px-2 py-1 rounded-full text-xs max-w-full break-words">{tag}</span>
+                          ))
+                        ) : (
+                          <span className="text-gray-400 text-xs">Нет тегов</span>
+                        )}
+                      </div>
                     )}
                   </div>
 
@@ -384,17 +355,17 @@ const EnhancedBotsPage: React.FC = () => {
                             <button
                               onClick={handleTogglePublic}
                               className={`w-12 cursor-pointer h-6 rounded-full transition-colors ${
-                                selectedBot.settings.isPublic ? 'bg-green-500' : 'bg-white/20'
+                                selectedBot.isPublic ? 'bg-green-500' : 'bg-white/20'
                               }`}
                             >
                               <div className={`w-5 h-5  bg-white rounded-full transition-transform ${
-                                selectedBot.settings.isPublic ? 'translate-x-6' : 'translate-x-0.5'
+                                selectedBot.isPublic ? 'translate-x-6' : 'translate-x-0.5'
                               }`}></div>
                             </button>
                           ) : (
-                            <div className={`w-12 h-6 rounded-full ${selectedBot.settings.isPublic ? 'bg-green-500' : 'bg-white/20'}`}>
+                            <div className={`w-12 h-6 rounded-full ${selectedBot.isPublic ? 'bg-green-500' : 'bg-white/20'}`}>
                               <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
-                                selectedBot.settings.isPublic ? 'translate-x-6' : 'translate-x-0.5'
+                                selectedBot.isPublic ? 'translate-x-6' : 'translate-x-0.5'
                               }`}></div>
                             </div>
                           )}
@@ -404,7 +375,7 @@ const EnhancedBotsPage: React.FC = () => {
                     <div className='flex flex-col'>
                       <div className="mt-6 flex justify-end gap-4">
                         <button
-                          onClick={() => handleDeleteBot(selectedBot.id)}
+                          onClick={() => setDelete(true)}
                           className="px-6 py-3 cursor-pointer bg-red-600/20 text-red-200 rounded-lg hover:bg-red-600/30 transition-colors flex items-center gap-2"
                         >
                           <Trash2 className="w-4 h-4" />

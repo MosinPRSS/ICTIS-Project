@@ -1,42 +1,17 @@
-import { useEffect, useState } from "react"
+
 import { AppSidebar } from "../components/app-sidebar"
-import BotInfo from "../components/BotInfo"
 import RegLog from "../components/RegLog"
 import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import { useRegister } from "../context/UserIsRegisteredContext"
-import BotsData from '../utils/data.json'
-import ChatsList from "../components/ChatsList"
-import Chat from "../components/Chat"
-import СhatsSet from "../components/СhatsSet"
-import { GripIcon, ArrowBigLeft, ArrowBigRight } from "lucide-react"
-import { Button } from "../components/ui/button"
 import ChatInterface from "../ai/Chat"
 
 export default function ChatsPage() {
-  const {wantToReg, theme, paletteFunc, chat} = useRegister()
-  const [collapsed, setCollapsed] = useState(true)
-  const [isChats, setChats] = useState(false)
-  const [setChat, setSetChat] = useState("chat1")
-
-  const [currentView, setCurrentView] = useState<'profile' | 'chat' | 'chatList'>('profile');
-  const [selectedBot] = useState({
-    id: '11',
-    name: 'Bot 11',
-    avatar: '',
-    description: 'Виртуальный собеседник'
-  });
-  
+  const { wantToReg, theme, paletteFunc } = useRegister()
 
   function setPalette() {
     paletteFunc(false)
   }
-
-  let bot = BotsData.find((e) => e.id == chat)
-  useEffect(() => {
-    bot = BotsData.find((e) => e.id == chat)
-    setSetChat("chat1")
-  }, [chat])
 
   return (
     <SidebarProvider onClick={setPalette} className={`${theme.options.bgColor} ${theme.options.textColor} select-none`}>

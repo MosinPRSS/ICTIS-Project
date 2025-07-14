@@ -11,67 +11,12 @@ import {
   EyeOff,
 } from "lucide-react";
 import { useRegister } from "../context/UserIsRegisteredContext";
-import { FloatingPortal } from "@floating-ui/react";
-import { Button } from "../components/ui/button";
-
-interface Persona {
-  id: number;
-  name: string;
-  description: string;
-  personality: string;
-  avatar: string;
-  isActive: boolean;
-  settings: {
-    temperature: number;
-    maxTokens: number;
-    systemPrompt: string;
-  };
-}
+import { UserPersonaWithSettings as Persona } from "../types/interfaces";
+import UserPersonas from '../utils/userPersonas.json';
 
 const EnhancedPersonasPage: React.FC = () => {
   const { theme } = useRegister();
-  const [personas, setPersonas] = useState<Persona[]>([
-    {
-      id: 1,
-      name: "persona1",
-      description: "persona1 description",
-      personality: "Дружелюбный и отзывчивый помощник",
-      avatar: "",
-      isActive: true,
-      settings: {
-        temperature: 0.7,
-        maxTokens: 2000,
-        systemPrompt: "Ты дружелюбный помощник, который всегда готов помочь.",
-      },
-    },
-    {
-      id: 2,
-      name: "persona2",
-      description: "Креативный писатель и рассказчик",
-      personality: "Творческий и вдохновляющий",
-      avatar: "",
-      isActive: false,
-      settings: {
-        temperature: 0.9,
-        maxTokens: 3000,
-        systemPrompt: "Ты креативный писатель с богатым воображением.",
-      },
-    },
-    {
-      id: 3,
-      name: "persona3",
-      description: "Аналитик и консультант по бизнесу",
-      personality: "Логичный и структурированный",
-      avatar: "",
-      isActive: false,
-      settings: {
-        temperature: 0.3,
-        maxTokens: 1500,
-        systemPrompt:
-          "Ты опытный бизнес-консультант с аналитическим складом ума.",
-      },
-    },
-  ]);
+  const [personas, setPersonas] = useState<Persona[]>(UserPersonas as Persona[]);
 
   const [isDelete, setDelete] = useState(false)
   const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
@@ -175,16 +120,6 @@ const EnhancedPersonasPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setDelete(true);
-                    }}
-                    className="p-1 cursor-pointer  text-white/40 hover:text-red-400 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
             ))}
@@ -536,7 +471,7 @@ const EnhancedPersonasPage: React.FC = () => {
                       <div className="mt-6 flex justify-end gap-4">
                         <button
                           onClick={() =>
-                            handleDeletePersona(selectedPersona.id)
+                            setDelete(true)
                           }
                           className="px-6 py-3 cursor-pointer bg-red-600/20 text-red-200 rounded-lg hover:bg-red-600/30 transition-colors flex items-center gap-2"
                         >
@@ -587,7 +522,7 @@ const EnhancedPersonasPage: React.FC = () => {
                     Отмена
                   </button>
                   <button
-                    onClick={() => {handleDeletePersona(selectedPersona.id); setDelete(false)}}
+                    onClick={() => { handleDeletePersona(selectedPersona.id); setDelete(false); setSelectedPersona(undefined); }}
                     className="flex-1 cursor-pointer px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium"
                   >
                     Удалить

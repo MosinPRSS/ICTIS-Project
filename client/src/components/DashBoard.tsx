@@ -16,8 +16,6 @@ import CategoryFilter from "./CategoryFilter";
 import { Categories } from "../utils/data";
 import { useRegister } from "../context/UserIsRegisteredContext";
 import {
-  ChevronLeft,
-  ChevronRight,
   Clock,
   Frown,
   MessageCircle,
@@ -27,56 +25,12 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import BotsData from "../utils/data.json";
+import { Bot } from "../types/interfaces";
 import { user } from "../utils/data";
 import { useNavigate } from "react-router-dom";
 import users from "../utils/users.json";
-
-interface Bot {
-  id: string;
-  name: string;
-  description: string;
-  author: string;
-  image: string;
-  chatsCount: number;
-  tags: string[];
-  rating?: number;
-  isNew?: boolean;
-  isPopular?: boolean;
-  lastActive?: string;
-}
-
-interface BotSectionProps {
-  title: string;
-  icon: React.ReactNode;
-  bots: Bot[];
-  viewAllLink?: string;
-}
-
-const popularBots: Bot[] = Array.from({ length: 8 }, (_, i) => ({
-  id: `popular-${i}`,
-  name: `Популярный бот ${i + 1}`,
-  description: `Один из самых популярных ботов с высоким рейтингом и множеством активных пользователей`,
-  author: `popular_author ${i + 1}`,
-  image: "/api/placeholder/200/160",
-  chatsCount: Math.floor(Math.random() * 5000) + 1000,
-  tags: ["популярный", "топ"],
-  rating: (4.5 + Math.random() * 0.5).toFixed(1),
-  isPopular: true,
-}));
-
-const newBots: Bot[] = Array.from({ length: 6 }, (_, i) => ({
-  id: `new-${i}`,
-  name: `Новый бот ${i + 1}`,
-  description: `Недавно добавленный бот с современными функциями и возможностями`,
-  author: `new_author ${i + 1}`,
-  image: "/api/placeholder/200/160",
-  chatsCount: Math.floor(Math.random() * 500) + 10,
-  tags: ["новый", "свежий"],
-  isNew: true,
-  lastActive: "Сегодня",
-}));
 
 const BotCard: React.FC<Bot> = ({
   name,
@@ -130,12 +84,12 @@ const BotCard: React.FC<Bot> = ({
     <div
       ref={refs.setReference}
       {...getReferenceProps()}
-      className="relative flex-shrink-0 cursor-pointer h-40"
+      className="relative flex-shrink-0 h-40 transition-transform duration-300 hover:scale-105 hover:z-20"
     >
-      <div className={`${theme.options.bgColor3} backdrop-blur-sm rounded-lg overflow-hidden min-w-[190px] ${theme.options.bgBorderColor} transition-all duration-300 hover:scale-105 hover:shadow-xl`}>
-        <div className="h-40">
+      <div className={`${theme.options.bgColor3} backdrop-blur-sm rounded-lg overflow-hidden min-w-[190px] ${theme.options.bgBorderColor} transition-all duration-300 hover:shadow-xl`}>
+        <button className="h-40 w-full cursor-pointer" onClick={() => navigate(`/bot/${id}`)}>
           <img className="h-full w-full object-cover" src={image} alt={name} />
-        </div>
+        </button>
 
         <div className={`p-3 ${theme.options.bgColor3}`}>
           <div className="mb-2">
@@ -155,7 +109,7 @@ const BotCard: React.FC<Bot> = ({
                   {author.charAt(0).toUpperCase()}
                 </span>
               </div>
-              <p className="text-purple-300 text-xs truncate max-w-[80px]">
+              <p className="text-purple-300 text-xs truncate max-w-[80px] cursor-pointer">
                 {author}
               </p>
             </button>
@@ -242,7 +196,7 @@ const BotGridSection = ({ title, icon, bots, isReg }) => {
         <span className="text-purple-300 text-sm">({bots.length})</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-4 h-full overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-4 h-full pr-2 relative overflow-visible">
         {bots.map((bot) => (
           <BotCard isReg={isReg} key={bot.id} {...bot} />
         ))}
@@ -254,7 +208,7 @@ const BotGridSection = ({ title, icon, bots, isReg }) => {
 export function DashBoard() {
   const { theme, isReg } = useRegister();
   const [searchBot, setSearchBot] = useState("");
-  const [findBots, setFindBots] = useState(BotsData);
+  const [searchQuery, setSearchQuery] = useState(""); // для фильтрации
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState("popular");
 
@@ -262,12 +216,12 @@ export function DashBoard() {
     popular: {
       title: "Популярные",
       icon: <TrendingUp className="text-green-400" size={24} />,
-      bots: popularBots,
+      bots: BotsData.filter((bot) => bot.isPopular),
     },
     new: {
       title: "Новинки",
       icon: <Clock className="text-blue-400" size={24} />,
-      bots: newBots,
+      bots: BotsData.filter((bot) => bot.isNew),
     },
   };
 
@@ -283,53 +237,30 @@ export function DashBoard() {
     setSelectedCategories([]);
   };
 
-  const find = () => {
-    if (searchBot === "") {
-      setFindBots(BotsData);
-      return;
-    }
-
-    const filtered = BotsData.filter((bot) =>
-      bot.name.toLowerCase().includes(searchBot.toLowerCase())
-    );
-    setFindBots(filtered);
-  };
-
-  useEffect(() => {
-    if (selectedCategories.length === 0 && searchBot === "") {
-      setFindBots(BotsData);
-      return;
-    }
-
-    let filtered = BotsData;
-
+  // Фильтрация по выбранной категории, тегам и поиску
+  const getFilteredBots = () => {
+    let bots = botCategories[activeCategory].bots;
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((bot) =>
+      bots = bots.filter((bot) =>
         selectedCategories.every((tag) => bot.tags.includes(tag))
       );
     }
-
-    if (searchBot) {
-      filtered = filtered.filter((bot) =>
-        bot.name.toLowerCase().includes(searchBot.toLowerCase())
+    if (searchQuery) {
+      bots = bots.filter((bot) =>
+        bot.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
-    setFindBots(filtered);
-  }, [selectedCategories, searchBot]);
+    return bots;
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      find();
+      setSearchQuery(searchBot);
     }
   };
 
-  const getFilteredBots = (bots: Bot[]) => {
-    return bots.filter(
-      (bot) =>
-        selectedCategories.length === 0 ||
-        selectedCategories.every((tag) => bot.tags.includes(tag))
-    );
+  const handleSearchClick = () => {
+    setSearchQuery(searchBot);
   };
 
   return (
@@ -360,7 +291,7 @@ export function DashBoard() {
           <Button
             variant={"outline"}
             className={`cursor-pointer ${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}
-            onClick={find}
+            onClick={handleSearchClick}
           >
             <SearchIcon />
           </Button>
@@ -378,11 +309,21 @@ export function DashBoard() {
         />
 
         <div className="flex-1 ml-5 mb-10 pr-5 flex flex-col h-full">
-          {searchBot && findBots.length === 0 ? (
-            <div className="flex w-full justify-center items-center gap-2 mt-20 text-xl text-purple-300">
-              <p>Ничего не найдено</p>
-              <Frown />
-            </div>
+          {/* Если был подтверждён поиск (searchQuery не пустой) или выбраны теги — показываем только найденные карточки */}
+          {(searchQuery || selectedCategories.length > 0) ? (
+            getFilteredBots().length === 0 ? (
+              <div className="flex w-full justify-center items-center gap-2 mt-20 text-xl text-purple-300">
+                <p>Ничего не найдено</p>
+                <Frown />
+              </div>
+            ) : (
+              <BotGridSection
+                title={searchQuery ? `Результаты (${getFilteredBots().length})` : botCategories[activeCategory].title}
+                icon={searchQuery ? <SearchIcon className="text-blue-400" size={24} /> : botCategories[activeCategory].icon}
+                bots={getFilteredBots()}
+                isReg={isReg}
+              />
+            )
           ) : (
             <div className="flex flex-col h-full">
               {/* Переключатель категорий */}
@@ -407,7 +348,7 @@ export function DashBoard() {
               <BotGridSection
                 title={botCategories[activeCategory].title}
                 icon={botCategories[activeCategory].icon}
-                bots={getFilteredBots(botCategories[activeCategory].bots)}
+                bots={botCategories[activeCategory].bots}
                 isReg={isReg}
               />
             </div>

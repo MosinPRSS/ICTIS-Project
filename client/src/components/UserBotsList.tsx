@@ -6,14 +6,14 @@ import { useRegister } from "../context/UserIsRegisteredContext"
 import { FrownIcon, PenLineIcon, PlusCircleIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
-import {bot} from '../types/interfaces'
+import { UserBot } from "../types/interfaces"
 import { Textarea } from "./ui/textarea"
 import { FloatingPortal } from "@floating-ui/react"
 
 export default function UserBotsList() {
     const {theme, pageFunc} = useRegister()
     const navigate = useNavigate()
-    const [botInfo, setBotInfo] = useState<bot>({})
+    const [botInfo, setBotInfo] = useState<UserBot>({} as UserBot)
     const [reduct, setReduct] = useState(false)
     const [isDelete, setDelete] = useState(false)
 
@@ -152,7 +152,7 @@ export default function UserBotsList() {
                                 <div className={`flex flex-row ${theme.options.textColor} items-center space-x-5`}>
                                     <Button
                                     className={`ml-[1px] min-h-[36px] rounded-sm ${theme.options.hoverBgColor} ${theme.options.hoverTextColor} ${theme.options.hoverBorderColor} hover:border-1 min-w-8 h-[36px] cursor-pointer bg-primary text-primary-foreground duration-200 ease-linear active:bg-primary/90 active:text-primary-foreground`}
-                                    onClick={() => {setDelete(false); setBotInfo({})}}
+                                    onClick={() => {setDelete(false); setBotInfo({} as UserBot)}}
                                     variant='outline'
                                     >
                                     <span>Подтвердить</span>

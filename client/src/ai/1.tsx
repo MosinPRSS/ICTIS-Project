@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import { Search, MessageCircle, Star, Users, Zap, Heart, Filter, Plus, Menu, User, Settings, HelpCircle } from 'lucide-react';
-
-interface Bot {
-  id: number;
-  name: string;
-  description: string;
-  author: string;
-  avatar: string;
-  category: string;
-  rating: number;
-  chatCount: number;
-  isOnline: boolean;
-  tags: string[];
-}
+import { EnhancedBot as Bot } from '../types/interfaces';
 
 const EnhancedMainPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
