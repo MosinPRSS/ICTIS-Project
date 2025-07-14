@@ -51,20 +51,27 @@ class User(AbstractBaseUser):
 
 class Chatbots(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128)
+    name = models.TextField()
+    chatname = models.TextField()
     avatar = models.ImageField(upload_to="img/bot/", default="Default_Avatar.svg")
     
     description = models.TextField(max_length=16384)
     scenario = models.TextField(max_length=8192)
     first_message = models.TextField(max_length=3000)
 
-    rate = models.IntegerField(default=0)
+    rate = models.IntegerField(default=0) # TODO
     is_public = models.BooleanField(default=False)
-    hide_info = models.BooleanField(default=False) # TODO
+    hide_info = models.BooleanField(default=True) # TODO
     public_description = models.TextField() # no generation
 
     tags = TaggableManager(blank=True)
     
+class Favorites(models.Model):
+    belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    bot_id = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
+
+# class Tags(models.Model):
+#    belongs_to = models.ForeignKey(to=Chatbots, on_delete=models.SET_NULL)
 
 class Personas(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -80,13 +87,11 @@ class AiSession(models.Model):
 
     # time working
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True) # TODO - сделать возврат по времени для сортировки сессий пользователя
 
     # options part
     temperatute = models.FloatField(default=0.7)
     tokens = models.IntegerField(default=1000)
-    # top_k = models.FloatField()
-    # top_p = models.FloatField()
 
 class Messages(models.Model):
     session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
@@ -95,8 +100,8 @@ class Messages(models.Model):
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def create_message(role: str, content: str):
-        return Messages.objects.create(
+    def create_message(self, role: str, content: str):
+        return self.objects.create(
             role=role,
             content=content
         )
