@@ -73,7 +73,7 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <div className="w-full mb-10 p-6">
+    <div className="w-full mb-10 p-6 mt-10">
       <div className="max-w-4xl mx-auto space-y-6">
         {showDeleteConfirm && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
@@ -106,7 +106,7 @@ const UserProfile: React.FC = () => {
             </div>
           )}
         {/* Профиль */}
-        <div className="bg-purple-800/30 backdrop-blur-sm rounded-2xl p-8 border border-purple-700/20">
+        <div className={`backdrop-blur-sm rounded-2xl p-8 ${theme.options.bgColor3}`}>
           <h1 className="text-3xl font-bold text-white mb-8">Профиль</h1>
           
           <div className="flex flex-col lg:flex-row gap-8">
@@ -135,7 +135,7 @@ const UserProfile: React.FC = () => {
                     <label className="block text-purple-300 text-sm font-medium mb-2">
                       Имя пользователя
                     </label>
-                    <div className="bg-purple-900/50 rounded-lg p-3 text-white">
+                    <div className={`${theme.options.mgColor} rounded-lg p-3 text-white`}>
                       {profile.username}
                     </div>
                   </div>
@@ -144,7 +144,7 @@ const UserProfile: React.FC = () => {
                     <label className="block text-purple-300 text-sm font-medium mb-2">
                       Описание
                     </label>
-                    <div className="bg-purple-900/50 rounded-lg p-3 text-white min-h-[80px]">
+                    <div className={`${theme.options.mgColor} rounded-lg p-3 text-white min-h-[80px]`}>
                       {profile.description}
                     </div>
                   </div>
@@ -173,7 +173,7 @@ const UserProfile: React.FC = () => {
                       type="text"
                       value={editForm.username}
                       onChange={(e) => setEditForm({ ...editForm, username: e.target.value })}
-                      className="w-full bg-purple-900/50 rounded-lg p-3 text-white border border-purple-600/30 focus:border-purple-400 focus:outline-none transition-colors"
+                      className={`w-full ${theme.options.mgColor} rounded-lg p-3 text-white border ${theme.options.bgBorderColor} focus:border-purple-400 focus:outline-none transition-colors`}
                     />
                   </div>
 
@@ -185,7 +185,7 @@ const UserProfile: React.FC = () => {
                       value={editForm.description}
                       onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                       rows={4}
-                      className="w-full bg-purple-900/50 rounded-lg p-3 text-white border border-purple-600/30 focus:border-purple-400 focus:outline-none transition-colors resize-none"
+                      className={`w-full ${theme.options.mgColor} rounded-lg p-3 text-white border ${theme.options.bgBorderColor} focus:border-purple-400 focus:outline-none transition-colors resize-none`}
                     />
                   </div>
 
@@ -210,7 +210,7 @@ const UserProfile: React.FC = () => {
         </div>
 
         {/* Подписки */}
-        <div className="bg-purple-800/30 backdrop-blur-sm rounded-2xl p-8 border border-purple-700/20">
+        <div className={`${theme.options.bgColor3} backdrop-blur-sm rounded-2xl p-8 ${theme.options.bgBorderColor}`}>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
               <Users size={28} />
@@ -236,7 +236,7 @@ const UserProfile: React.FC = () => {
               {subscriptions.map((sub) => (
                 <div
                   key={sub.id}
-                  className="bg-purple-900/40 rounded-xl p-4 border border-purple-600/20 hover:bg-purple-900/60 transition-all duration-200 hover:scale-105"
+                  className={`${theme.options.mgColor} rounded-xl p-4 ${theme.options.bgBorderColor} hover:bg-purple-900/60 transition-all duration-200 hover:scale-105`}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div

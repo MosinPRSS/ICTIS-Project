@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, User, Settings, ArrowLeft, Save, X, Upload, Eye, EyeOff, Zap } from 'lucide-react';
+import { FloatingPortal } from '@floating-ui/react';
+import { Button } from '../components/ui/button';
+import { useRegister } from '../context/UserIsRegisteredContext';
 
 interface Bot {
   id: number;
@@ -54,9 +57,11 @@ const EnhancedBotsPage: React.FC = () => {
     }
   ]);
 
+  const {theme} = useRegister()
   const [selectedBot, setSelectedBot] = useState<Bot | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [isDelete, setDelete] = useState(false)
 
   const handleSelectBot = (bot: Bot) => {
     setSelectedBot(bot);
@@ -122,6 +127,7 @@ const EnhancedBotsPage: React.FC = () => {
 
 
   const handleTogglePublic = () => {
+    
     if (selectedBot) {
       setSelectedBot({
         ...selectedBot,
@@ -187,7 +193,7 @@ const EnhancedBotsPage: React.FC = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteBot(bot.id);
+                      setDelete(true);
                     }}
                     className="p-1 cursor-pointer text-white/40 hover:text-red-400 transition-colors"
                   >
@@ -363,58 +369,8 @@ const EnhancedBotsPage: React.FC = () => {
                 <div className="space-y-6 overflow-y-auto">
                       
 
-                      <div>
-                        <label className="block text-white font-medium mb-2">
-                          Температура ({selectedBot.settings.temperature})
-                        </label>
-                        <p className="text-white/60 text-sm mb-2">Влияет на креативность ответов (0 - точные, 1 - креативные)</p>
-                        {isEditing ? (
-                          <div className="flex items-center gap-4">
-                            <input
-                              type="range"
-                              min="0"
-                              max="1"
-                              step="0.1"
-                              value={selectedBot.settings.temperature}
-                              onChange={(e) => setSelectedBot({
-                                ...selectedBot,
-                                settings: {...selectedBot.settings, temperature: parseFloat(e.target.value)}
-                              })}
-                              className="flex-1"
-                            />
-                            <span className="text-white w-8 text-center">
-                              {selectedBot.settings.temperature}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="w-full bg-white/10 rounded-lg h-2">
-                            <div 
-                              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg"
-                              style={{ width: `${selectedBot.settings.temperature * 100}%` }}
-                            ></div>
-                          </div>
-                        )}
-                      </div>
 
-                      <div>
-                        <label className="block text-white font-medium mb-2">Максимум токенов</label>
-                        <p className="text-white/60 text-sm mb-2">Максимальная длина ответов (100-4000)</p>
-                        {isEditing ? (
-                          <input
-                            type="number"
-                            value={selectedBot.settings.maxTokens}
-                            onChange={(e) => setSelectedBot({
-                              ...selectedBot,
-                              settings: {...selectedBot.settings, maxTokens: parseInt(e.target.value)}
-                            })}
-                            className="w-full p-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
-                            min="100"
-                            max="4000"
-                          />
-                        ) : (
-                          <div className="p-3 bg-white/5 rounded-lg text-white">{selectedBot.settings.maxTokens}</div>
-                        )}
-                      </div>
+
 
                       
 
@@ -473,11 +429,43 @@ const EnhancedBotsPage: React.FC = () => {
                   <Plus className="w-4 h-4" />
                   Создать нового бота
                 </button>
+                
               </div>
             </div>
           )}
         </div>
+        
       </div>
+      {isDelete && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full mx-4 border border-red-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-red-600/20 flex items-center justify-center">
+                    <Trash2 className="w-6 h-6 text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Удалить бота?</h3>
+                    <p className="text-sm text-gray-400">Это действие нельзя отменить</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setDelete(false)}
+                    className="flex-1 cursor-pointer px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    onClick={() => {handleDeleteBot(selectedBot.id); setDelete(false)}}
+                    className="flex-1 cursor-pointer px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
     </div>
   );
 };

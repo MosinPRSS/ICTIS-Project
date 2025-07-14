@@ -45,9 +45,9 @@ const CategoryFilter: React.FC<Props> = ({
   return (
     <div className="hidden w-[230px] gap-1 p-6 md:flex">
       <div className="flex flex-col space-y-4 mb-4">
-        <h2 className="text-xl font-bold tracking-tight">Категории</h2>
+        <h2 className="text-xl font-bold tracking-tight">Теги</h2>
         <Input 
-          placeholder="Найти категорию" 
+          placeholder="Найти тег" 
           value={searchTerm}
           onChange={handleSearch}
           className={`${theme.options.hoverBgColor} ${theme.options.hoverTextColor}`}
