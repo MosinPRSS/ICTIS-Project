@@ -287,7 +287,7 @@ const ChatInterface: React.FC = () => {
                 }}
                 className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-200 ${
                   selectedBot?.id === bot.id
-                    ? 'bg-purple-600/50 ring-2 ring-purple-400/50'
+                    ? 'bg-purple-100/50 ring-2 ring-purple-400/50'
                     : 'bg-white/5 hover:bg-white/10'
                 }`}
               >
