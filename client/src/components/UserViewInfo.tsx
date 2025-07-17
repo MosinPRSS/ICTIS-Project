@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { User, Mail, Calendar, Bot, Heart, MessageCircle, Share2 } from 'lucide-react';
 import users from '../utils/users.json'
-import { useRegister } from '../context/UserIsRegisteredContext';
+import { useRegister } from '../context/Context';
 import { LikedBot } from '../types/interfaces';
 
   const likedBots: LikedBot[] = [

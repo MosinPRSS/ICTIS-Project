@@ -18,7 +18,7 @@ import {
   SidebarMenuItem,
 } from "../components/ui/sidebar"
 import { Button } from "./ui/button"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { cn } from "../lib/utils"
 import { useNavigate } from "react-router-dom"
 

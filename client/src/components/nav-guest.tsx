@@ -5,7 +5,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../components/ui/sidebar"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { cn } from "../lib/utils"
 
 export default function NavGuest() {

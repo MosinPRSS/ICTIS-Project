@@ -2,7 +2,7 @@ import { DonutIcon, InspectionPanelIcon, TreeDeciduousIcon } from "lucide-react"
 import { Separator } from "./ui/separator"
 import { SidebarTrigger } from "./ui/sidebar"
 import { Button } from "./ui/button"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import Theme from "../utils/themes.json"
 import { useEffect, useRef, useState } from "react"
 

@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { Bot, ChatsSetProps } from "../types/interfaces"
 import { Button } from "./ui/button"
 import { PenIcon, TrashIcon, X } from "lucide-react"

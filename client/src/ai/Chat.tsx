@@ -16,9 +16,10 @@ import {
   ArrowLeft,
   ArrowRight
 } from 'lucide-react';
-import { useRegister } from '../context/UserIsRegisteredContext';
-import { useNavigate } from 'react-router-dom';
+import { useRegister } from '../context/Context';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ChatBot, Chat, ChatMessage as Message } from '../types/interfaces';
+import botsChats from '../utils/botsChats.json';
 
 export let bots: ChatBot[] = [
     {
@@ -57,8 +58,9 @@ export let bots: ChatBot[] = [
 ];
 
 const ChatInterface: React.FC = () => {
-  const {theme, pageFunc} = useRegister()
-  const navigate = useNavigate()
+  const {theme, pageFunc, setUserViewFunc} = useRegister();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [selectedBot, setSelectedBot] = useState<ChatBot | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [showChatList, setShowChatList] = useState(false);
@@ -74,33 +76,7 @@ const ChatInterface: React.FC = () => {
 
   
 
-  const [chats, setChats] = useState<Chat[]>([
-    {
-      id: '1',
-      name: 'Основной чат',
-      botId: '11',
-      messages: [
-        {
-          id: '1',
-          content: 'Здравствуй! Я твой виртуальный собеседник. О чём поговорим?',
-          isBot: true,
-          timestamp: '14:32'
-        }
-      ],
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15',
-      isPinned: false
-    },
-    {
-      id: '2',
-      name: 'Рабочие вопросы',
-      botId: '11',
-      messages: [],
-      createdAt: '2024-01-14',
-      updatedAt: '2024-01-14',
-      isPinned: true
-    }
-  ]);
+  const [chats, setChats] = useState<Chat[]>(botsChats as Chat[]);
 
   const filteredBots = bots.filter(bot =>
     bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -183,7 +159,6 @@ const ChatInterface: React.FC = () => {
       timestamp: new Date().toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })
     };
 
-    // Обновляем чат с новыми сообщениями и временем последнего обновления
     setChats(prev => prev.map(chat =>
       chat.id === selectedChat.id
         ? { 
@@ -193,13 +168,67 @@ const ChatInterface: React.FC = () => {
           }
         : chat
     ));
-
+    // Обновляем selectedChat вручную
+    setSelectedChat(prev => prev ? {
+      ...prev,
+      messages: [...prev.messages, userMessage, botResponse],
+      updatedAt: new Date().toISOString()
+    } : prev);
     setMessageInput('');
   };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [selectedChat?.messages]);
+
+  // Автоматический выбор бота по botId из query
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const botId = params.get('botId');
+    if (botId) {
+      const bot = bots.find(b => b.id === botId);
+      if (bot) {
+        setSelectedBot(bot);
+        // Найти существующий чат или создать новый
+        const botChats = chats.filter(chat => chat.botId === botId);
+        if (botChats.length > 0) {
+          setSelectedChat(botChats[0]);
+          setCollapsed(true);
+          setShowChatList(false);
+        } else {
+          // Создать новый чат
+          const newChat: Chat = {
+            id: Date.now().toString(),
+            name: `Чат с ${bot.name}`,
+            botId,
+            messages: [{
+              id: '1',
+              content: bot.lastMessage || 'Здравствуйте! Как дела?',
+              isBot: true,
+              timestamp: new Date().toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })
+            }],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isPinned: false
+          };
+          setChats(prev => [newChat, ...prev]);
+          setSelectedChat(newChat);
+          setCollapsed(true);
+          setShowChatList(false);
+        }
+      }
+    }
+  }, [location.search, chats]);
+
+  // Следим за изменением chats и обновляем selectedChat, если чат был изменён
+  useEffect(() => {
+    if (selectedChat) {
+      const updated = chats.find(c => c.id === selectedChat.id);
+      if (updated && updated !== selectedChat) {
+        setSelectedChat(updated);
+      }
+    }
+  }, [chats]);
 
   const deleteAllChatsWithBot = (botId: string) => {
     bots = bots.filter(bot => bot.id !== selectedBot?.id);
@@ -490,7 +519,15 @@ const ChatInterface: React.FC = () => {
                   />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-1">{selectedBot.name}</h3>
-                <p className="text-purple-300">от <button onClick={() => viewUser(selectedBot.author)}>{selectedBot.author}</button></p>
+                <button
+                  className="text-purple-300 hover:underline cursor-pointer"
+                  onClick={() => {
+                    setUserViewFunc(selectedBot.author);
+                    navigate('/userview');
+                  }}
+                >
+                  от {selectedBot.author}
+                </button>
               </div>
 
               <div>

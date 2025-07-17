@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "../components/ui/sidebar"
 import { cn } from "../lib/utils"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { Link } from "react-router-dom"
 
 export function NavSecondary({

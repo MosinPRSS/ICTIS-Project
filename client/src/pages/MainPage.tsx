@@ -3,7 +3,7 @@ import { DashBoard } from "../components/DashBoard"
 import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
 import RegLog from "../components/RegLog"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 
 export default function MainPage() {
   const {wantToReg, theme, paletteFunc} = useRegister()

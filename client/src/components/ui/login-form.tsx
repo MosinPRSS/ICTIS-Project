@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useRegister } from "../../context/UserIsRegisteredContext"
+import { useRegister } from "../../context/Context"
 import { cn } from "../../lib/utils"
 import { Button } from "./button"
 import {

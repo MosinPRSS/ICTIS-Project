@@ -1,5 +1,5 @@
 import { BotMessageSquareIcon, MailIcon, PenLineIcon, UserIcon, X } from "lucide-react"
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { useState } from "react";
 import { FloatingPortal } from "@floating-ui/react";
 import { useNavigate } from "react-router-dom";

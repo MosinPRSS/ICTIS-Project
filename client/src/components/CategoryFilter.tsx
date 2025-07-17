@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FrownIcon, X } from "lucide-react";
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { CategoryFilterProps } from "../types/interfaces";
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
@@ -38,7 +38,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   const themeOptions = theme?.options || {};
 
   return (
-    <div className="w-full lg:w-[230px] gap-1 p-3 sm:p-4 lg:p-6 flex flex-col">
+    <div className={`w-full lg:w-[230px] gap-1 p-3 sm:p-4 lg:p-6 flex flex-col`}>
       <div className="flex flex-col space-y-3 sm:space-y-4 mb-3 sm:mb-4">
         <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-white">Теги</h2>
         <Input 

@@ -10,7 +10,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { UserPersonaWithSettings as Persona } from "../types/interfaces";
 import UserPersonas from '../utils/userPersonas.json';
 
@@ -127,9 +127,9 @@ const EnhancedPersonasPage: React.FC = () => {
         </div>
 
         {/* Persona Details */}
-        <div className="flex p-8 w-full justify-center border-white/10 bg-black/10 backdrop-blur-sm border-r">
+        <div className="flex p-8 w-full justify-between border-white/10 bg-black/10 backdrop-blur-sm border-r">
           {selectedPersona ? (
-            <div className="max-w-4xl">
+            <div className="max-w-4xl w-full">
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">

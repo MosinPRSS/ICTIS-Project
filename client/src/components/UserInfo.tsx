@@ -1,7 +1,7 @@
 import { FloatingPortal } from "@floating-ui/react";
 import { user } from "../utils/data";
 import { Button } from "./ui/button";
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 

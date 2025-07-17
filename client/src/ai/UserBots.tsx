@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Save, X, Upload, Zap } from 'lucide-react';
-import { useRegister } from '../context/UserIsRegisteredContext';
+import { useRegister } from '../context/Context';
 import { UserBotWithSettings as Bot } from '../types/interfaces';
 import UserBots from '../utils/userBots.json';
 

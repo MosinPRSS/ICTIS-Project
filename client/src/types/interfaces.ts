@@ -17,6 +17,9 @@ export interface Bot {
   isNew?: boolean;
   isPopular?: boolean;
   lastActive?: string;
+  promt?: string;
+  hello?: string;
+  scenario?: string;
 }
 
 export interface BotGridSectionProps {

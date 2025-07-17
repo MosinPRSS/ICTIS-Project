@@ -3,7 +3,7 @@ import { AppSidebar } from "../components/app-sidebar"
 import RegLog from "../components/RegLog"
 import { SiteHeader } from "../components/site-header"
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import ChatInterface from "../ai/Chat"
 
 export default function ChatsPage() {

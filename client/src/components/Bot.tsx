@@ -3,7 +3,7 @@
 import { MessageCircle } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useEffect, useRef, useState } from "react"
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { Bot } from "../types/interfaces"
 import { autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating } from "@floating-ui/react"
 import { useNavigate } from "react-router-dom"

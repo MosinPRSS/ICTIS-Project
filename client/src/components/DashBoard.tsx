@@ -14,7 +14,7 @@ import {
 } from "@floating-ui/react";
 import CategoryFilter from "./CategoryFilter";
 import { Categories } from "../utils/data";
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import {
   Clock,
   Frown,
@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import users from "../utils/users.json";
 
 const BotCard: React.FC<Bot> = ({
+  id,
   name,
   description,
   author,
@@ -40,7 +41,6 @@ const BotCard: React.FC<Bot> = ({
   chatsCount,
   rating,
   isNew,
-  isReg,
   tags,
 }) => {
   const { setUserViewFunc, pageFunc } = useRegister();
@@ -84,7 +84,7 @@ const BotCard: React.FC<Bot> = ({
     <div
       ref={refs.setReference}
       {...getReferenceProps()}
-      className="relative flex-shrink-0 h-40 transition-transform duration-300 hover:scale-105 hover:z-20"
+      className="relative flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:z-20"
     >
       <div className={`${theme.options.bgColor3} backdrop-blur-sm rounded-lg overflow-hidden min-w-[190px] ${theme.options.bgBorderColor} transition-all duration-300 hover:shadow-xl`}>
         <button className="h-40 w-full cursor-pointer" onClick={() => navigate(`/bot/${id}`)}>
@@ -133,11 +133,6 @@ const BotCard: React.FC<Bot> = ({
             <div className="space-y-3">
               <div>
                 <p className="text-white font-semibold">{name}</p>
-                {!isReg && (
-                  <p className="text-purple-200 text-sm">
-                    Для общения необходимо зарегистрироваться
-                  </p>
-                )}
                 <p className="text-purple-300 text-sm">{description}</p>
               </div>
 
@@ -187,18 +182,23 @@ const BotCard: React.FC<Bot> = ({
   );
 };
 
-const BotGridSection = ({ title, icon, bots, isReg }) => {
+interface BotGridSectionProps {
+  title: string;
+  icon: React.ReactNode;
+  bots: Bot[];
+}
+
+const BotGridSection: React.FC<BotGridSectionProps> = ({ title, icon, bots }) => {
   return (
-    <div className="flex-1 h-full">
+    <div className="flex-1">
       <div className="flex items-center gap-3 mb-6">
         {icon}
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <span className="text-purple-300 text-sm">({bots.length})</span>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-4 h-full pr-2 relative overflow-visible">
-        {bots.map((bot) => (
-          <BotCard isReg={isReg} key={bot.id} {...bot} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 pr-2 relative overflow-visible">
+        {bots.map((bot: Bot) => (
+          <BotCard key={bot.id} {...bot} />
         ))}
       </div>
     </div>
@@ -275,7 +275,7 @@ export function DashBoard() {
               Добро пожаловать, {user.name}!
             </p>
           ) : (
-            <p className="text-3xl font-bold max-w-[300px]">
+            <p className="text-3xl font-bold max-w-[500px]">
               Добро пожаловать!
             </p>
           )}
@@ -321,7 +321,6 @@ export function DashBoard() {
                 title={searchQuery ? `Результаты (${getFilteredBots().length})` : botCategories[activeCategory].title}
                 icon={searchQuery ? <SearchIcon className="text-blue-400" size={24} /> : botCategories[activeCategory].icon}
                 bots={getFilteredBots()}
-                isReg={isReg}
               />
             )
           ) : (
@@ -349,7 +348,6 @@ export function DashBoard() {
                 title={botCategories[activeCategory].title}
                 icon={botCategories[activeCategory].icon}
                 bots={botCategories[activeCategory].bots}
-                isReg={isReg}
               />
             </div>
           )}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { SendIcon } from "lucide-react";
 import { Message, Bot, ChatProps } from "../types/interfaces";
 

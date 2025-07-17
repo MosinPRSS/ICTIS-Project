@@ -1,7 +1,7 @@
 import { TriangleIcon, X } from "lucide-react";
 import { LoginForm } from "./ui/login-form";
 import dashboardBackground from "../../public/images/LoginPageBackGroundDarkTheme1900x1200.jpg"
-import { useRegister } from "../context/UserIsRegisteredContext";
+import { useRegister } from "../context/Context";
 import { useSidebar } from "./ui/sidebar";
 
 export default function RegLog() {

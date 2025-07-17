@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, UserPlus, Users } from 'lucide-react';
-import { useRegister } from '../context/UserIsRegisteredContext';
+import { useRegister } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
 import { Subscription } from '../types/interfaces';
 

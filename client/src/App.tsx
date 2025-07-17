@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import ChatPage from "./pages/ChatPage";
 import MainPage from "./pages/MainPage";
-import { UserIsRegisteredContext } from "./context/UserIsRegisteredContext";
+import { UserIsRegisteredContext } from "./context/Context";
 import CreateBotPage from "./pages/CreateBotPage";
 import UserBotsPage from "./pages/UserBotsPage";
 import HelpPage from "./pages/HelpPage";
@@ -27,7 +27,7 @@ export default function App() {
         <Route path='/userpersonas' element={<UserPersonasPage />} />
         <Route path="/createper" element={<CreatePersonaPage />} />
         <Route path="/userview" element={<UserViewPage />} />
-        <Route path="/bot" element={<BotInfoPage />} />
+        <Route path="/bot/:id" element={<BotInfoPage />} />
       </Routes>
     </UserIsRegisteredContext>
   )

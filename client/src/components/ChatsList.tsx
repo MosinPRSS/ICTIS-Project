@@ -1,4 +1,4 @@
-import { useRegister } from "../context/UserIsRegisteredContext"
+import { useRegister } from "../context/Context"
 import { Button } from "./ui/button"
 import ava from '../../public/images/dashboardBackground.png'
 import BotsData from '../utils/data.json'
