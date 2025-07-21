@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('DJANGO_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на фронтенд
+ALLOWED_HOSTS = ["http://localhost:5173"] # При деплое нужно заменить на настоящий фронтенд
 
 
 # Application definition
