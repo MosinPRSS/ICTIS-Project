@@ -6,11 +6,14 @@ export default function SearchBox() {
     let RandomStrings = [
         "🔎 Начни свой путь отсюда...",
         "🌄 Сегодня мне повезет...",
-        "❤️ Поиск тебе поможет..."
+        "❤️ Поиск тебе поможет...",
+        "🤔 Может, стоит поискать?"
     ]
     return (
         <div className="w-full p-4 bg-transparent relative z-10">
-            <input type="text" placeholder={RandomStrings[GetRandom(3)]} className="
+            <input type="text" placeholder={RandomStrings[GetRandom(
+                RandomStrings.length
+            )]} className="
             w-full 
             p-2
             border
