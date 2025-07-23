@@ -1,49 +1,38 @@
 import Bot from "./bot";
 
-export default function BotField() {
+type Props = {
+    isSidebarOpened: boolean;
+};
 
+export default function BotField({ isSidebarOpened }: Props) {
     const GetBots = () => {
-        let BotsObjects = []
-        for (let i = 0; i < 42; i++) {
-            BotsObjects.push(<Bot />);
-        }
-        return BotsObjects
-    }
-    
+        return Array.from({ length: 42 }, (_, i) => <Bot key={i} />);
+    };
+
     return (
-        <>
-        <div className="relative">
-            <div className="
-            bg-transparent
-            flex
-            flex-row
-            ">
-                <a className="text-right pt-4">Заглушка для страниц</a>
-            </div>
-            <div className="
-            relative
-            z-20
-            grid
-            grid-cols-1
-            sm:grid-cols-2 
-            md:grid-cols-3 
-            lg:grid-cols-6
-            gap-2
-            overflow-y-hidden
-            overflow-x-hidden
-            bg-gray-100
-            
-            ">{GetBots()}</div>
-            <div className="
-            bg-transparent
-            flex
-            flex-row-reverse
-            p-2
-            ">
-                <a className="text-right">Заглушка для страниц</a>
+        <div className="relative h-full flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-2">
+                <div className="m-2 text-left text-sm text-gray-500">
+                    Заглушка для страниц
+                </div>
+
+                <div
+                    className={`
+                        grid gap-4 transition-all duration-300
+                        ${
+                            isSidebarOpened
+                                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,_minmax(180px,_1fr))]'
+                                : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(auto-fit,_minmax(180px,_1fr))]'
+                        }
+                    `}
+                >
+                    {GetBots()}
+                </div>
+
+                <div className="m-2 text-right text-sm text-gray-500">
+                    Заглушка для страниц
+                </div>
             </div>
         </div>
-       
-        </>
-    )
+    );
 }
