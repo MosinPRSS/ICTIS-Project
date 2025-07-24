@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import MainBar from "../components/home-mainbar";
-import SearchBox from "../components/mainbar-components/search-field";
-import SideBar from "../components/home-sidebar";
-import PocketButton from "../components/sidebar-components/pocket";
-import MobileBottomNav from "../components/mobile-components/mobile-bottom-bar";
+import MainBar from "../components/home/home-mainbar";
+import SearchBox from "../components/home/mainbar-components/search-field";
+import SideBar from "../components/home/home-sidebar";
+import PocketButton from "../components/home/sidebar-components/pocket";
+import MobileBottomNav from "../components/home/mobile-components/mobile-bottom-bar";
 
 export default function Home() {
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
@@ -14,9 +14,9 @@ export default function Home() {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       if (mobile) {
-        setIsSidebarOpened(false); // по умолчанию закрыть на мобилках
+        setIsSidebarOpened(false);
       } else {
-        setIsSidebarOpened(true); // открыть на десктопах
+        setIsSidebarOpened(true);
       }
     };
 

@@ -6,7 +6,11 @@ export default function PocketButton({ onClick }: Props) {
     return (
         <button
             onClick={onClick}
-            className="absolute top-20 left-0 z-50 w-4 h-16 bg-gray-600 rounded-r-xl flex items-center justify-center"
+            className="absolute top-20 left-0 z-50 w-4 h-16 
+            bg-gray-900 
+            rounded-r-xl 
+            flex items-center justify-center
+            hover:shadow-xl"
             aria-label="Развернуть"
         >
             <svg

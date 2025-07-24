@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Button from "./sidebar-components/button";
 import ExpandButton from "./sidebar-components/expand";
+import Separator from './sidebar-components/separator';
 
 type Props = {
   isOpened: boolean;
@@ -14,11 +15,7 @@ export default function SideBar({ isOpened, onToggle }: Props) {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (mobile) {
-        onToggle(false);
-      } else {
-        onToggle(true);
-      }
+      onToggle(!mobile);
     };
 
     handleResize();
@@ -31,16 +28,20 @@ export default function SideBar({ isOpened, onToggle }: Props) {
   return (
     <div
       className={`
-        flex flex-col bg-gray-400 h-full p-4 transition-all duration-300 overflow-hidden
-        ${isOpened ? "w-60" : "w-16"}
+        flex flex-col bg-gray-400 h-full items-center
+        transition-all duration-300 overflow-hidden
+        ${isOpened ? "w-60 px-4" : "w-16 px-0"}
       `}
     >
-      <ExpandButton
-        is_opened={isOpened}
-        onClick={() => onToggle(!isOpened)}
-      />
 
-      <div className="flex-1 mt-4">
+      <div className="w-full mt-4">
+        <ExpandButton
+          is_opened={isOpened}
+          onClick={() => onToggle(!isOpened)}
+        />
+      </div>
+
+      <div className="flex-1 mt-4 flex flex-col gap-2 items-start w-full mr-8">
         <Button
           name="Главная"
           url="/"
@@ -48,6 +49,7 @@ export default function SideBar({ isOpened, onToggle }: Props) {
           img_url={"/homyak.jpg"}
           is_collapsed={!isOpened}
         />
+        <Separator />
         <Button
           name="Профиль"
           url="/profile"
@@ -59,4 +61,3 @@ export default function SideBar({ isOpened, onToggle }: Props) {
     </div>
   );
 }
-

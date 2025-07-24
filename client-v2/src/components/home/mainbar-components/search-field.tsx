@@ -1,14 +1,11 @@
+import { RandomStrings } from "../../../utils/data"
+
+
 export default function SearchBox() {
     const GetRandom = (max: Number) => {
         return Math.floor(Math.random() * max)
     }
 
-    let RandomStrings = [
-        "🔎 Начни свой путь отсюда...",
-        "🌄 Сегодня мне повезет...",
-        "❤️ Поиск тебе поможет...",
-        "🤔 Может, стоит поискать?"
-    ]
     return (
         <div className="w-full p-4 bg-transparent relative z-10">
             <input type="text" placeholder={RandomStrings[GetRandom(
