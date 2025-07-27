@@ -1,25 +1,39 @@
-export default function Bot() {
+type Props = {
+  onOpenAuth?: (method: string) => void;
+};
+
+export default function Bot({ onOpenAuth }: Props) {
+  const handleClick = () => {
+    if (onOpenAuth) {
+      onOpenAuth("register");
+    }
+  };
+
   return (
-    <div className={`
-      flex 
-      flex-shrink-0
-      m-2 mt-4
+    <div 
+      className={`
+        flex 
+        flex-shrink-0
+        m-2 mt-4
 
-      w-36 h-48    /* 📱 по умолчанию — для маленьких экранов */
-      sm:w-40 sm:h-56
-      md:w-45 md:h-60
-      lg:w-45 lg:h-70  /* 🖥️ на десктопах */
+        w-36 h-48
+        sm:w-40 sm:h-56
+        md:w-45 md:h-60
+        lg:w-45 lg:h-70
 
-      bg-gray-400 rounded-sm
-      transition
-      duration-300
-      ease-in-out
-      hover:shadow-xl/30
-      hover:scale-110
-      overflow-hidden
-      relative
-      group
-    `}>
+        bg-gray-400 rounded-sm
+        transition
+        duration-300
+        ease-in-out
+        hover:shadow-xl/30
+        hover:scale-110
+        overflow-hidden
+        relative
+        group
+        cursor-pointer
+      `}
+      onClick={handleClick}
+    >
       <img src="/homyak.jpg"
         className="
           w-full h-full object-cover

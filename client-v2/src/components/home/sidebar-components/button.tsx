@@ -14,7 +14,7 @@ export default function Button({
         <div
             className={`
             flex items-center rounded-sm py-2 px-2 cursor-pointer
-            ${is_activated ? 'bg-blue-500 text-white' : 'bg-gray-500 text-black'}
+            ${is_activated ? 'bg-gray-800 text-white' : 'bg-gray-500 text-black'}
             hover:bg-gray-700 transition-all duration-300
             `}
         >

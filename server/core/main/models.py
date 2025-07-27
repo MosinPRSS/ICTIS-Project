@@ -51,8 +51,8 @@ class User(AbstractBaseUser):
 
 class Chatbots(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    name = models.TextField()
-    chatname = models.TextField()
+    name = models.TextField(default="")
+    chatname = models.TextField(default="")
     avatar = models.ImageField(upload_to="img/bot/", default="Default_Avatar.svg")
     
     description = models.TextField(max_length=16384)
@@ -95,8 +95,8 @@ class AiSession(models.Model):
 
 class Messages(models.Model):
     session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
-    content = models.TextField()
-    previous_versions = models.TextField()
+    content = models.TextField(default="")
+    previous_versions = models.TextField(default="")
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

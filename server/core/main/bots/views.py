@@ -81,7 +81,9 @@ class SearchBots(generics.ListCreateAPIView):
             return queryset.filter(
                 Q(name__icontains=query) 
                 | 
-                Q(public_description__icontains=query))
+                Q(public_description__icontains=query)
+                |
+                Q(description__icontains=query))
         except AttributeError as e:
             return f"Nothing found: {e}"
 

@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('DJANGO_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:5173"] # При деплое нужно заменить на настоящий фронтенд
+ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на настоящий фронтенд
 
 
 # Application definition
@@ -41,7 +41,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
     ],
 }
 
@@ -108,7 +108,7 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv("PGUSER"),
         'PASSWORD': os.getenv("PGPASSWORD"),
-        'HOST': '0.0.0.0',
+        'HOST': '172.18.165.86',
         'PORT': os.getenv("PGPORT"),
     }
 }

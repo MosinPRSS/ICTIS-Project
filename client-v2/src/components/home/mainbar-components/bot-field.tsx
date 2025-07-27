@@ -1,12 +1,16 @@
+// bot-field.jsx
 import Bot from "./bot";
 
 type Props = {
     isSidebarOpened: boolean;
+    onOpenAuth: (method: string) => void; // новый пропс
 };
 
-export default function BotField({ isSidebarOpened }: Props) {
+export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
     const GetBots = () => {
-        return Array.from({ length: 42 }, (_, i) => <Bot key={i} />);
+        return Array.from({ length: 42 }, (_, i) => 
+            <Bot key={i} onOpenAuth={onOpenAuth} /> // передаем пропс
+        );
     };
 
     return (
