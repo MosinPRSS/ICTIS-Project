@@ -48,7 +48,7 @@ REST_FRAMEWORK = {
 INSTALLED_APPS = [
     'taggit',
     'daphne',
-    'main',
+    'main', # entire project
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',

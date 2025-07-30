@@ -4,8 +4,7 @@ from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 from taggit.models import Tag
 
-class BotSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tags = TagListSerializerField()
+class BotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chatbots
         fields = [
@@ -29,17 +28,26 @@ class BotSerializer(TaggitSerializer, serializers.ModelSerializer):
             "avatar": {"required": False},
             "is_public": {"required": True},
             "hide_info": {"required": True},
-            "first_message" : {"required": True},
+            "first_message": {"required": True},
             "scenario": {"required": False},
             "public_description": {"required": False},
             "tags": {"required": False},
         }
+
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
         validated_data["belongs_to"] = self.context["request"].user
         instance = super().create(validated_data)
-        instance.tags.set(*tags)
-        return instance
+        instance.tags.set(tags)
+
+        return Chatbots.objects.get(id=instance.id)
+
+    def to_representation(self, instance):
+        print("🔥 to_representation вызван для:", instance.name)
+        print("Теги в instance.tags.all():", [t.name for t in instance.tags.all()])
+        data = super().to_representation(instance)
+        data['tags'] = [tag.name for tag in instance.tags.all()]
+        return data
 
 class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
     bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
