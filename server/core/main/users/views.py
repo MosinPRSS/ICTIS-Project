@@ -1,7 +1,11 @@
 from rest_framework import generics
-from ..models import User
+from rest_framework.response import Response
+from ..models import *
 from .serializers import *
+from ..bots.serializers import BotSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.db.models import Q
+from rest_framework.exceptions import NotFound
 
 class CreateUser(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -14,6 +18,33 @@ class GetUser(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
+class GetAnotherUser(generics.RetrieveAPIView):
+    """
+    Получение пользователя и его ботов
+    """
+    serializer_class = ListUsersSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return User.objects.all()
+
+    def get_object(self):
+        user_id = self.kwargs.get("pk")
+        try:
+            return self.get_queryset().get(id=user_id)
+        except User.DoesNotExist:
+            raise NotFound("User not found")
+    
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        bots = Chatbots.objects.filter(belongs_to=user, is_public=True)
+
+        user_data = ListUsersSerializer(user).data
+        bot_data = BotSerializer(bots, many=True, context={'request': request}).data
+        return Response({
+            "user": user_data,
+            "public_bots": bot_data
+        })
 
 class DeleteUser(generics.DestroyAPIView):
     serializer_class = UserSerializer
@@ -28,3 +59,15 @@ class UpdateUser(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+    
+class SearchUsers(generics.ListCreateAPIView):
+    serializer_class = ListUsersSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        query = self.request.query_params.get("query", None)
+        try:
+            return queryset.filter(Q(username__icontains=query))
+        except AttributeError as e:
+            return f"Nothing found: {e}"

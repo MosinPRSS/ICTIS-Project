@@ -9,13 +9,20 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ["id", "email", "username", "password", "avatar", "description"]
+        fields = [
+            "id", "email", 
+            "username", 
+            "password", 
+            "avatar", 
+            "description", 
+            "view_nsfw"
+                  ]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
-            "username": {
-                "required": True,
-            },
-            "description": {"required": False}
+            "username": {"required": True},
+            "description": {"required": False},
+            "email": {"write_only": True, "required": True},
+            "view_nsfw": {"required": False}
         }
 
     def create(self, validated_data):
@@ -37,7 +44,15 @@ class UserSerializer(serializers.ModelSerializer):
             if instance.avatar.name != new_avatar.name and instance.avatar.storage.exists(instance.avatar.name):
                 instance.avatar.delete(save=False)
         return super().update(instance, validated_data)
+    
 
+class ListUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+        extra_kwargs = {
+            
+        }
 
 
 

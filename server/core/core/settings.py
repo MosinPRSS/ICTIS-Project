@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('DJANGO_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на фронтенд
+ALLOWED_HOSTS = ["*"] # При деплое нужно заменить на настоящий фронтенд
 
 
 # Application definition
@@ -41,13 +41,15 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
     ],
 }
 
 INSTALLED_APPS = [
+    'taggit',
     'daphne',
-    'main',
+    'main', # entire project
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,8 +57,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',  
 ]
+
+TAGGIT_TAGS_FROM_STRING = "taggit.utils.default_stringify"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,7 +97,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 SIMPLE_JWT = {
     "TOKEN_OBTAIN_SERIALIZER": "main.serializers.CustomTokenObtainPairSerializer",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
 
 
@@ -105,7 +110,7 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv("PGUSER"),
         'PASSWORD': os.getenv("PGPASSWORD"),
-        'HOST': '0.0.0.0',
+        'HOST': 'localhost',
         'PORT': os.getenv("PGPORT"),
     }
 }
