@@ -9,12 +9,20 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ["id", "email", "username", "password", "avatar", "description"]
+        fields = [
+            "id", "email", 
+            "username", 
+            "password", 
+            "avatar", 
+            "description", 
+            "view_nsfw"
+                  ]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {"required": True},
             "description": {"required": False},
-            "email": {"write_only": True, "required": True}
+            "email": {"write_only": True, "required": True},
+            "view_nsfw": {"required": False}
         }
 
     def create(self, validated_data):
@@ -41,9 +49,9 @@ class UserSerializer(serializers.ModelSerializer):
 class ListUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "avatar", "description"]
+        fields = '__all__'
         extra_kwargs = {
-            field: {'required': False} for field in fields 
+            
         }
 
 

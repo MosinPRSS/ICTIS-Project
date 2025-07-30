@@ -10,7 +10,7 @@ export default function Button({
     name, url, img_url, is_activated, is_collapsed = false
 }: ButtonTemplate) {
     return (
-        <a href={url} className="w-full">
+        <a href={url} className="">
         <div
             className={`
             flex items-center rounded-sm py-2 px-2 cursor-pointer

@@ -5,18 +5,14 @@ from django.conf import settings
 import random, string
 from typing import *
 from taggit.managers import TaggableManager
-
-
-# Отсюда будут браться компоненты для отправки сообщений.
-# Возможно, будем использовать и другие модели, поэтому сделаем свою реализацию взаимодействия
-# подобно ollama-lib и другим.
-import asyncio
+import uuid
 
 # class PublicDescription(models.Model)
 #   belongs_to = bot | user
 #   for users and bots
 
 class User(AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField('email address', unique=True)
     username = models.CharField('username')
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
@@ -24,6 +20,8 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
+
+    view_nsfw = models.BooleanField(default=False) # TODO: SOON
 
     objects = UserManager()
 
@@ -51,6 +49,7 @@ class User(AbstractBaseUser):
 
 class Chatbots(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField(default="")
     chatname = models.TextField(default="")
     avatar = models.ImageField(upload_to="img/bot/", default="Default_Avatar.svg")
@@ -64,6 +63,9 @@ class Chatbots(models.Model):
     hide_info = models.BooleanField(default=True) # TODO
     public_description = models.TextField() # no generation
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     tags = TaggableManager(blank=True)
     
 class Favorites(models.Model):
@@ -75,14 +77,15 @@ class Favorites(models.Model):
 
 class Personas(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
     avatar = models.ImageField(upload_to="img/personas/", default="Default_Avatar.svg")
     description = models.TextField(max_length=8192)
 
 class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
-    session_code = models.CharField(max_length=32)
     persona = models.ForeignKey(to=Personas, on_delete=models.SET_NULL, null=True)
 
     # time working
@@ -109,6 +112,9 @@ class Messages(models.Model):
 class AiLogging(models.Model):
     code = models.IntegerField()
     description = models.CharField(max_length=64, default="null")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class ServerLoggin(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 

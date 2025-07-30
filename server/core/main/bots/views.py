@@ -30,6 +30,7 @@ class UpdateBot(generics.UpdateAPIView):
             raise NotFound("This bot isnt yours.")
         
 class GetUserBot(generics.RetrieveAPIView):
+    # outdated - do not use.
     serializer_class = ShowBotSerializer
     permission_classes = [IsAuthenticated]
 
@@ -50,7 +51,8 @@ class ListPublicBots(generics.ListCreateAPIView):
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to')
 
-class ListPublicBotsToNotRegistered(generics.ListCreateAPIView): 
+class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
+    # outdated - do not use.
     serializer_class = ShowBotSerializer
     permission_classes = [AllowAny]
     

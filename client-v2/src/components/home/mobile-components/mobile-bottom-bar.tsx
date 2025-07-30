@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { base_url } from "../../../api/consts";
 
 export default function MobileBottomNav({ scrollContainerRef, isBlurred }) {
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
-
+  const avatarImg = localStorage.getItem("avatarUrl")
   useEffect(() => {
+    
     const el = scrollContainerRef?.current;
     if (!el) return;
 
@@ -37,23 +39,23 @@ export default function MobileBottomNav({ scrollContainerRef, isBlurred }) {
       `}
     >
       <a href="/" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
-        <img className="h-8 w-8" src="/homyak.jpg" />
+        <img className="h-8 w-8 rounded-sm" src="/homyak.jpg" />
         <span className="text-xs">Главная</span>
       </a>
       <a href="/profile" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
-        <img className="h-8 w-8" src="/homyak.jpg" />
+        <img className="h-8 w-8 rounded-sm" src="/homyak.jpg" />
         <span className="text-xs">Чаты</span>
       </a>
       <a href="/profile" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
-        <img className="h-8 w-8" src="/homyak.jpg" />
+        <img className="h-8 w-8 rounded-sm" src="/homyak.jpg" />
         <span className="text-xs">Создать бота</span>
       </a>
       <a href="/profile" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
-        <img className="h-8 w-8" src="/homyak.jpg" />
+        <img className="h-8 w-8 rounded-sm" src="/homyak.jpg" />
         <span className="text-xs">Персоны</span>
       </a>
-      <a href="/settings" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
-        <img className="h-8 w-8" src="/homyak.jpg" />
+      <a href="/profile" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
+        <img className="h-8 w-8 rounded-sm" src={(avatarImg === null ? "/homyak.jpg" : base_url + avatarImg)} />
         <span className="text-xs">Профиль</span>
       </a>
     </div>

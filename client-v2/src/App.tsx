@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom"
 import './App.css'
 import Home from "./pages/home"
 import Error from './pages/error'
 import { ServerStatus } from './components/error-components/status'
 import Login from './components/auth/login-components/form'
+import Profile from "./pages/profile"
 
 function App() {
 
@@ -28,6 +28,12 @@ function App() {
              onClose={undefined}         
           />
          }/>
+         <Route 
+         path="/profile/:user_id"
+         element={
+          <Profile />
+         }
+         />
       </Routes>
     </BrowserRouter>
   )
@@ -38,7 +44,7 @@ function ErrorPageWrapper() {
   const errorData = ServerStatus[code as keyof typeof ServerStatus];
 
   if (!errorData) {
-    return <div>Ошибка не найдена</div>;
+    return <div>Серьезная ошибка клиента и сервера</div>;
   }
 
   return (

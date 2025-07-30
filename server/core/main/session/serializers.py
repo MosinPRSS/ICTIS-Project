@@ -48,7 +48,7 @@ class SessionSerializer(serializers.ModelSerializer):
         )
         if fst_message:
             Messages.create_message(
-                role="assistant",
+                role=chatbot.name,
                 content=fst_message
             )
         return session

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'taggit',
     'daphne',
     'main',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',  
 ]
 
@@ -95,7 +97,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 SIMPLE_JWT = {
     "TOKEN_OBTAIN_SERIALIZER": "main.serializers.CustomTokenObtainPairSerializer",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
 
 
@@ -108,7 +110,7 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv("PGUSER"),
         'PASSWORD': os.getenv("PGPASSWORD"),
-        'HOST': '172.18.165.86',
+        'HOST': 'localhost',
         'PORT': os.getenv("PGPORT"),
     }
 }
