@@ -9,15 +9,22 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     async (config) => {
+        if (config.skipAuth) {
+            return config;
+        }
+
         if (!config.headers.Authorization) {
             const token = await getValidAccessToken();
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
             }
         }
+
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        return Promise.reject(error);
+    }
 );
 
 apiClient.interceptors.response.use(
@@ -25,11 +32,15 @@ apiClient.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        if (originalRequest.skipAuth && error.response?.status === 401) {
+            return Promise.reject(error);
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             const newToken = await getValidAccessToken();
-            
+
             if (newToken) {
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return apiClient(originalRequest);
