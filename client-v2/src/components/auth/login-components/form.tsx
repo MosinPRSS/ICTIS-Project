@@ -179,6 +179,7 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
             placeholder="Введите пароль"
             className="w-full px-4 py-2 border border-gray-300 rounded-sm transition outline-none"
             required
+            minLength={8}
           />
         </div>
         {!isLogin && (
@@ -194,6 +195,7 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
               placeholder="Повторите пароль"
               className="w-full px-4 py-2 border border-gray-300 rounded-sm transition outline-none"
               required
+              minLength={8}
             />
           </div>
         )}

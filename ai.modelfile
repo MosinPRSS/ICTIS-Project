@@ -1,0 +1,63 @@
+# ЕСЛИ ЖЕ ПОНАДОБИТСЯ ПОТРЕБНОСТЬ, НАПРИМЕР, СОЗДАТЬ СИСТЕМНЫЙ ПРОМПТ ДЛЯ ПОСТОЯННОЙ РАБОТЫ, 
+# ТО ЧЕРЕЗ ЭТОТ ФАЙЛ МОЖНО ЗАДАТЬ ТАКОВЫЕ НАСТРОЙКИ
+
+# Полная документация по Ollama Modelfile:
+# https://github.com/ollama/ollama/blob/main/docs/modelfile.md
+
+# Полная документация по Ollama API 
+# (отправка запросов к локальному серверу Олламы)
+# https://github.com/ollama/ollama/blob/main/docs/api.md
+
+# Данный файл содержит лишь некоторые важные моменты и пояснения
+
+# FROM - т.е, из какой модели он будет создаваться
+# чаще на основе какого-либо SHA256-блоба, находящийся где-то в корне системы
+# Для дипсика (docker-образ Дебиана):
+FROM /usr/share/ollama/.ollama/models/blobs/sha256-e6a7edc1a4d7d9b2de136a221a57336b76316cfe53a252aeba814496c5ae439d
+
+# Однако если же используется "сжатая" модель в формате .gguf
+# то нужно вызвать "FROM ./path/to/your/file/*.gguf" в терминале
+
+# SYSTEM - Системный промпт. Описывается внутри кавычек
+SYSTEM """
+
+"""
+
+# TEMPLATE - Чаще используйте тот, что идет первоначально в модели, особенно для думающих,
+# поскольку они сами по себе выглядят сложно, но уже в готовом виде.
+# Например, для Дипсика:
+
+TEMPLATE """{{- if .System }}{{ .System }}{{ end }}
+{{- range $i, $_ := .Messages }}
+{{- $last := eq (len (slice $.Messages $i)) 1}}
+{{- if eq .Role "user" }}<｜User｜>{{ .Content }}
+{{- else if eq .Role "assistant" }}<｜Assistant｜>
+  {{- if and $.IsThinkSet (and $last .Thinking) -}}
+<think>
+{{ .Thinking }}
+</think>
+{{- end }}{{ .Content }}{{- if not $last }}<｜end▁of▁sentence｜>{{- end }}
+{{- end }}
+{{- if and $last (ne .Role "assistant") }}<｜Assistant｜>
+{{- if and $.IsThinkSet (not $.Think) -}}
+<think>
+
+</think>
+{{ end }}
+{{- end -}}
+{{- end }}"""
+
+# PARAMETER - меняет характеристики ответов ИИ. Задается одной строкой.
+# Список параметров в полной документации. Для дипсика это:
+PARAMETER stop <｜begin▁of▁sentence｜>
+PARAMETER stop <｜end▁of▁sentence｜>
+PARAMETER stop <｜User｜>
+PARAMETER stop <｜Assistant｜>
+PARAMETER temperature 0.6
+PARAMETER top_p 0.95
+
+# Файлы для создания новой, улучшенной, модели должны оканчиваться на ".modelfile" (любой регистр)
+# Для создания новой модели, используйте:
+# ollama create НАЗВАНИЕ_НОВОЙ_МОДЕЛИ -f "ПУТЬ К ВАШЕМУ .modelfile ФАЙЛУ"
+# Для запуска:
+# ollama run НАЗВАНИЕ_НОВОЙ_МОДЕЛИ

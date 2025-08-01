@@ -2,19 +2,18 @@ type ButtonTemplate = {
     name: string;
     url: string;
     img_url: string;
-    is_activated: boolean;
     is_collapsed?: boolean;
 };
 
 export default function Button({
-    name, url, img_url, is_activated, is_collapsed = false
+    name, url, img_url, is_collapsed = false
 }: ButtonTemplate) {
     return (
         <a href={url} className="">
         <div
             className={`
             flex items-center rounded-sm py-2 px-2 cursor-pointer
-            ${is_activated ? 'bg-gray-800 text-white' : 'bg-gray-500 text-black'}
+          bg-gray-500 text-black
             hover:bg-gray-700 transition-all duration-300
             `}
         >
@@ -37,8 +36,6 @@ export default function Button({
             </div>
         </div>
         </a>
-
-
     );
 }
 

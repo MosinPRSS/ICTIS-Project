@@ -2,7 +2,7 @@ import { RandomStrings } from "../../../utils/data"
 
 
 export default function SearchBox() {
-    const GetRandom = (max: Number) => {
+    const GetRandom = (max: number) => {
         return Math.floor(Math.random() * max)
     }
 

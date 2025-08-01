@@ -60,7 +60,6 @@ export default function SideBar({
           <Button
             name="Главная"
             url="/"
-            is_activated={true}
             img_url={"/homyak.jpg"}
             is_collapsed={!isOpened}
           />

@@ -32,7 +32,7 @@ export default function ProfileButton({
   const handleProfileInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isReg) {
-      navigate('/profile');
+      navigate('/profile/' + localStorage.getItem("userID"));
     }
   };
 
@@ -108,7 +108,7 @@ export default function ProfileButton({
             <button
               type="button"
               onClick={handleProfileInfoClick}
-              className="flex-shrink-0 p-1 rounded-full hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex-shrink-0 p-1 rounded-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
               aria-label="Настройки"
             >
               <svg 

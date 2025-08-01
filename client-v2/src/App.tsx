@@ -31,7 +31,7 @@ function App() {
          <Route 
          path="/profile/:user_id"
          element={
-          <Profile />
+          <ProfilePageWrapper />
          }
          />
       </Routes>
@@ -55,6 +55,16 @@ function ErrorPageWrapper() {
       short_description={errorData.short_status}
     />
   );
+}
+
+function ProfilePageWrapper() {
+  const { user_id } = useParams<{ user_id: string }>();
+
+  if (!user_id) {
+    return <div>Не указан ID пользователя</div>;
+  }
+
+  return <Profile user_id={user_id} />;
 }
 
 export default App

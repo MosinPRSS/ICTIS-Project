@@ -219,7 +219,7 @@ export default function Home() {
           </div>
           
           {/* Основной контент */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-w-0">
             <div className="h-16 flex items-center bg-gray-100 shadow-sm">
               <SearchBox />
             </div>
