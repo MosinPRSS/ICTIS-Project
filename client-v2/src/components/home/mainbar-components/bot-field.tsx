@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Bot from "./bot";
 import TagButton from "./tag_button";
 import useTagsService from "../../../api/tags_service"
+import { base_url } from "../../../api/consts";
+import convertToK from "../../../utils/data";
 
 type Props = {
     isSidebarOpened: boolean;
@@ -10,6 +12,7 @@ type Props = {
 };
 
 export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
+    const test = base_url + (localStorage.getItem("avatarUrl"));
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
     const [tags, setTags] = useState<Array<{ name: string; num_times: number }>>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -40,15 +43,20 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
     };
 
     const GetBots = () => {
-        return Array.from({ length: 42 }, (_, i) => (
-            <Bot key={i} onOpenAuth={onOpenAuth} />
+        return Array.from({ length: 41 }, (_, i) => (
+            <Bot key={i} onOpenAuth={onOpenAuth} 
+            name={"хомячок"}
+            avatarUrl={"/homyak.jpg"}
+            sessionCount={convertToK(1200)}
+            userAvatarUrl={test}
+            publicDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            />
         ));
     };
 
     return (
         <div className="relative h-full flex flex-col overflow-hidden">
             <div className="overflow-y-auto p-2">
-                {/* Блок с тегами */}
                 <div className="mb-2">
                     <h3 className="text-sm font-medium text-gray-700 mb-1">Теги</h3>
 
@@ -89,7 +97,7 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
                     )}
                 </div>
 
-                <div className="m-2 text-left text-sm text-gray-500">
+                <div className="mb-2 mt-2 text-left text-sm text-gray-500">
                     Заглушка для страниц
                 </div>
 
@@ -103,10 +111,11 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
                         }
                     `}
                 >
+                    <Bot onOpenAuth={onOpenAuth} avatarUrl={"/hernya.webp"} />
                     {GetBots()}
                 </div>
 
-                <div className="m-2 text-right text-sm text-gray-500">
+                <div className="mt-2 mb-2 text-right text-sm text-gray-500">
                     Заглушка для страниц
                 </div>
             </div>

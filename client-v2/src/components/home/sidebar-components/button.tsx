@@ -12,12 +12,12 @@ export default function Button({
         <a href={url} className="">
         <div
             className={`
-            flex items-center rounded-sm py-2 px-2 cursor-pointer
-          bg-gray-500 text-black
+            flex items-center rounded-sm py-1 px-2 cursor-pointer
+          bg-gray-500/20 text-black
             hover:bg-gray-700 transition-all duration-300
             `}
         >
-            <div className="w-8 h-8 flex-shrink-0">
+            <div className="w-6 h-6 flex-shrink-0 ml-1">
             {img_url && (
                 <img
                 src={img_url}
@@ -28,7 +28,7 @@ export default function Button({
 
             <div
             className={`
-                ml-2 text-sm font-semibold truncate transition-all duration-300 
+                ml-6 text-sm font-semibold truncate transition-all duration-300 
                 ${is_collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}
             `}
             >

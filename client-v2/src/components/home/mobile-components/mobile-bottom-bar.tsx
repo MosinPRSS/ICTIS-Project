@@ -54,7 +54,7 @@ export default function MobileBottomNav({ scrollContainerRef, isBlurred }) {
         <img className="h-8 w-8 rounded-sm" src="/homyak.jpg" />
         <span className="text-xs">Персоны</span>
       </a>
-      <a href="/profile" className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
+      <a href={"/profile/" + localStorage.getItem("userID")}className="flex flex-col items-center text-sm text-gray-600 hover:text-blue-500">
         <img className="h-8 w-8 rounded-sm" src={(avatarImg === null ? "/homyak.jpg" : base_url + avatarImg)} />
         <span className="text-xs">Профиль</span>
       </a>

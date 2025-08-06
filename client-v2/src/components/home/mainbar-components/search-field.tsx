@@ -7,20 +7,26 @@ export default function SearchBox() {
     }
 
     return (
-        <div className="w-full p-4 bg-transparent relative z-10">
+        <>
+        <div className="w-5/7 p-4 bg-transparent relative z-10">
             <input type="text" placeholder={RandomStrings[GetRandom(
                 RandomStrings.length
             )]} className="
             w-full 
-            p-2
-            border
+            py-1
+            px-2
             rounded-sm
-            bg-transparent
+            bg-white
             transition
             duration-300
             hover:shadow-xl/10
             focus:shadow-xl/50
+            focus:outline-0
             " />
         </div>
+        <div>
+
+        </div>
+        </>
     )
 }
