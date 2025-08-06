@@ -116,17 +116,17 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
         <div className="flex justify-center gap-4">
           <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
             <div className="w-8 h-8 flex-shrink-0">
-              <img src="/google.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
             </div>
           </div>
           <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
             <div className="w-8 h-8 flex-shrink-0">
-              <img src="/google.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
             </div>
           </div>
           <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
             <div className="w-8 h-8 flex-shrink-0">
-              <img src="/google.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
             </div>
           </div>
         </div>

@@ -1,16 +1,25 @@
 // Здесь содержатся цвета, которые будут использованы для тем
 // а также всякие плюшки для работы приложения
 
-export const Themes = {
-    "night-mountain": {
-        "accent": "#FFFFFF"
-    }
-} 
-
 export const RandomStrings = [
     "🔎 Начни свой путь отсюда...",
     "🌄 Сегодня мне повезет...",
     "❤️ Поиск тебе поможет...",
     "🤔 Может, стоит поискать?",
-    "💕 Также можно искать по описанию!"
+    "💕 Также можно искать по описанию!",
+    "🏷️ С помощью тегов можно сортировать персонажей!",
 ]
+
+export const PreparedTags = [
+    // Базовые теги для использования при создании и отображения    
+]
+
+export default function convertToK(num: number): string {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  } else {
+    return num.toString();
+  }
+}

@@ -60,14 +60,50 @@ export default function SideBar({
           <Button
             name="Главная"
             url="/"
-            img_url={"/homyak.jpg"}
+            img_url={"https://img.icons8.com/material-outlined/24/home--v2.png"}
             is_collapsed={!isOpened}
           />
         </div>
-        <Separator />
-      </div>
+        {
+          !isReg ? (
+            <>
+            <Separator />
+            <div className='
+            flex justify-center
+            bg-gray-500 
+            rounded-sm
+            '>
+              <p className='text-center'>ВОйдите в аккаунт</p>
+            </div>
+            </>
+          ) : ( 
+          <>
+          <Separator />
+          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
+            <Button
+              name="Мои чаты"
+              url="/"
+              img_url={"https://img.icons8.com/material-outlined/24/chat.png"}
+              is_collapsed={!isOpened}
+            />
+          </div>
+          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
+            <Button
+              name="Мои персоны"
+              url="/"
+              img_url={"/persons.svg"}
+              is_collapsed={!isOpened}
+            />
+          </div>
+          </>
+            
+          )
 
+        }
+      </div>
+        
       <div className={`${isOpened ? "w-full px-2" : "flex items-center w-full px-2"} mb-4 mr-8`}>
+        <Separator />
         <ProfileButton
           isReg={isReg}
           username={username}

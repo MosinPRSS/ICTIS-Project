@@ -186,10 +186,10 @@ export default function Home() {
               ${isMobile
                 ? isSidebarOpened
                   ? "w-60 bg-gray-400"
-                  : "w-0 bg-transparent"
+                  : "w-0 bg-gray-100"
                 : isSidebarOpened
                 ? "w-60 bg-gray-400"
-                : "w-4 bg-transparent"
+                : "w-4 bg-gray-100"
               }
               flex-shrink-0 overflow-hidden
             `}
@@ -220,10 +220,10 @@ export default function Home() {
           
           {/* Основной контент */}
           <div className="flex-1 flex flex-col min-w-0">
-            <div className="h-16 flex items-center bg-gray-100 shadow-sm">
+            <div className="h-16 flex justify-center bg-emerald-400/40 shadow-sm">
               <SearchBox />
             </div>
-            <div className="flex-1 p-4 overflow-auto bg-gray-100">
+            <div className="flex-1 px-2 overflow-auto bg-emerald-400/30">
               {/* Передаем openAuthModal, который теперь учитывает isReg */}
               <MainBar 
                 isSidebarOpened={isSidebarOpened} 
@@ -238,10 +238,7 @@ export default function Home() {
           <MobileBottomNav scrollContainerRef={scrollContainerRef} isBlurred={isAuthModalOpen} />
         </div>
       </div>
-      
-      {/* Модальное окно авторизации - отображается по условию */}
-      {/* Оно будет отображаться только если isAuthModalOpen === true */}
-      {/* И только если пользователь не авторизован */}
+
       {isAuthModalOpen && !isReg && (
         <AuthForm 
           isOpen={isAuthModalOpen} 

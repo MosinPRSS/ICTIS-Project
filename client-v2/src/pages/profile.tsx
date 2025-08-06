@@ -106,10 +106,6 @@ export default function Profile({ user_id }: ProfileProps) {
     setIsAuthModalOpen(false);
   };
 
-  if (isLoadingAuthCheck) {
-    return <div>Загрузка...</div>;
-  }
-
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Основной макет */}
