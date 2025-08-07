@@ -60,7 +60,7 @@ export default function SideBar({
           <Button
             name="Главная"
             url="/"
-            img_url={"https://img.icons8.com/material-outlined/24/home--v2.png"}
+            img_url={"/home.svg"}
             is_collapsed={!isOpened}
           />
         </div>
@@ -83,7 +83,7 @@ export default function SideBar({
             <Button
               name="Мои чаты"
               url="/"
-              img_url={"https://img.icons8.com/material-outlined/24/chat.png"}
+              img_url={"/chats.svg"}
               is_collapsed={!isOpened}
             />
           </div>
@@ -102,7 +102,7 @@ export default function SideBar({
         }
       </div>
         
-      <div className={`${isOpened ? "w-full px-2" : "flex items-center w-full px-2"} mb-4 mr-8`}>
+      <div className={`${isOpened ? "w-full px-2" : "flex items-center w-full px-2"} mb-1 mr-8`}>
         <Separator />
         <ProfileButton
           isReg={isReg}
@@ -112,6 +112,13 @@ export default function SideBar({
           onOpenSettings={onOpenSettings}
           isCollapsed={!isOpened}
         />
+        <Separator />
+      </div>
+      <div className="flex flex-col items-center mr-8">
+        <a className="font-semibold text-sm hover:underline"
+        href="/">Report a subject</a>
+        <a className="font-semibold text-sm hover:underline"
+        href="mailto:contact.mosin3310@gmail.com">Связаться с поддержкой</a>
       </div>
     </div>
   );
