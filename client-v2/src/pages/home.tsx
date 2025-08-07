@@ -220,7 +220,10 @@ export default function Home() {
           
           {/* Основной контент */}
           <div className="flex-1 flex flex-col min-w-0">
-            <div className="h-16 flex justify-center bg-emerald-400/40 shadow-sm">
+            <div className="h-12 flex justify-center bg-emerald-400/40">
+              <p className="align-middle">Главная</p>
+            </div>
+            <div className="h-16 flex justify-center bg-emerald-400/40 shadow-2xl/60">
               <SearchBox />
             </div>
             <div className="flex-1 px-2 overflow-auto bg-emerald-400/30">

@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 type Props = {
   onOpenAuth?: (method: string) => void;
 
@@ -9,7 +11,8 @@ type Props = {
   sessionCount: string;
   userAvatarUrl: string;
   username: string;
-  userUrl: string
+  userUrl: string;
+  userID: string;
 
   tags: []
 
@@ -23,6 +26,7 @@ export default function Bot({
   sessionCount,
   userAvatarUrl,
   username,
+  userID,
   avatarUrl,
 }: Props) {
   const handleClick = () => {
@@ -80,7 +84,6 @@ export default function Bot({
           bg-gradient-to-t from-black/60 via-black/20 to-transparent
           p-2
           text-white
-          pointer-events-none
           flex
           flex-col
           gap-1
@@ -95,13 +98,19 @@ export default function Bot({
               alt={username}
               className="h-5 w-5 rounded-sm shadow-2xl"
             />
-            <span className="truncate max-w-[80px] drop-shadow-sm">{username}</span>
+            <Link to={`/profile/${userID}`} 
+            className="
+            truncate 
+            max-w-[80px] 
+            drop-shadow-sm
+            hover:underline"
+            onClick={(e) => e.stopPropagation()}
+            >{username}</Link>
           </div>
 
           <div className="flex items-center gap-1 whitespace-nowrap">
             <img
-              src="https://img.icons8.com/external-royyan-wijaya-detailed-outline-royyan-wijaya/24/external-chats-communication-royyan-wijaya-detailed-outline-royyan-wijaya.png"
-              alt="sessions"
+              src="chats.svg"
               className="h-4 w-4"
             />
             <span>{sessionCount}</span>
@@ -124,7 +133,7 @@ export default function Bot({
           opacity-0
           group-hover:opacity-100
           transition-opacity
-          duration-300
+          duration-200
           pointer-events-none
           z-10
         "

@@ -12,8 +12,8 @@ const ExpandButton: FC<ExpandButtonProps> = ({ is_opened, onClick }) => {
             <button
                 onClick={onClick}
                 className="w-8 h-8 
-                bg-gray-600 
-                rounded-xl 
+                bg-emerald-400/40
+                rounded-sm
                 flex items-center justify-center 
                 transition-transform duration-300
                 hover:shadow-xl"

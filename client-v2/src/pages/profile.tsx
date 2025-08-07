@@ -4,6 +4,7 @@ import SideBar from '../components/home/home-sidebar';
 import PocketButton from '../components/home/sidebar-components/pocket'; // ✅ Импортируем PocketButton
 import { isAuthenticated } from '../api/token_service';
 import AuthForm from '../components/auth/authform';
+import InfoBox from '../components/profile-components/mainbar-components/profile_info';
 
 type ProfileProps = {
   user_id: string;
@@ -147,10 +148,19 @@ export default function Profile({ user_id }: ProfileProps) {
 
         {/* Основной контент профиля */}
         <div className="flex-1 flex flex-col p-6 bg-gray-100">
-          <h1 className="text-2xl font-bold mb-4">Профиль: {user_id}</h1>
-          <p className="text-lg">Это {isOwnProfile ? 'ваш' : 'чужой'} профиль.</p>
-          <p>ОХЕРЕТЬ ЭТО РАБОТАЕТ</p>
-        </div>
+          <div className="w-full flex items-center justify-center mb-6">
+            <p className="text-xl font-semibold text-gray-800">Профиль пользователя</p>
+          </div>
+
+          <div className="w-full flex justify-start">
+            <div className="w-1/3 min-w-80"> {/* min-w-80 — чтобы не схлопывался на узких экранах */}
+              <InfoBox
+              username='MosinPRSS'
+              createdAt='28 Nov 2025'
+              userId={localStorage.getItem("userID")}
+              />
+            </div>
+          </div>
       </div>
 
       {/* Модальное окно авторизации */}
@@ -167,6 +177,7 @@ export default function Profile({ user_id }: ProfileProps) {
           />
         </div>
       )}
+    </div>
     </div>
   );
 }
