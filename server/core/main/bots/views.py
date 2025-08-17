@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from taggit.models import Tag
+from ..pagination import *
 
 class CreateBot(generics.CreateAPIView):
     queryset = Chatbots.objects.all()
@@ -30,7 +31,7 @@ class UpdateBot(generics.UpdateAPIView):
             raise NotFound("This bot isnt yours.")
         
 class GetUserBot(generics.RetrieveAPIView):
-    # outdated - do not use.
+    # needs to be updated
     serializer_class = ShowBotSerializer
     permission_classes = [IsAuthenticated]
 
@@ -45,8 +46,10 @@ class GetUserBot(generics.RetrieveAPIView):
             raise NotFound("This bot isnt yours.")
 
 class ListPublicBots(generics.ListCreateAPIView): 
+    # outdated - do not use. // for test uses only
     serializer_class = ShowBotSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    pagination_class = StandardResultsPagination
     
     def get_queryset(self):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to')

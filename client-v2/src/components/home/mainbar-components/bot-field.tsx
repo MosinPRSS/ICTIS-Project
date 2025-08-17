@@ -46,7 +46,7 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
         return Array.from({ length: 41 }, (_, i) => (
             <Bot key={i} onOpenAuth={onOpenAuth} 
             name={"хомячок"}
-            avatarUrl={"/homyak.jpg"}
+            avatarUrl={"/staticx.jpg"}
             sessionCount={convertToK(1200)}
             userAvatarUrl={test}
             username="MosinPRSS"

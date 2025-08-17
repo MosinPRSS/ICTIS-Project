@@ -116,7 +116,7 @@ export default function SideBar({
       </div>
       <div className="flex flex-col items-center mr-8">
         <a className="font-semibold text-sm hover:underline"
-        href="/">Report a subject</a>
+        href="/">Пожаловаться</a>
         <a className="font-semibold text-sm hover:underline"
         href="mailto:contact.mosin3310@gmail.com">Связаться с поддержкой</a>
       </div>

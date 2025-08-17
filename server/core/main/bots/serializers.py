@@ -7,19 +7,7 @@ from taggit.models import Tag
 class BotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chatbots
-        fields = [
-            "id",
-            "chatname",
-            "name", 
-            "avatar",
-            "public_description",
-            "first_message",
-            "description", 
-            "scenario",
-            "hide_info",
-            "is_public",
-            "tags",
-        ]
+        fields = "__all__"
         extra_kwargs = {
             "id": {"read_only": True},
             "chatname": {"required": True},
@@ -43,8 +31,6 @@ class BotSerializer(serializers.ModelSerializer):
         return Chatbots.objects.get(id=instance.id)
 
     def to_representation(self, instance):
-        print("🔥 to_representation вызван для:", instance.name)
-        print("Теги в instance.tags.all():", [t.name for t in instance.tags.all()])
         data = super().to_representation(instance)
         data['tags'] = [tag.name for tag in instance.tags.all()]
         return data
@@ -59,9 +45,9 @@ class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = [
             "__all__",
             "tags",
-            "bot_owner",
-            "avatar_owner",
             "user_id",
+            "bot_owner",
+            "avatar_owner"
         ]
         extra_kwargs = {
             "id": {"read_only": True},

@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, useParams } from "react-router-dom"
 import './App.css'
 import Home from "./pages/home"
 import Error from './pages/error'
-import { ServerStatus } from './components/error-components/status'
+import { ServerStatus } from './components/error/status'
 import Login from './components/auth/login-components/form'
 import Profile from "./pages/profile"
 
@@ -27,13 +27,25 @@ function App() {
          <Login 
              onClose={undefined}         
           />
-         }/>
+         }
+         />
          <Route 
          path="/profile/:user_id"
          element={
           <ProfilePageWrapper />
          }
          />
+         <Route 
+         path="/chats"
+         />
+         <Route 
+         path="/personas"
+         />
+         <Route 
+         path="/chats/:chat_id"
+         
+         />
+        {/*пусть чаты будут универсальны, без ввода каких-нибудь sessions */}
       </Routes>
     </BrowserRouter>
   )

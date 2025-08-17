@@ -4,7 +4,7 @@ import SideBar from '../components/home/home-sidebar';
 import PocketButton from '../components/home/sidebar-components/pocket'; // ✅ Импортируем PocketButton
 import { isAuthenticated } from '../api/token_service';
 import AuthForm from '../components/auth/authform';
-import InfoBox from '../components/profile-components/mainbar-components/profile_info';
+import InfoBox from '../components/profile/mainbar-components/profile_info';
 
 type ProfileProps = {
   user_id: string;
