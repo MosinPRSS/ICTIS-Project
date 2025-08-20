@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from main.users.serializers import ListUsersSerializer
 from ..models import *
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
@@ -7,7 +9,16 @@ from taggit.models import Tag
 class BotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chatbots
-        fields = "__all__"
+        fields = [
+            "id",
+            "chatname",
+            "name",
+            "avatar",
+            "description",
+            "first_message",
+            "scenario",
+            "tags"
+        ]
         extra_kwargs = {
             "id": {"read_only": True},
             "chatname": {"required": True},
@@ -83,6 +94,26 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         extra_kwargs = {
             field: {'required': False} for field in fields 
         }
+
+class PublicBotSerializer(serializers.ModelSerializer):
+    owner = ListUsersSerializer(source='belongs_to', read_only=True)
+
+    class Meta:
+        model = Chatbots
+        fields = [
+            'id',
+            'name',
+            'avatar',
+            'public_description',
+            'hide_info',
+            'tags',
+            'owner'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tags'] = [tag.name for tag in instance.tags.all()]
+        return data
 
 
 class TagSerializer(serializers.ModelSerializer):

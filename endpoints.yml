@@ -132,30 +132,6 @@ Bot:
     body-type: "content-type/json"
     required_fields: "id"
     # НОВОЕ: Возвращают массив тегов бота.
-  list:
-    public:
-      link: "http://127.0.0.1:8000/api/b/list/public"
-      type: "GET"
-      bearer_required: true
-      description: "Получение списка ботов, доступных публично"
-      body-type: "content-type/json"
-      required_fields: null
-
-    public/non-registered:
-      link: "http://127.0.0.1:8000/api/b/list/public/non-registered"
-      type: "GET"
-      bearer_required: false
-      description: "Получение списка ботов, доступных публично. ТОЛЬКО ДЛЯ НЕЗАРЕГИСТРИРОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ ДЛЯ ОЗНАКОМЛЕНИЯ"
-      body-type: "content-type/json"
-      required_fields: null
-
-    user:
-      link: "http://127.0.0.1:8000/api/b/list/user"
-      type: "GET"
-      bearer_required: true
-      description: "Получение списка ботов пользователя, который это запрашивает"
-      body-type: "content-type/json"
-      required_fields: null
 
   update:
     link: "http://127.0.0.1:8000/api/b/update/<int>"

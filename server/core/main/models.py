@@ -97,9 +97,8 @@ class AiSession(models.Model):
     tokens = models.IntegerField(default=1000)
 
 class Messages(models.Model):
-    session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
+    session_id = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
     content = models.TextField(default="")
-    previous_versions = models.TextField(default="")
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -108,6 +107,12 @@ class Messages(models.Model):
             role=role,
             content=content
         )
+    
+class PreviousVersionMessage(models.Model):
+    # TODO SOON
+    message_id = models.ForeignKey(to=Messages, on_delete=models.CASCADE)
+    content = models.TextField(default="")
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 class AiLogging(models.Model):
     code = models.IntegerField()
@@ -115,6 +120,7 @@ class AiLogging(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class ServerLoggin(models.Model):
+    # TODO
     timestamp = models.DateTimeField(auto_now_add=True)
 
 

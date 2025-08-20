@@ -2,15 +2,51 @@ from rest_framework import generics
 from rest_framework.response import Response
 from ..models import *
 from .serializers import *
-from ..bots.serializers import BotSerializer
+from ..bots.serializers import BotSerializer, PublicBotSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
+
+user_var = get_user_model()
 
 class CreateUser(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+class UserDetailView(generics.RetrieveAPIView):
+    """
+    Получение пользователя и его публичных ботов по UUID.
+    URL: /users/<uuid:pk>/
+    """
+    serializer_class = ListUsersSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        return user_var.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            user = self.get_object()  # автоматически ищет по pk
+        except user_var.DoesNotExist:
+            raise NotFound("User not found")
+        
+        is_own_profile = user == request.user
+
+        if is_own_profile:
+            bots = Chatbots.objects.filter(belongs_to=user)
+        else:
+            bots = Chatbots.objects.filter(belongs_to=user, is_public=True)
+
+        user_data = ListUsersSerializer(user).data
+        bot_data = PublicBotSerializer(bots, many=True, context={'request': request}).data
+
+        return Response({
+            "user": user_data,
+            "bots": bot_data
+        })
 
 class GetUser(generics.RetrieveAPIView):
     serializer_class = UserSerializer
@@ -40,10 +76,10 @@ class GetAnotherUser(generics.RetrieveAPIView):
         bots = Chatbots.objects.filter(belongs_to=user, is_public=True)
 
         user_data = ListUsersSerializer(user).data
-        bot_data = BotSerializer(bots, many=True, context={'request': request}).data
+        bot_data = PublicBotSerializer(bots, many=True, context={'request': request}).data
         return Response({
             "user": user_data,
-            "public_bots": bot_data
+            "bots": bot_data
         })
 
 class DeleteUser(generics.DestroyAPIView):

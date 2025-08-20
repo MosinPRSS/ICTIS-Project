@@ -66,7 +66,7 @@ class Common():
         payload["messages"][0]["content"] = completed_prompt
             
 class OllamaAPI():
-    API_HOST: str = "http://localhost:11434/api/chat"
+    API_HOST: str = "http://localhost:11434/api/chat/completions"
     PROMPT: str = """
     """
 
