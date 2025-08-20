@@ -13,10 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
             "id", "email", 
             "username", 
             "password", 
+            "date_joined",
             "avatar", 
             "description", 
             "view_nsfw"
-                  ]
+            ]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {"required": True},
@@ -50,9 +51,13 @@ class ListUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-        extra_kwargs = {
-            
-        }
+        fields = [
+            "id",
+            "username", 
+            "date_joined",
+            "avatar", 
+            "description", 
+        ]
 
 
 

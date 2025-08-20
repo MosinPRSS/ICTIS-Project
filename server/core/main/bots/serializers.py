@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from main.users.serializers import ListUsersSerializer
 from ..models import *
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
@@ -10,15 +12,12 @@ class BotSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "chatname",
-            "name", 
+            "name",
             "avatar",
-            "public_description",
+            "description",
             "first_message",
-            "description", 
             "scenario",
-            "hide_info",
-            "is_public",
-            "tags",
+            "tags"
         ]
         extra_kwargs = {
             "id": {"read_only": True},
@@ -43,8 +42,6 @@ class BotSerializer(serializers.ModelSerializer):
         return Chatbots.objects.get(id=instance.id)
 
     def to_representation(self, instance):
-        print("🔥 to_representation вызван для:", instance.name)
-        print("Теги в instance.tags.all():", [t.name for t in instance.tags.all()])
         data = super().to_representation(instance)
         data['tags'] = [tag.name for tag in instance.tags.all()]
         return data
@@ -59,9 +56,9 @@ class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = [
             "__all__",
             "tags",
-            "bot_owner",
-            "avatar_owner",
             "user_id",
+            "bot_owner",
+            "avatar_owner"
         ]
         extra_kwargs = {
             "id": {"read_only": True},
@@ -97,6 +94,26 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         extra_kwargs = {
             field: {'required': False} for field in fields 
         }
+
+class PublicBotSerializer(serializers.ModelSerializer):
+    owner = ListUsersSerializer(source='belongs_to', read_only=True)
+
+    class Meta:
+        model = Chatbots
+        fields = [
+            'id',
+            'name',
+            'avatar',
+            'public_description',
+            'hide_info',
+            'tags',
+            'owner'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tags'] = [tag.name for tag in instance.tags.all()]
+        return data
 
 
 class TagSerializer(serializers.ModelSerializer):

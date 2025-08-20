@@ -1,9 +1,6 @@
 from ..models import *
 from rest_framework import serializers
 from main.ai_modules.collector import PromptTools as pt
-
-def generate_session_code(length=32):
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
    
 class SessionSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
@@ -37,7 +34,6 @@ class SessionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 "error": "This bot dont belongs you"
             })
-        validated_data['session_code'] = generate_session_code()
         validated_data['belongs_to'] = user
         session = super().create(validated_data)
 
@@ -48,7 +44,7 @@ class SessionSerializer(serializers.ModelSerializer):
         )
         if fst_message:
             Messages.create_message(
-                role=chatbot.name,
+                role="system",
                 content=fst_message
             )
         return session
@@ -75,7 +71,7 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         else:
             role = session.belongs_to.username
 
-        validated_data['role'] = role
+        validated_data['role'] = "role"
 
         return super().create(validated_data)
 

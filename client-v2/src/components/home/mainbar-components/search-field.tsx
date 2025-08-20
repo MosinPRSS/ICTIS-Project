@@ -19,8 +19,8 @@ export default function SearchBox() {
             bg-white
             transition
             duration-300
-            hover:shadow-xl/10
-            focus:shadow-xl/50
+            hover:shadow-sm
+            focus:shadow-sm/20
             focus:outline-0
             " />
         </div>
