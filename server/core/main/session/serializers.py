@@ -10,7 +10,6 @@ class SessionSerializer(serializers.ModelSerializer):
         model = AiSession
         fields = [
             "id",
-            "session_code",
             "chatbot",
             "chatbot_name",
             "persona",
@@ -19,7 +18,6 @@ class SessionSerializer(serializers.ModelSerializer):
             "last_message",
         ]
         extra_kwargs = {
-            "session_code": {"read_only": True},
             "chatbot": {"required": True},
             "persona": {"required": True},
             "persona_name": {"read_only": True},
@@ -32,7 +30,7 @@ class SessionSerializer(serializers.ModelSerializer):
 
         if not chatbot.is_public and chatbot.belongs_to != user:
             raise serializers.ValidationError({
-                "error": "This bot dont belongs you"
+                "error": "This bot not belongs you"
             })
         validated_data['belongs_to'] = user
         session = super().create(validated_data)
@@ -44,7 +42,7 @@ class SessionSerializer(serializers.ModelSerializer):
         )
         if fst_message:
             Messages.create_message(
-                role="system",
+                role="assistant",
                 content=fst_message
             )
         return session

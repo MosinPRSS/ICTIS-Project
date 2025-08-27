@@ -55,12 +55,29 @@ class ListPublicBots(generics.ListCreateAPIView):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to')
     
 class ListPublicBotsV2(generics.ListCreateAPIView):
+    # TODO - needs a test
+    
     serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
     pagination_class = StandardResultsPagination
 
     def get_queryset(self):
-        return Chatbots.objects.filter(is_public=True)
+        # три сортировки - алфавитный (0), по популярности (1), по сессиям (2)
+        # два метода - возрастание (0) и убывание (1)
+        sort_by = self.request.query_params.get("sort_by", None)
+        method = "" if self.request.query_params.get("method", None) == 0 else "-"
+        queryset = Chatbots.objects.filter(is_public=True)
+        queryset = queryset.annotate(
+            session_count=Count("aisession", distinct=True)
+        )
+        try:
+            if sort_by == 0: return queryset.order_by(f"{method}name")
+            elif sort_by == 1: return queryset.order_by(f"{method}rate")
+            elif sort_by == 2: return queryset.order_by(f"{method}session_count")
+            else: return queryset.order_by(f"name")
+
+        except Exception:
+            raise
 
 class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
     # outdated - do not use.
@@ -85,12 +102,12 @@ class ListUserBots(generics.ListCreateAPIView):
         return Chatbots.objects.filter(belongs_to=self.request.user)
     
 class SearchBots(generics.ListCreateAPIView):
-    serializer_class = ShowBotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Chatbots.objects.filter(is_public=True)
-        query = self.request.query_params.get("query", None)
+        query = self.request.query_params.get("q", None)
         try:
             return queryset.filter(
                 Q(name__icontains=query) 
@@ -102,7 +119,7 @@ class SearchBots(generics.ListCreateAPIView):
             return f"Nothing found: {e}"
 
 class DeleteBot(generics.DestroyAPIView):
-    serializer_class = ShowBotSerializer
+    serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -135,7 +152,7 @@ class GetTopTags(generics.ListCreateAPIView):
                     })
             
 class SearchByTags(generics.ListCreateAPIView):
-    serializer_class = BotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):

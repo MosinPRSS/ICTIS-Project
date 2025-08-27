@@ -119,7 +119,7 @@ class AiLogging(models.Model):
     description = models.CharField(max_length=64, default="null")
     timestamp = models.DateTimeField(auto_now_add=True)
 
-class ServerLoggin(models.Model):
+class ServerLogging(models.Model):
     # TODO
     timestamp = models.DateTimeField(auto_now_add=True)
 
