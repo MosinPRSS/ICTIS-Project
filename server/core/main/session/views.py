@@ -25,4 +25,11 @@ class ListSessions(generics.ListCreateAPIView):
             last_message=Subquery(latest_message_subquery)
         )
         return queryset
+    
+class GetMessagesOfSession(generics.ListCreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Messages.objects.filter(session_id=self.request.id).order_by("timestamp")
 

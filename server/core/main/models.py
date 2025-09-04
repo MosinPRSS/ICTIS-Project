@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
 from django.conf import settings
-import random, string
 from typing import *
 from taggit.managers import TaggableManager
 import uuid
@@ -101,12 +100,24 @@ class Messages(models.Model):
     content = models.TextField(default="")
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    def create_message(self, role: str, content: str):
-        return self.objects.create(
-            role=role,
-            content=content
-        )
+    
+    eval_count = models.IntegerField(default=0)
+    @classmethod
+    def get_recent_messages_with_token_limit(cls, session_id, token_limit=4000):
+        messages = cls.objects.filter(session_id=session_id).order_by('-timestamp')
+        
+        total_tokens = 0
+        selected_messages = []
+        
+        for msg in messages:
+            if total_tokens + msg.eval_count <= token_limit:
+                selected_messages.append(msg)
+                total_tokens += msg.eval_count
+            else:
+                break
+        
+        return selected_messages[::-1]
+    
     
 class PreviousVersionMessage(models.Model):
     # TODO SOON

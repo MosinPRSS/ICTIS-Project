@@ -1,3 +1,5 @@
+from main.ai_modules.tokenizer import Tokenization
+from main.ai_modules.services import OllamaAPI
 from ..models import *
 from rest_framework import serializers
 from main.ai_modules.collector import PromptTools as pt
@@ -41,9 +43,12 @@ class SessionSerializer(serializers.ModelSerializer):
             persona.name
         )
         if fst_message:
-            Messages.create_message(
+            eval_c = Tokenization().deepseek_tokens(fst_message)
+            Messages.objects.create(
+                session_id=session,
                 role="assistant",
-                content=fst_message
+                content=fst_message,
+                eval_count=eval_c
             )
         return session
     
@@ -53,23 +58,56 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         fields = [
             'session',
             'content',
-            'role', # i.e. persona or bot
+            'role',
         ]
         extra_kwargs = {
             "role": {"read_only": True}
         }
-    
+
     def create(self, validated_data):
         session = validated_data['session']
-        content = validated_data['content'] 
-        queryset = Messages.objects.filter(session=session) [:10]
-        role = None
-        if session.persona and session.persona.name:
-            role = session.persona.name
-        else:
-            role = session.belongs_to.username
+        user_input = validated_data['content']
 
-        validated_data['role'] = "role"
+        user_message = Messages.objects.create(
+            session_id=session,
+            content=user_input,
+            role="user",
+            eval_count=Tokenization().deepseek_tokens(user_input)
+        )
 
-        return super().create(validated_data)
+        api = OllamaAPI(model_name=session.chatbot.model_name)
 
+        import asyncio
+        response_data = asyncio.run(api.send_message(
+            user_prompt=session.chatbot.prompt,
+            session_id=session.id,
+            user_input=user_input,
+            temperature=session.temperatute,
+            tokens=session.tokens,
+            char_name=session.persona.name if session.persona else None,
+            char_desc=session.persona.description if session.persona else None,
+            pers_name=session.belongs_to.username
+        ))
+
+        ai_content: dict = ""
+        eval_count = 0
+        
+        if response_data and "message" in response_data:
+            ai_content = response_data["message"].get("content", "")
+            eval_count = response_data.get("eval_count", 0)
+
+        ai_message = Messages.objects.create(
+            session_id=session,
+            content=ai_content,
+            role="assistant",
+            eval_count=eval_count
+        )
+
+        return ai_message
+    
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionSerializer
+        field = [
+            "id"
+        ]

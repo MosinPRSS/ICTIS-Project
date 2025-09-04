@@ -11,7 +11,3 @@ class AiLogs():
             description=description
         )
         return None
-    
-
-AiLogs.create_log(505)
-print(AiLogging.objects.all())
