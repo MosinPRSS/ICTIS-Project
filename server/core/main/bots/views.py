@@ -60,7 +60,7 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
     pagination_class = StandardResultsPagination
 
     def get_queryset(self):
-        # sort_by: 0=алфавит, 1=рейтинг, 2=сессии
+        # sort_by: 0=алфавит, 1=рейтинг, 2=сессии, 3=время
         # method: 0=возрастание, 1=убывание
         sort_by = self.request.query_params.get("sort_by", "0")
         method = self.request.query_params.get("method", "0")

@@ -83,7 +83,7 @@ class GetAnotherUser(generics.RetrieveAPIView):
         })
 
 class DeleteUser(generics.DestroyAPIView):
-    # TODO - CHECK IT ASAP
+    
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 

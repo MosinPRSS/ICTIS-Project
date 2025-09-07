@@ -63,3 +63,9 @@ class GetMessagesOfSession(generics.ListCreateAPIView):
             "session__chatbot",
             "session__persona"
         )
+    
+class DeleteSession(generics.DestroyAPIView):
+    serializer_class = SessionByIDSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset=
