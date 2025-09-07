@@ -47,6 +47,7 @@ class BotSerializer(serializers.ModelSerializer):
         return data
 
 class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
+    # OUTDATED
     bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
     avatar_owner = serializers.CharField(source='belongs_to.avatar_url', read_only=True)
     user_id = serializers.CharField(source='belongs_to.id', read_only=True)
@@ -116,6 +117,7 @@ class PublicBotSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['tags'] = [tag.name for tag in instance.tags.all()]
         return data
+    
 
 
 class TagSerializer(serializers.ModelSerializer):

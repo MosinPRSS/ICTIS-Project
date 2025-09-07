@@ -5,6 +5,8 @@ from django.conf import settings
 from typing import *
 from taggit.managers import TaggableManager
 import uuid
+from main.ai_modules.tokenizer import Tokenization
+from asgiref.sync import sync_to_async
 
 # class PublicDescription(models.Model)
 #   belongs_to = bot | user
@@ -96,27 +98,35 @@ class AiSession(models.Model):
     tokens = models.IntegerField(default=1000)
 
 class Messages(models.Model):
-    session_id = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
+    session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
     content = models.TextField(default="")
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     
     eval_count = models.IntegerField(default=0)
+    
     @classmethod
-    def get_recent_messages_with_token_limit(cls, session_id, token_limit=4000):
-        messages = cls.objects.filter(session_id=session_id).order_by('-timestamp')
-        
+    async def aget_recent_messages_with_token_limit(cls, session, token_limit=4000):
+        messages = []
         total_tokens = 0
-        selected_messages = []
-        
-        for msg in messages:
-            if total_tokens + msg.eval_count <= token_limit:
-                selected_messages.append(msg)
-                total_tokens += msg.eval_count
-            else:
+        tokenizer = Tokenization()
+
+        async for msg in (
+            cls.objects
+            .filter(session_id=session)
+            .order_by('-timestamp')
+            .select_related('session')
+            .aiterator()
+        ):
+            msg_tokens = tokenizer.deepseek_tokens(msg.content)
+
+            if total_tokens + msg_tokens > token_limit:
                 break
-        
-        return selected_messages[::-1]
+
+            messages.append(msg)
+            total_tokens += msg_tokens
+
+        return list(reversed(messages))
     
     
 class PreviousVersionMessage(models.Model):

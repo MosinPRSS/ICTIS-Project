@@ -32,7 +32,7 @@ class UpdateBot(generics.UpdateAPIView):
         
 class GetUserBot(generics.RetrieveAPIView):
     # needs to be updated
-    serializer_class = ShowBotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -55,29 +55,40 @@ class ListPublicBots(generics.ListCreateAPIView):
         return Chatbots.objects.filter(is_public=True).select_related('belongs_to')
     
 class ListPublicBotsV2(generics.ListCreateAPIView):
-    # TODO - needs a test
-    
     serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
     pagination_class = StandardResultsPagination
 
     def get_queryset(self):
-        # три сортировки - алфавитный (0), по популярности (1), по сессиям (2)
-        # два метода - возрастание (0) и убывание (1)
-        sort_by = self.request.query_params.get("sort_by", None)
-        method = "" if self.request.query_params.get("method", None) == 0 else "-"
-        queryset = Chatbots.objects.filter(is_public=True)
-        queryset = queryset.annotate(
+        # sort_by: 0=алфавит, 1=рейтинг, 2=сессии
+        # method: 0=возрастание, 1=убывание
+        sort_by = self.request.query_params.get("sort_by", "0")
+        method = self.request.query_params.get("method", "0")
+
+        try:
+            sort_by = int(sort_by)
+        except ValueError:
+            sort_by = 0
+
+        try:
+            method = int(method)
+        except ValueError:
+            method = 0
+
+        order_prefix = "-" if method == 1 else ""
+
+        queryset = Chatbots.objects.filter(is_public=True).annotate(
             session_count=Count("aisession", distinct=True)
         )
-        try:
-            if sort_by == 0: return queryset.order_by(f"{method}name")
-            elif sort_by == 1: return queryset.order_by(f"{method}rate")
-            elif sort_by == 2: return queryset.order_by(f"{method}session_count")
-            else: return queryset.order_by(f"name")
 
-        except Exception:
-            raise
+        if sort_by == 0:
+            return queryset.order_by(f"{order_prefix}name")
+        elif sort_by == 1:
+            return queryset.order_by(f"{order_prefix}rate")
+        elif sort_by == 2:
+            return queryset.order_by(f"{order_prefix}session_count")
+        else:
+            return queryset.order_by("name")
 
 class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
     # outdated - do not use.
