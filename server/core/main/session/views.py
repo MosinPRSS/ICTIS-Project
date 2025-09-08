@@ -1,9 +1,12 @@
 from rest_framework import generics,  status
 from rest_framework.response import Response
 from ..models import *
+
 from django.db.models import OuterRef, Subquery
 from .serializers import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 from asgiref.sync import sync_to_async
 from adrf.views import APIView as AsyncAPIView
 import asyncio
@@ -67,5 +70,9 @@ class GetMessagesOfSession(generics.ListCreateAPIView):
 class DeleteSession(generics.DestroyAPIView):
     serializer_class = SessionByIDSerializer
     permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        return AiSession.objects.filter(belongs_to=self.request.user)
+
+    def get_object(self):
+        session = get_object_or_404(AiSession, id=self.kwargs.get("pk"))
+        if session.belongs_to_id != self.request.user.id:
+            raise PermissionDenied("Not yours.")
+        return session

@@ -19,6 +19,7 @@ class User(AbstractBaseUser):
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     is_active = models.BooleanField('active', default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
 
@@ -46,6 +47,12 @@ class User(AbstractBaseUser):
             return self.avatar.url
         else:
             return f"{settings.MEDIA_URL}/Default_Avatar.svg"
+        
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
 
 
 class Chatbots(models.Model):

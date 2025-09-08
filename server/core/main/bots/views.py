@@ -6,7 +6,10 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from taggit.models import Tag
+from rest_framework.exceptions import PermissionDenied
 from ..pagination import *
+from django.shortcuts import get_object_or_404
+
 
 class CreateBot(generics.CreateAPIView):
     queryset = Chatbots.objects.all()
@@ -133,8 +136,11 @@ class DeleteBot(generics.DestroyAPIView):
     serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
+    def get_object(self):
+        chatbot = get_object_or_404(Chatbots, id=self.kwargs.get("pk"))
+        if chatbot.belongs_to_id != self.request.user.id:
+            raise PermissionDenied("Not yours.")
+        return chatbot
     
 
 # services
@@ -179,6 +185,7 @@ class SearchByTags(generics.ListCreateAPIView):
         return Chatbots.objects.none()
     
 class GetPopularBotsBySession(generics.ListCreateAPIView):
+    # outdated
     serializer_class = ShowBotSerializer
     permission_classes = [AllowAny]
 
