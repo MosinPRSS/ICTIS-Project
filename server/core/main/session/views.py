@@ -68,4 +68,4 @@ class DeleteSession(generics.DestroyAPIView):
     serializer_class = SessionByIDSerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        queryset=
+        return AiSession.objects.filter(belongs_to=self.request.user)

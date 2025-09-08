@@ -171,5 +171,5 @@ class SessionByIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = AiSession
         fields = [
-            "id"
+            "session"
         ]
