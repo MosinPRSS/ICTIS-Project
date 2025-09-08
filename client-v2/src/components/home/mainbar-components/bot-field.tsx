@@ -1,4 +1,3 @@
-// BotField.js
 import { useState, useEffect } from "react";
 import Bot from "./bot";
 import TagButton from "./tag_button";
@@ -43,10 +42,10 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
     };
 
     const GetBots = () => {
-        return Array.from({ length: 41 }, (_, i) => (
+        return Array.from({ length: 42 }, (_, i) => (
             <Bot key={i} onOpenAuth={onOpenAuth} 
             name={"хомячок"}
-            avatarUrl={"/staticx.jpg"}
+            avatarUrl={"/homyak.jpg"}
             sessionCount={convertToK(1200)}
             userAvatarUrl={test}
             username="MosinPRSS"
@@ -113,7 +112,6 @@ export default function BotField({ isSidebarOpened, onOpenAuth }: Props) {
                         }
                     `}
                 >
-                    <Bot onOpenAuth={onOpenAuth} avatarUrl={"/hernya.webp"} />
                     {GetBots()}
                 </div>
 

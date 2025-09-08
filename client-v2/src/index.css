@@ -2,3 +2,19 @@
 @import "tailwindcss";
 @import 'tailwind-scrollbar-hide/v4';
 
+@layer utilities {
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotate-border {
+    from { --border-angle: 0deg; }
+    to { --border-angle: 360deg; }
+  }
+
+  .animate-gradient-border {
+    animation: rotate-border 3s linear infinite;
+  }
+}

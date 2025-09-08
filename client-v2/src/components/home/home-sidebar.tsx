@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Button from "./sidebar-components/button";
+import Button, { PremiumButton } from "./sidebar-components/button";
 import ExpandButton from "./sidebar-components/expand";
 import Separator from './sidebar-components/separator';
 import ProfileButton from './sidebar-components/profile_button';
@@ -73,11 +73,28 @@ export default function SideBar({
             bg-gray-500 
             rounded-sm
             '>
-              <p className='text-center'>ВОйдите в аккаунт</p>
             </div>
             </>
           ) : ( 
           <>
+          <Separator />
+          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
+            <Button
+              name="Создать бота"
+              url="/"
+              img_url={"/plus.svg"}
+              is_collapsed={!isOpened}
+            />
+          </div>
+          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
+            <PremiumButton
+              name="Подписка"
+              url="/"
+              img_url={"/crown.svg"}
+              is_collapsed={!isOpened}
+              is_premium={false}
+            />
+          </div>
           <Separator />
           <div className={isOpened ? "w-full" : "flex items-center w-full"}>
             <Button

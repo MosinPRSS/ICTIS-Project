@@ -17,6 +17,7 @@ type Props = {
   tags: []
 
   avatarUrl: string;
+  botUrl: string;
 };
 
 export default function Bot({
@@ -110,7 +111,7 @@ export default function Bot({
 
           <div className="flex items-center gap-1 whitespace-nowrap">
             <img
-              src="chats.svg"
+              src="chats_bot.svg"
               className="h-4 w-4"
             />
             <span>{sessionCount}</span>
