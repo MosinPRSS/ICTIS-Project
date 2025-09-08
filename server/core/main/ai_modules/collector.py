@@ -103,13 +103,11 @@ class PromptTools():
             character_description, 
             character_name, 
             persona_name, 
-            persona_description
         )
         temp_scenario = PromptTools.analyze_scenario(
             character_scenario, 
             character_name, 
             persona_name, 
-            persona_description
         )
         result = PromptTools.replace_placeholders(
             system_prompt,
@@ -122,3 +120,9 @@ class PromptTools():
         )
 
         return result
+    def create_message(role: str, content: str):
+        # for creating a context
+        return {
+            "role": role,
+            "content": content
+        }

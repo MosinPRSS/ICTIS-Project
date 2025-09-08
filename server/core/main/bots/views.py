@@ -6,7 +6,10 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from taggit.models import Tag
+from rest_framework.exceptions import PermissionDenied
 from ..pagination import *
+from django.shortcuts import get_object_or_404
+
 
 class CreateBot(generics.CreateAPIView):
     queryset = Chatbots.objects.all()
@@ -32,7 +35,7 @@ class UpdateBot(generics.UpdateAPIView):
         
 class GetUserBot(generics.RetrieveAPIView):
     # needs to be updated
-    serializer_class = ShowBotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -60,7 +63,35 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
     pagination_class = StandardResultsPagination
 
     def get_queryset(self):
-        return Chatbots.objects.filter(is_public=True)
+        # sort_by: 0=алфавит, 1=рейтинг, 2=сессии, 3=время
+        # method: 0=возрастание, 1=убывание
+        sort_by = self.request.query_params.get("sort_by", "0")
+        method = self.request.query_params.get("method", "0")
+
+        try:
+            sort_by = int(sort_by)
+        except ValueError:
+            sort_by = 0
+
+        try:
+            method = int(method)
+        except ValueError:
+            method = 0
+
+        order_prefix = "-" if method == 1 else ""
+
+        queryset = Chatbots.objects.filter(is_public=True).annotate(
+            session_count=Count("aisession", distinct=True)
+        )
+
+        if sort_by == 0:
+            return queryset.order_by(f"{order_prefix}name")
+        elif sort_by == 1:
+            return queryset.order_by(f"{order_prefix}rate")
+        elif sort_by == 2:
+            return queryset.order_by(f"{order_prefix}session_count")
+        else:
+            return queryset.order_by("name")
 
 class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
     # outdated - do not use.
@@ -85,12 +116,12 @@ class ListUserBots(generics.ListCreateAPIView):
         return Chatbots.objects.filter(belongs_to=self.request.user)
     
 class SearchBots(generics.ListCreateAPIView):
-    serializer_class = ShowBotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Chatbots.objects.filter(is_public=True)
-        query = self.request.query_params.get("query", None)
+        query = self.request.query_params.get("q", None)
         try:
             return queryset.filter(
                 Q(name__icontains=query) 
@@ -102,11 +133,14 @@ class SearchBots(generics.ListCreateAPIView):
             return f"Nothing found: {e}"
 
 class DeleteBot(generics.DestroyAPIView):
-    serializer_class = ShowBotSerializer
+    serializer_class = BotSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
+    def get_object(self):
+        chatbot = get_object_or_404(Chatbots, id=self.kwargs.get("pk"))
+        if chatbot.belongs_to_id != self.request.user.id:
+            raise PermissionDenied("Not yours.")
+        return chatbot
     
 
 # services
@@ -135,7 +169,7 @@ class GetTopTags(generics.ListCreateAPIView):
                     })
             
 class SearchByTags(generics.ListCreateAPIView):
-    serializer_class = BotSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -151,6 +185,7 @@ class SearchByTags(generics.ListCreateAPIView):
         return Chatbots.objects.none()
     
 class GetPopularBotsBySession(generics.ListCreateAPIView):
+    # outdated
     serializer_class = ShowBotSerializer
     permission_classes = [AllowAny]
 

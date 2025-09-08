@@ -7,5 +7,5 @@ urlpatterns = [
     path("read/<str:pk>", UserDetailView.as_view(), name="another-user"),
     path("list",  SearchUsers.as_view(), name="search-users"),# outdated
     path("update", UpdateUser.as_view(), name="update-user-main"),
-    path("delete/<str:pk>", DeleteUser.as_view(), name="delete-user"),
+    path("delete", DeleteUser.as_view(), name="delete-user"),
 ]

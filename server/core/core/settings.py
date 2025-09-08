@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'taggit',
     'daphne',
     'main', # entire project
+    'adrf',
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',

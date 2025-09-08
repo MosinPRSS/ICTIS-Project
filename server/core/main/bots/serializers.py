@@ -47,6 +47,7 @@ class BotSerializer(serializers.ModelSerializer):
         return data
 
 class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
+    # OUTDATED
     bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
     avatar_owner = serializers.CharField(source='belongs_to.avatar_url', read_only=True)
     user_id = serializers.CharField(source='belongs_to.id', read_only=True)
@@ -96,8 +97,8 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         }
 
 class PublicBotSerializer(serializers.ModelSerializer):
-    owner = ListUsersSerializer(source='belongs_to', read_only=True)
-
+    user = ListUsersSerializer(source='belongs_to', read_only=True)
+    sessions = serializers.IntegerField(source='session_count', read_only=True)
     class Meta:
         model = Chatbots
         fields = [
@@ -105,15 +106,18 @@ class PublicBotSerializer(serializers.ModelSerializer):
             'name',
             'avatar',
             'public_description',
+            'rate',
             'hide_info',
             'tags',
-            'owner'
+            'sessions',
+            'user'
         ]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['tags'] = [tag.name for tag in instance.tags.all()]
         return data
+    
 
 
 class TagSerializer(serializers.ModelSerializer):

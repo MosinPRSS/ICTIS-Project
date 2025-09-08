@@ -42,8 +42,14 @@ function App() {
          path="/personas"
          />
          <Route 
+         path="/personas/:persona_id" // for modal
+         />
+         <Route 
          path="/chats/:chat_id"
          
+         />
+         <Route 
+         path="/bot/:bot_id"
          />
         {/*пусть чаты будут универсальны, без ввода каких-нибудь sessions */}
       </Routes>

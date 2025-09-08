@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
 from django.conf import settings
-import random, string
 from typing import *
 from taggit.managers import TaggableManager
 import uuid
+from main.ai_modules.tokenizer import Tokenization
+from asgiref.sync import sync_to_async
 
 # class PublicDescription(models.Model)
 #   belongs_to = bot | user
@@ -18,6 +19,7 @@ class User(AbstractBaseUser):
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     is_active = models.BooleanField('active', default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
 
@@ -45,6 +47,12 @@ class User(AbstractBaseUser):
             return self.avatar.url
         else:
             return f"{settings.MEDIA_URL}/Default_Avatar.svg"
+        
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
 
 
 class Chatbots(models.Model):
@@ -97,16 +105,36 @@ class AiSession(models.Model):
     tokens = models.IntegerField(default=1000)
 
 class Messages(models.Model):
-    session_id = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
+    session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
     content = models.TextField(default="")
     role = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+    eval_count = models.IntegerField(default=0)
+    
+    @classmethod
+    async def aget_recent_messages_with_token_limit(cls, session, token_limit=4000):
+        messages = []
+        total_tokens = 0
+        tokenizer = Tokenization()
 
-    def create_message(self, role: str, content: str):
-        return self.objects.create(
-            role=role,
-            content=content
-        )
+        async for msg in (
+            cls.objects
+            .filter(session_id=session)
+            .order_by('-timestamp')
+            .select_related('session')
+            .aiterator()
+        ):
+            msg_tokens = tokenizer.deepseek_tokens(msg.content)
+
+            if total_tokens + msg_tokens > token_limit:
+                break
+
+            messages.append(msg)
+            total_tokens += msg_tokens
+
+        return list(reversed(messages))
+    
     
 class PreviousVersionMessage(models.Model):
     # TODO SOON
@@ -119,7 +147,7 @@ class AiLogging(models.Model):
     description = models.CharField(max_length=64, default="null")
     timestamp = models.DateTimeField(auto_now_add=True)
 
-class ServerLoggin(models.Model):
+class ServerLogging(models.Model):
     # TODO
     timestamp = models.DateTimeField(auto_now_add=True)
 
