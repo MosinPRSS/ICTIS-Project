@@ -16,15 +16,15 @@ export default function Button({
     name, url, icon, img_url, is_collapsed = false
 }: ButtonTemplate) {
     return (
-        <a href={url} className="">
+        <a href={url} className="group relative">
             <div
                 className={`
-                    flex items-center rounded-sm py-2 px-2 cursor-pointer
-                    bg-gray-500/20 text-black
+                    group relative flex items-center rounded-sm py-2 px-2 cursor-pointer
+                    bg-gray-500/20 text-black overflow-hidden
                     hover:bg-gray-700 transition-all duration-300
                 `}
             >
-                <div className="w-6 h-6 flex-shrink-0 ml-1">
+                <div className="w-6 h-6 flex-shrink-0 ml-2 mt-0.5 justify-center">
                     {icon ? (
                         icon
                     ) : img_url ? (
@@ -43,6 +43,10 @@ export default function Button({
                     `}
                 >
                     {name}
+                </div>
+
+                <div className="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <div className="relative h-full w-8 bg-white/30"></div>
                 </div>
             </div>
         </a>

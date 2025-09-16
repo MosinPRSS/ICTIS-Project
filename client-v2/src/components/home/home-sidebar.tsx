@@ -113,6 +113,16 @@ export default function SideBar({
               is_collapsed={!isOpened}
             />
           </div>
+          <Separator />
+          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
+            <Button
+              name="Помощь"
+              url="/"
+              img_url={"/persons.svg"}
+              is_collapsed={!isOpened}
+            />
+          </div>
+          
           </>
             
           )

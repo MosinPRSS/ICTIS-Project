@@ -18,9 +18,16 @@
     animation: rotate-border 3s linear infinite;
   }
 }
-/* for svg icons */
 
-[class^='mgc_']::before,
-[class*=' mgc_']::before {
-  color: inherit !important;
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-shine-infinite {
+    animation: shine 3.0s ease-in-out infinite;
 }
