@@ -3,7 +3,7 @@ import Button, { PremiumButton } from "./sidebar-components/button";
 import ExpandButton from "./sidebar-components/expand";
 import Separator from './sidebar-components/separator';
 import ProfileButton from './sidebar-components/profile_button';
-import { HomeIcon, UserIcon, SettingsIcon, GoogleIcon } from '../../utils/icons'; 
+import { HomeIcon, UserIcon, SettingsIcon, BotIcon } from '../../utils/icons'; 
 
 type Props = {
   isOpened: boolean;
@@ -83,7 +83,7 @@ export default function SideBar({
             <Button
               name="Создать бота"
               url="/"
-              icon={HomeIcon}
+              icon={<BotIcon />}
               is_collapsed={!isOpened}
             />
           </div>

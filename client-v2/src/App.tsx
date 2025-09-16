@@ -51,6 +51,9 @@ function App() {
          <Route 
          path="/bot/:bot_id"
          />
+         <Route 
+         path="/search_result"
+         />
         {/*пусть чаты будут универсальны, без ввода каких-нибудь sessions */}
       </Routes>
     </BrowserRouter>

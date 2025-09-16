@@ -26,3 +26,13 @@ export const SettingsIcon = () => (
         <path fill="#ffffff" d="m12 15.5a3.5 3.5 0 1 1 0-7a3.5 3.5 0 0 1 0 7Zm0-5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3ZM12 20c-4.41 0-8-1.79-8-4v-2.5a5.97 5.97 0 0 1 2.5-4.5l.73-.54l-.73-.54A5.97 5.97 0 0 1 4 3.5V1c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v2.5c0 1.93-1.16 3.65-2.5 4.5l-.73.54l.73.54A5.97 5.97 0 0 1 20 13.5V16c0 2.21-3.58 4-8 4Z"/>
     </svg>
 );
+
+export const BotIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ffffff">
+        <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <rect width="20" height="14" x="2" y="9" rx="4"/>
+            <circle cx="12" cy="3" r="2"/>
+            <path d="M12 5v4m-3 8v-2m6 0v2"/>
+        </g>
+    </svg>
+)
