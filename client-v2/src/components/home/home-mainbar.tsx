@@ -1,4 +1,3 @@
-// MainBar.jsx
 import BotField from "./mainbar-components/bot-field";
 
 type Props = {

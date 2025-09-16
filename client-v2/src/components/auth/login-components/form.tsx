@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useAuth } from "../../../api/auth_service"; // Убедись, что путь правильный
+import { useAuth } from "../../../api/auth_service";
+import { GoogleIcon } from "../../../utils/icons"
 
 interface LoginProps {
   onClose: () => void;
-  onSuccess?: () => void; // Новый пропс для обработки успешной авторизации
+  onSuccess?: () => void;
 }
 
 export default function Login({ onClose, onSuccess }: LoginProps) {
@@ -25,7 +26,7 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
     setConfirmPassword("");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => { // Добавил тип
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -38,33 +39,23 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
     }
     try {
       if (isLogin) {
-        // Логин
         const result = await performLogin(email, password);
         if (result === 0) {
-          console.log("Успешный логин!");
-          // Вместо navigate("/") вызываем onSuccess и позволяем родителю управлять состоянием
           if (onSuccess) {
             onSuccess(); 
           }
-          // Модальное окно будет закрыто родительским компонентом через handleAuthSuccess
-          // Если нужно закрыть сразу, можно вызвать onClose() здесь:
-          // onClose(); 
         } else if (result === -1) {
           setError("Неверный логин или пароль");
         }
       } else {
-        // Регистрация
         const result = await performRegister(username, email, password);
         if (result === 0) {
-          console.log("Успешная регистрация!");
-          // После успешной регистрации переключаемся на логин
           setMode("login");
           setError("Регистрация успешна! Войдите в аккаунт.");
           setUsername("");
           setEmail("");
           setPassword("");
           setConfirmPassword("");
-          // Не вызываем onSuccess здесь, только после фактического логина
         } else if (typeof result === 'string') {
           setError(result);
         } else {
@@ -95,7 +86,6 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
           border-white
         "
       >
-        {/* Кнопка закрытия */}
         <button
           type="button"
           onClick={onClose}
@@ -104,39 +94,40 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
         >
           &times;
         </button>
-        {/* Заголовок */}
+        
         <div className="text-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">{name}</h2>
         </div>
-        {/* Ошибка */}
+        
         {error && (
           <div className="text-red-500 text-sm text-center">{error}</div>
         )}
-        {/* Войти через... */}
+        
+        {/* Исправленные иконки */}
         <div className="flex justify-center gap-4">
-          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
-            <div className="w-8 h-8 flex-shrink-0">
-              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2 cursor-pointer">
+            <div className="w-6 h-6 flex-shrink-0">
+              <GoogleIcon />
             </div>
           </div>
-          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
-            <div className="w-8 h-8 flex-shrink-0">
-              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2 cursor-pointer">
+            <div className="w-6 h-6 flex-shrink-0">
+              <GoogleIcon />
             </div>
           </div>
-          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2">
-            <div className="w-8 h-8 flex-shrink-0">
-              <img src="https://img.icons8.com/ios/50/google-logo--v1.png" className="h-full w-full object-cover rounded-sm" alt="auth" />
+          <div className="flex items-center border rounded-sm bg-white hover:shadow-xl/20 transition duration-200 p-2 cursor-pointer">
+            <div className="w-6 h-6 flex-shrink-0">
+              <GoogleIcon />
             </div>
           </div>
         </div>
-        {/* Разделитель */}
+        
         <div className="flex items-center my-1">
           <div className="flex-grow h-px bg-gray-200" />
           <span className="mx-3 text-gray-400 text-sm">или</span>
           <div className="flex-grow h-px bg-gray-200" />
         </div>
-        {/* Поля формы */}
+        
         {!isLogin && (
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
@@ -199,7 +190,7 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
             />
           </div>
         )}
-        {/* Кнопка отправки */}
+        
         <button
           type="submit"
           disabled={loading}
@@ -207,7 +198,7 @@ export default function Login({ onClose, onSuccess }: LoginProps) {
         >
           {loading ? "Загрузка..." : name}
         </button>
-        {/* Переключатель режимов */}
+        
         <div className="text-center text-sm text-gray-600 space-y-2">
           {isLogin ? (
             <>

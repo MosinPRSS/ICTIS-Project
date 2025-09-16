@@ -18,3 +18,9 @@
     animation: rotate-border 3s linear infinite;
   }
 }
+/* for svg icons */
+
+[class^='mgc_']::before,
+[class*=' mgc_']::before {
+  color: inherit !important;
+}
