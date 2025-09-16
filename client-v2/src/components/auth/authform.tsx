@@ -37,7 +37,7 @@ export default function AuthForm({ isOpen, onClose, onSuccess }: AuthFormProps) 
       />
       {/* модальное окно */}
       <div
-        className="relative z-10 rounded-lg p-6 w-full max-w-md mx-4 animate-fade-in"
+        className="relative z-10 rounded-sm p-6 w-full max-w-md mx-4 animate-fade-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Передаем onSuccess в Login */}
