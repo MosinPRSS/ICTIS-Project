@@ -204,6 +204,7 @@ export default function Profile({ user_id }: ProfileProps) {
                   createdAt={ISOtoText(profileData.date_joined)}
                   userId={profileData.id}
                   avatarUrl={profileData.avatar || "/homyak.jpg"}
+                  ownProfile={isOwnProfile}
                 />
               </div>
             </div>

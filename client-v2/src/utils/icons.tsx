@@ -21,10 +21,10 @@ export const UserIcon = () => (
     </svg>
 );
 
-export const SettingsIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-        <path fill="#ffffff" d="m12 15.5a3.5 3.5 0 1 1 0-7a3.5 3.5 0 0 1 0 7Zm0-5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3ZM12 20c-4.41 0-8-1.79-8-4v-2.5a5.97 5.97 0 0 1 2.5-4.5l.73-.54l-.73-.54A5.97 5.97 0 0 1 4 3.5V1c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v2.5c0 1.93-1.16 3.65-2.5 4.5l-.73.54l.73.54A5.97 5.97 0 0 1 20 13.5V16c0 2.21-3.58 4-8 4Z"/>
-    </svg>
+export const SettingsIcon = ({ className = "w-5 h-5" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 416 432" className={className}>
+    <path fill="#000000" d="m366 237l45 35q7 6 3 14l-43 74q-4 8-13 4l-53-21q-18 13-36 21l-8 56q-1 9-11 9h-85q-9 0-11-9l-8-56q-19-8-36-21l-53 21q-9 3-13-4L1 286q-4-8 3-14l45-35q-1-12-1-21t1-21L4 160q-7-6-3-14l43-74q5-8 13-4l53 21q18-13 36-21l8-56q2-9 11-9h85q10 0 11 9l8 56q19 8 36 21l53-21q9-3 13 4l43 74q4 8-3 14l-45 35q2 12 2 21t-2 21zm-158.5 54q30.5 0 52.5-22t22-53t-22-53t-52.5-22t-52.5 22t-22 53t22 53t52.5 22z"/>
+  </svg>
 );
 
 export const BotIcon = () => (
