@@ -24,6 +24,17 @@ export default function convertToK(num: number): string {
   }
 }
 
+export const ISOtoText = (iso: string | number | Date) => {
+  const dateObject = new Date(iso);
+  return dateObject.toLocaleDateString("ru-RU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  })
+} 
+
 // Иконки
 export const GoogleIcon = () => (
     <>

@@ -24,7 +24,7 @@ export default function Button({
                     hover:bg-gray-700 transition-all duration-300
                 `}
             >
-                <div className="w-6 h-6 flex-shrink-0 ml-2 mt-0.5 justify-center">
+                <div className="w-6 h-6 flex-shrink-0 ml-2 mt- justify-center">
                     {icon ? (
                         icon
                     ) : img_url ? (

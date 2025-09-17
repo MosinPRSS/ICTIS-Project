@@ -1,16 +1,18 @@
-// pages/profile.tsx
 import { useEffect, useState } from 'react';
 import SideBar from '../components/home/home-sidebar';
-import PocketButton from '../components/home/sidebar-components/pocket'; // ✅ Импортируем PocketButton
+import PocketButton from '../components/home/sidebar-components/pocket';
 import { isAuthenticated } from '../api/token_service';
 import AuthForm from '../components/auth/authform';
 import InfoBox from '../components/profile/mainbar-components/profile_info';
-
+import useUserActions from '../api/user_service'; 
+import { ISOtoText } from '../utils/data';
 type ProfileProps = {
   user_id: string;
 };
 
 export default function Profile({ user_id }: ProfileProps) {
+  const { readAuthUser } = useUserActions();
+
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -20,7 +22,18 @@ export default function Profile({ user_id }: ProfileProps) {
   const [avatarUrl, setAvatarUrl] = useState<string>("/homyak.jpg");
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
-  const isOwnProfile = currentUser === user_id;
+  // 👇 Новые состояния для профиля
+  const [profileData, setProfileData] = useState<{
+    username: string;
+    avatar: string;
+    date_joined: string;
+    id: string;
+  } | null>(null);
+
+  const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(true);
+
+  // 👇 Проверка: это собственный профиль?
+  const isOwnProfile = profileData?.id === localStorage.getItem('userID');
 
   // Проверка размера экрана
   useEffect(() => {
@@ -39,7 +52,7 @@ export default function Profile({ user_id }: ProfileProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Проверка аутентификации
+  // Проверка аутентификации — сохраняем ID в currentUser
   useEffect(() => {
     const checkAuth = async () => {
       setIsLoadingAuthCheck(true);
@@ -72,6 +85,33 @@ export default function Profile({ user_id }: ProfileProps) {
 
     checkAuth();
   }, []);
+
+  // Загрузка данных профиля
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!user_id) {
+        setIsLoadingProfile(false);
+        return;
+      }
+
+      setIsLoadingProfile(true);
+      try {
+        const userData = await readAuthUser(user_id);
+        if (userData) {
+          setProfileData(userData);
+        } else {
+          setProfileData(null);
+        }
+      } catch (err) {
+        console.error("Не удалось загрузить профиль", err);
+        setProfileData(null);
+      } finally {
+        setIsLoadingProfile(false);
+      }
+    };
+
+    loadProfile();
+  }, [user_id, readAuthUser]);
 
   // Блокировка скролла при открытии модалки
   useEffect(() => {
@@ -122,12 +162,10 @@ export default function Profile({ user_id }: ProfileProps) {
             flex-shrink-0 overflow-hidden
           `}
         >
-          {/* PocketButton — показывается только на десктопе, когда сайдбар закрыт */}
           {!isMobile && !isSidebarOpened && (
             <PocketButton onClick={() => setIsSidebarOpened(true)} />
           )}
 
-          {/* Содержимое сайдбара */}
           <div
             className={`
               absolute inset-0 p-4 transition-all duration-300
@@ -152,32 +190,47 @@ export default function Profile({ user_id }: ProfileProps) {
             <p className="text-xl font-semibold text-gray-800">Профиль пользователя</p>
           </div>
 
-          <div className="w-full flex justify-start">
-            <div className="w-1/3 min-w-80"> {/* min-w-80 — чтобы не схлопывался на узких экранах */}
-              <InfoBox
-              username='MosinPRSS'
-              createdAt='28 Nov 2025'
-              userId={localStorage.getItem("userID")}
-              />
+          {isLoadingProfile ? (
+            <div className="w-full flex justify-center">
+              <div className="w-full max-w-3xl px-4">
+                <div className="h-44 bg-gray-200 animate-pulse rounded-sm"></div>
+              </div>
             </div>
-          </div>
-      </div>
-
-      {/* Модальное окно авторизации */}
-      {isAuthModalOpen && !isReg && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={handleCloseAuthModal}
-          ></div>
-          <AuthForm
-            isOpen={isAuthModalOpen}
-            onClose={handleCloseAuthModal}
-            onSuccess={handleAuthSuccess}
-          />
+          ) : profileData ? (
+            <div className="w-full flex justify-start">
+              <div className="w-2/5 max-w-3xl px-4">
+                <InfoBox
+                  username={profileData.username}
+                  createdAt={ISOtoText(profileData.date_joined)}
+                  userId={profileData.id}
+                  avatarUrl={profileData.avatar || "/homyak.jpg"}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center">
+              <div className="w-full max-w-3xl px-4 py-8 text-center text-gray-600">
+                Пользователь не найден.
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+
+        {/* Модальное окно авторизации */}
+        {isAuthModalOpen && !isReg && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div
+              className="absolute inset-0 bg-black opacity-50"
+              onClick={handleCloseAuthModal}
+            ></div>
+            <AuthForm
+              isOpen={isAuthModalOpen}
+              onClose={handleCloseAuthModal}
+              onSuccess={handleAuthSuccess}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

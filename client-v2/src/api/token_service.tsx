@@ -11,7 +11,7 @@ function AuthClean() {
 
 export const verifyToken = async (token: string): Promise<boolean> => {
     try {
-        const res = await axios.post(`${env_api}a/api-token/`, {
+        const res = await axios.post(`${env_api}a/api-token/verify`, {
             token: token
         });
         return res.status === 200;
