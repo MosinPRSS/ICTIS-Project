@@ -1,0 +1,130 @@
+@font-face {
+	font-family: Delius;
+	src: url("./Delius-Regular.woff2") format("woff2"),
+		url("./Delius-Regular.woff") format("woff");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-Light.woff") format("woff");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-Regular.woff") format("woff");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-Medium.woff") format("woff");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-SemiBold.woff") format("woff");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-Bold.woff") format("woff");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: GoogleSans;
+	src: url("./GoogleSansCode-ExtraBold.woff") format("woff");
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-Light.woff2") format("woff2");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-Regular.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-Medium.woff2") format("woff2");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-SemiBold.woff2") format("woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-Bold.woff2") format("woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: PlaypenSans;
+	src: url("./PlaypenSans-ExtraBold.woff2") format("woff2");
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: HachiMaruPop;
+	src: url("./HachiMaruPop-Regular.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+h1 {
+	font-family: HachiMaruPop, sans-serif;
+	font-weight: 400;
+}
+
+h1#logo {
+	font-family: GoogleSans, sans-serif;
+	font-weight: 400;
+}
+
+h1.playpen {
+	font-family: PlaypenSans, sans-serif;
+}
+
+p {
+	font-family: PlaypenSans, sans-serif;
+}

@@ -1,0 +1,12 @@
+.sidebar-transition {
+	transition: all 0.3s ease-in-out;
+}
+
+/* Для мобильного меню */
+@media (max-width: 768px) {
+	.sidebar-mobile {
+		position: fixed;
+		height: 100vh;
+		z-index: 50;
+	}
+}

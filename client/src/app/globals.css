@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+html {
+	user-select: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
