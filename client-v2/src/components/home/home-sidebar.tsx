@@ -3,7 +3,7 @@ import Button, { PremiumButton } from "./sidebar-components/button";
 import ExpandButton from "./sidebar-components/expand";
 import Separator from './sidebar-components/separator';
 import ProfileButton from './sidebar-components/profile_button';
-import { HomeIcon, UserIcon, SettingsIcon, BotIcon } from '../../utils/icons'; 
+import { HomeIcon, BotIcon } from '../../utils/icons'; 
 
 type Props = {
   isOpened: boolean;
@@ -40,113 +40,92 @@ export default function SideBar({
   if (isMobile) return null;
 
   return (
-    <div
-      className={`
-        flex flex-col bg-gray-400 h-full
-        transition-all duration-300 overflow-hidden
-        items-center
-        ${isOpened ? "w-60 px-4" : "w-16 px-0"}
-      `}
-    >
+    <div className="relative h-full bg-gray-400 overflow-hidden">
+      <div
+        className={`
+          flex flex-col h-full justify-between
+          transition-all duration-300
+          ${isOpened ? "w-60" : "w-16"}
+        `}
+      >
+        {/* Верх: Expand + Главная + кнопки */}
+        <div className="p-2">
+          {/* ExpandButton всегда сверху справа */}
+          <div className="flex justify-end mb-2">
+            <ExpandButton
+              is_opened={isOpened}
+              onClick={() => onToggle(!isOpened)}
+            />
+          </div>
 
-      <div className="w-full mt-4">
-        <ExpandButton
-          is_opened={isOpened}
-          onClick={() => onToggle(!isOpened)}
-        />
-      </div>
-
-      <div className="flex-1 mt-4 flex flex-col gap-2 items-center w-full mr-8">
-        <div className={isOpened ? "w-full" : "flex items-center w-full"}>
           <Button
             name="Главная"
             url="/"
             icon={<HomeIcon />}
             is_collapsed={!isOpened}
           />
-        </div>
-        {
-          !isReg ? (
-            <>
-            <Separator />
-            <div className='
-            flex justify-center
-            bg-gray-500 
-            rounded-sm
-            '>
-            </div>
-            </>
-          ) : ( 
-          <>
           <Separator />
-          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
-            <Button
-              name="Создать бота"
-              url="/"
-              icon={<BotIcon />}
-              is_collapsed={!isOpened}
-            />
-          </div>
-          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
-            <PremiumButton
-              name="Подписка"
-              url="/"
-              img_url={"/crown.svg"}
-              is_collapsed={!isOpened}
-              is_premium={false}
-            />
-          </div>
-          <Separator />
-          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
-            <Button
-              name="Мои чаты"
-              url="/"
-              img_url={"/chats.svg"}
-              is_collapsed={!isOpened}
-            />
-          </div>
-          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
-            <Button
-              name="Мои персоны"
-              url="/"
-              img_url={"/persons.svg"}
-              is_collapsed={!isOpened}
-            />
-          </div>
-          <Separator />
-          <div className={isOpened ? "w-full" : "flex items-center w-full"}>
-            <Button
-              name="Помощь"
-              url="/"
-              img_url={"/persons.svg"}
-              is_collapsed={!isOpened}
-            />
-          </div>
-          
-          </>
-            
-          )
 
-        }
-      </div>
-        
-      <div className={`${isOpened ? "w-full px-2" : "flex items-center w-full px-2"} mb-1 mr-8`}>
-        <Separator />
-        <ProfileButton
-          isReg={isReg}
-          username={username}
-          avatarUrl={avatarUrl}
-          onOpenAuth={onOpenAuth}
-          onOpenSettings={onOpenSettings}
-          isCollapsed={!isOpened}
-        />
-        <Separator />
-      </div>
-      <div className="flex flex-col items-center mr-8">
-        <a className="font-semibold text-sm hover:underline"
-        href="/">Пожаловаться</a>
-        <a className="font-semibold text-sm hover:underline"
-        href="mailto:contact.mosin3310@gmail.com">Связаться с поддержкой</a>
+          {!isReg ? (
+            <div className="bg-gray-500 rounded-sm w-10/12 h-8 flex items-center justify-center" />
+          ) : ( 
+            <>
+              <Button
+                name="Создать бота"
+                url="/"
+                icon={<BotIcon />}
+                is_collapsed={!isOpened}
+              />
+              <PremiumButton
+                name="Подписка"
+                url="/"
+                img_url={"/crown.svg"}
+                is_collapsed={!isOpened}
+                is_premium={false}
+              />
+              <Separator />
+              <Button
+                name="Мои чаты"
+                url="/"
+                img_url={"/chats.svg"}
+                is_collapsed={!isOpened}
+              />
+              <Button
+                name="Мои персоны"
+                url="/"
+                img_url={"/persons.svg"}
+                is_collapsed={!isOpened}
+              />
+              <Separator />
+              <Button
+                name="Помощь"
+                url="/"
+                img_url={"/persons.svg"}
+                is_collapsed={!isOpened}
+              />
+            </>
+          )}
+        </div>
+          
+        {/* Низ */}
+        <div className="w-full p-2">
+          <Separator />
+          <ProfileButton
+            isReg={isReg}
+            username={username}
+            avatarUrl={avatarUrl}
+            onOpenAuth={onOpenAuth}
+            onOpenSettings={onOpenSettings}
+            isCollapsed={!isOpened}
+          />
+          <Separator />
+          <div className="flex flex-col items-center justify-center pt-2 w-full">
+            <a className="font-semibold text-sm hover:underline mb-1 text-center"
+              href="/">Пожаловаться</a>
+            <a className="font-semibold text-sm hover:underline text-center"
+              href="mailto:contact.mosin3310@gmail.com">Связаться с поддержкой</a>
+          </div>
+        </div>
       </div>
     </div>
   );

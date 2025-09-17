@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 type ButtonTemplate = {
     name: string;
     url: string;
-    icon?: React.ReactNode; // Для SVG иконок
-    img_url?: string;       // Для обычных изображений
+    icon?: React.ReactNode;
+    img_url?: string;
     is_collapsed?: boolean;
 };
 
@@ -16,15 +16,16 @@ export default function Button({
     name, url, icon, img_url, is_collapsed = false
 }: ButtonTemplate) {
     return (
-        <a href={url} className="group relative">
+        <a href={url} className="w-full">
             <div
                 className={`
-                    group relative flex items-center rounded-sm py-2 px-2 cursor-pointer
-                    bg-gray-500/20 text-black overflow-hidden
+                    flex items-center rounded-sm py-2 px-2 cursor-pointer
+                    bg-gray-500/20 text-black
                     hover:bg-gray-700 transition-all duration-300
+                    ${is_collapsed ? 'w-10 h-10 justify-center' : 'w-full max-w-[180px] justify-start'}
                 `}
             >
-                <div className="w-6 h-6 flex-shrink-0 ml-2 mt- justify-center">
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     {icon ? (
                         icon
                     ) : img_url ? (
@@ -36,18 +37,11 @@ export default function Button({
                     ) : null}
                 </div>
 
-                <div
-                    className={`
-                        ml-6 text-sm font-semibold truncate transition-all duration-300 
-                        ${is_collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}
-                    `}
-                >
-                    {name}
-                </div>
-
-                <div className="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <div className="relative h-full w-8 bg-white/30"></div>
-                </div>
+                {!is_collapsed && (
+                    <div className="ml-2 text-sm font-semibold truncate">
+                        {name}
+                    </div>
+                )}
             </div>
         </a>
     );
@@ -79,14 +73,13 @@ export function PremiumButton({
         >
             <div
                 className={`
-                    animate-rotate
-                    flex items-center rounded-sm py-1 px-2 cursor-pointer
+                    flex items-center rounded-sm py-2 px-2 cursor-pointer
                     bg-gray-500/20 text-black
                     hover:bg-gray-700 transition-all duration-300
-                    relative z-10
+                    ${is_collapsed ? 'w-10 h-10 justify-center' : 'w-full max-w-[180px] justify-start'}
                 `}
             >
-                <div className="w-6 h-6 flex-shrink-0 ml-1">
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     {icon ? (
                         icon
                     ) : img_url ? (
@@ -98,14 +91,11 @@ export function PremiumButton({
                     ) : null}
                 </div>
 
-                <div
-                    className={`
-                        ml-6 text-sm font-semibold truncate transition-all duration-300 
-                        ${is_collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}
-                    `}
-                >
-                    {name}
-                </div>
+                {!is_collapsed && (
+                    <div className="ml-2 text-sm font-semibold truncate">
+                        {name}
+                    </div>
+                )}
             </div>
         </a>
     );
