@@ -2,7 +2,7 @@ from rest_framework import generics
 from ..models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from taggit.models import Tag
@@ -33,20 +33,32 @@ class UpdateBot(generics.UpdateAPIView):
         except Chatbots.DoesNotExist:
             raise NotFound("This bot isnt yours.")
         
-class GetUserBot(generics.RetrieveAPIView):
-    # needs to be updated
+class GetBot(generics.RetrieveAPIView):
     serializer_class = PublicBotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
+        queryset = Chatbots.objects.annotate(
+            session_count=Count("aisession", distinct=True)
+        )
+        return queryset
 
     def get_object(self):
         bot_id = self.kwargs.get("pk")
-        try:
-            return self.get_queryset().get(id=bot_id)
+        try: 
+            bot = self.get_queryset().get(id=bot_id)
+            if bot.belongs_to != self.request.user:
+                if not bot.is_public: 
+                    raise PermissionDenied("This bot is not yours")
+                else: return bot
+            else: return bot
         except Chatbots.DoesNotExist:
-            raise NotFound("This bot isnt yours.")
+            raise NotFound("Bot not found")
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class ListPublicBots(generics.ListCreateAPIView): 
     # outdated - do not use. // for test uses only
@@ -92,6 +104,16 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
             return queryset.order_by(f"{order_prefix}session_count")
         else:
             return queryset.order_by("name")
+        
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
 class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
     # outdated - do not use.
@@ -152,7 +174,7 @@ class GetTopTags(generics.ListCreateAPIView):
         try:
             num = self.kwargs.get("pk")
         except:
-            return Response({"error": "What the Fuck."})
+            return Response({"error": "what"})
         finally: 
             try:
                 tags = Tag.objects.annotate(

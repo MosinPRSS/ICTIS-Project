@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ACCESS_TOKEN, REFRESH_TOKEN, env_api } from './consts';
 
 function AuthClean() {
+    // в будущем нужно будет вывести из локального в более защищенное
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(REFRESH_TOKEN);
     localStorage.removeItem('username');

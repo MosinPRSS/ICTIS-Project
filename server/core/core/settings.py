@@ -43,6 +43,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 INSTALLED_APPS = [
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'daphne',
     'main', # entire project
     'adrf',
+    'drf_spectacular',
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,6 +65,13 @@ INSTALLED_APPS = [
 ]
 
 TAGGIT_TAGS_FROM_STRING = "taggit.utils.default_stringify"
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Project Arisen',
+    'DESCRIPTION': 'All links of API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

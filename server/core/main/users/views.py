@@ -18,7 +18,7 @@ class CreateUser(generics.CreateAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     """
     Получение пользователя и его публичных ботов по UUID.
-    URL: /users/<uuid:pk>/
+    URL: /u/<uuid:pk>/
     """
     serializer_class = ListUsersSerializer
     permission_classes = [IsAuthenticated]

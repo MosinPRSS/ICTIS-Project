@@ -69,7 +69,7 @@ class Chatbots(models.Model):
     rate = models.IntegerField(default=0) # TODO
     is_public = models.BooleanField(default=False)
     hide_info = models.BooleanField(default=True) # TODO
-    public_description = models.TextField() # no generation
+    public_description = models.TextField(blank=True, default="") # no generation
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

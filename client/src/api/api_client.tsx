@@ -4,7 +4,8 @@ import { env_api } from './consts';
 
 const apiClient = axios.create({
     baseURL: env_api,
-    timeout: 10000,
+    // убрал таймаут - когда будет продакшн, понадобится
+    // timeout: 10000,
 });
 
 apiClient.interceptors.request.use(

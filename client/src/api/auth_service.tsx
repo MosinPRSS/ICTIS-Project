@@ -1,9 +1,7 @@
 import apiClient from './api_client';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './consts';
-import { useNavigate } from 'react-router-dom';
 
 export function useAuth() {
-    const navigate = useNavigate();
 
     const login = async (email: string, password: string) => {
         try {
@@ -22,7 +20,6 @@ export function useAuth() {
             } else if (res.status === 401) {
                 return -1;
             } else if (res.status >= 500) {
-                navigate(`/error/${res.status}`);
                 return -1;
             } else {
                 return -1;
@@ -32,7 +29,6 @@ export function useAuth() {
             const status = error.response?.status || 500;
 
             if (status >= 404) {
-                navigate(`/error/${status}`);
             } else {
                 console.error("Ошибка авторизации:", error.message);
             }
@@ -69,7 +65,6 @@ export function useAuth() {
             const status = error.response?.status || 500;
             
             if (status >= 404) {
-                navigate(`/error/${status}`);
             } else {
                 console.error("Ошибка регистрации:", error.message);
                 if (status === 409) {

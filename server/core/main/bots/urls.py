@@ -6,7 +6,7 @@ urlpatterns = [
     path("create", CreateBot.as_view(), name="create-bot"),
     path("delete/<uuid:pk>", DeleteBot.as_view(), name="delete-bot"),
     # "read" principle
-    path("read/<uuid:pk>", GetUserBot.as_view(), name="get-bot"),
+    path("read/<uuid:pk>", GetBot.as_view(), name="get-bot"),
     path("list", ListPublicBotsV2.as_view(), name="list-public-bots"),
     # path("list/public/non-registered", ListPublicBotsToNotRegistered.as_view(), name="bots-for-non-registered"), - not safe
     # path("list/user", ListUserBots.as_view(), name="user-bots"),

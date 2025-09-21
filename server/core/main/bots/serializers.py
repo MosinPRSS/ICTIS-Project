@@ -6,7 +6,8 @@ from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 from taggit.models import Tag
 
-class BotSerializer(serializers.ModelSerializer):
+class BotSerializer(serializers.ModelSerializer, TaggitSerializer):
+    tags = TagListSerializerField()
     class Meta:
         model = Chatbots
         fields = [
@@ -14,7 +15,10 @@ class BotSerializer(serializers.ModelSerializer):
             "chatname",
             "name",
             "avatar",
+            "hide_info",
+            "is_public",
             "description",
+            "public_description",
             "first_message",
             "scenario",
             "tags"
@@ -34,17 +38,9 @@ class BotSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        tags = validated_data.pop("tags", [])
         validated_data["belongs_to"] = self.context["request"].user
         instance = super().create(validated_data)
-        instance.tags.set(tags)
-
-        return Chatbots.objects.get(id=instance.id)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['tags'] = [tag.name for tag in instance.tags.all()]
-        return data
+        return instance
 
 class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
     # OUTDATED
@@ -96,28 +92,51 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
             field: {'required': False} for field in fields 
         }
 
-class PublicBotSerializer(serializers.ModelSerializer):
+class PublicBotSerializer(serializers.ModelSerializer, TaggitSerializer):
     user = ListUsersSerializer(source='belongs_to', read_only=True)
-    sessions = serializers.IntegerField(source='session_count', read_only=True)
+    session_count = serializers.IntegerField(read_only=True)
+    tags = TagListSerializerField()
     class Meta:
         model = Chatbots
         fields = [
             'id',
             'name',
+            'chatname',
             'avatar',
             'public_description',
+            'description',
+            'scenario',
+            'first_message',
+            'created_at',
+            'updated_at',
             'rate',
             'hide_info',
+            'is_public',
             'tags',
-            'sessions',
+            'session_count',
             'user'
         ]
-
+    
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['tags'] = [tag.name for tag in instance.tags.all()]
+
+        request = self.context.get('request')
+        user = request.user if request else None
+        if instance.hide_info and (not request.user.is_authenticated or instance.belongs_to != request.user):
+            allowed_fields = [
+                "id", "name", "public_description", 
+                "avatar", "hide_info", 
+                "is_public",
+                "created_at",
+                "updated_at",
+                "rate",
+                "session_count",
+                "tags",
+                "user",
+                ]
+            filtered_data = {field: data[field] for field in allowed_fields if field in data}
+            return filtered_data
         return data
-    
 
 
 class TagSerializer(serializers.ModelSerializer):

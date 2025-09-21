@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import apiClient from "./api_client"
 
-export default function useTagsService({amount}) {
-    const navigate = useNavigate();
+export default function useTagsService({amount: number}) {
 
     const getPopularTags = async () => {
         try {
@@ -12,11 +10,9 @@ export default function useTagsService({amount}) {
             if (res.status === 200) {
                 return res.data
             } else {
-                navigate(`error/${res.status}`);
                 return []
             }
         } catch (error) {
-            navigate("error/500");
             return []
         }
     }
