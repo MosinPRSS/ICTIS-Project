@@ -7,6 +7,7 @@ urlpatterns = [
    path("list/messages/<uuid:pk>", GetMessagesOfSession.as_view(), name="list-messages-of-session"),
    path("delete/<uuid:pk>", DeleteSession.as_view(), name="delete-chat"),
    path("generate", GenerateAnswer.as_view(), name="generate-answer"),
+   # path("generate/proxy") - для прокси в будущем
 
    # штуки для сообщений
    # path("message/update/<int:pk>")

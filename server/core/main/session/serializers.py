@@ -129,8 +129,8 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Messages
         fields = [
-            "session",
             "id",
+            "session",
             "role",
             "name",
             "avatar",

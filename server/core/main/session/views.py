@@ -16,6 +16,49 @@ class CreateSession(generics.CreateAPIView):
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
 
+
+
+class ListSessions(generics.ListCreateAPIView):
+    serializer_class = ShowSessionsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        latest_message_subquery = Messages.objects.filter(
+            session=OuterRef('pk')
+        ).order_by('-timestamp').values('content')[:1]
+
+        queryset = AiSession.objects.filter(belongs_to=self.request.user).annotate(
+            last_message=Subquery(latest_message_subquery)
+        )
+        return queryset
+    
+
+    
+class DeleteSession(generics.DestroyAPIView):
+    serializer_class = SessionByIDSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        session = get_object_or_404(AiSession, id=self.kwargs.get("pk"))
+        if session.belongs_to_id != self.request.user.id:
+            raise PermissionDenied("Not yours.")
+        return session
+    
+# Messages section
+    
+class GetMessagesOfSession(generics.ListCreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        query = self.kwargs.get("pk")
+        return Messages.objects.filter(
+            session=query
+        ).order_by("timestamp").select_related(
+            "session__chatbot",
+            "session__persona"
+        )
+
 class GenerateAnswer(AsyncAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -39,40 +82,9 @@ class GenerateAnswer(AsyncAPIView):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ListSessions(generics.ListCreateAPIView):
-    serializer_class = ShowSessionsSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        latest_message_subquery = Messages.objects.filter(
-            session=OuterRef('pk')
-        ).order_by('-timestamp').values('content')[:1]
-
-        queryset = AiSession.objects.filter(belongs_to=self.request.user).annotate(
-            last_message=Subquery(latest_message_subquery)
-        )
-        return queryset
-    
-class GetMessagesOfSession(generics.ListCreateAPIView):
+        
+class UpdateMessage(generics.UpdateAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        query = self.kwargs.get("pk")
-        return Messages.objects.filter(
-            session=query
-        ).order_by("timestamp").select_related(
-            "session__chatbot",
-            "session__persona"
-        )
     
-class DeleteSession(generics.DestroyAPIView):
-    serializer_class = SessionByIDSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        session = get_object_or_404(AiSession, id=self.kwargs.get("pk"))
-        if session.belongs_to_id != self.request.user.id:
-            raise PermissionDenied("Not yours.")
-        return session
