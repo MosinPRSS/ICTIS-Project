@@ -1,15 +1,8 @@
 "use client";
-import {
-	closeIcon,
-	editIcon,
-	addIcon,
-	uploadIcon,
-} from "@/assets/images/images";
 import { useWindow } from "@/hooks/window";
 import { IBot } from "@/interfaces/interfaces";
-import Image from "next/image";
 import { RootState } from "@/store/store";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";

@@ -1,11 +1,19 @@
-import { IValidateData } from "@/interfaces/interfaces";
+import {
+	IRegisterValidateData,
+	ILoginValidateData,
+} from "@/interfaces/interfaces";
 
-export default function validation({
+export function registrationValidation({
 	name,
 	email,
 	password,
 	submitPassword,
-}: IValidateData) {
+}: IRegisterValidateData) {
+	let isValidate = true;
+	return isValidate;
+}
+
+export function loginValidation({ email, password }: ILoginValidateData) {
 	let isValidate = true;
 	return isValidate;
 }

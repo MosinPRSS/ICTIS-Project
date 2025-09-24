@@ -1,42 +1,89 @@
 import { Logo } from "@/assets/images/images";
-import { login } from "@/store/slices/userSlice";
+import { auth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
-import validation from "@/utils/validation";
+import { loginValidation, registrationValidation } from "@/utils/validation";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useAuth } from "@/api/auth_service";
+import { th } from "motion/react-client";
 
 const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
+	const { login, register } = useAuth();
 
-	const { user } = useSelector((state: RootState) => state);
 	const dispatch = useDispatch();
 
-	const nameInput = useRef(null);
-	const emailInput = useRef(null);
-	const passwordInput = useRef(null);
-	const submitPassword = useRef(null);
+	const [nameInput, setNameInput] = useState("");
+	const [emailInput, setEmailInput] = useState("");
+	const [passwordInput, setPasswordInput] = useState("");
+	const [submitPassword, setSubmitPassword] = useState("");
 
-	function registration(event: MouseEvent) {
-		const input = {
-			name: nameInput.current.value,
-			email: emailInput.current.value,
-			password: passwordInput.current.value,
-			submitPassword: submitPassword.current.value,
-		};
-		event.preventDefault();
-		if (!validation(input)) return;
+	const [loginEmail, setLoginEmail] = useState("");
+	const [loginPassword, setLoginPassword] = useState("");
 
-		dispatch(
-			login({
-				name: input.name,
-				email: input.email,
-				password: input.password,
-			})
-		);
-		setOpenAuth(false);
+	async function registrationFunc(event: MouseEvent) {
+		try {
+			event.preventDefault();
+
+			if (
+				!registrationValidation({
+					name: nameInput,
+					email: emailInput,
+					password: passwordInput,
+					submitPassword: submitPassword,
+				})
+			) {
+				throw new Error("Invalid data");
+			}
+			if ((await register(nameInput, emailInput, passwordInput)) != 0) {
+				throw new Error("Registration error");
+			}
+
+			dispatch(
+				auth({
+					name: nameInput,
+					email: emailInput,
+				})
+			);
+
+			handleClose();
+		} catch (error) {
+			console.log(error);
+		}
 	}
+
+	async function loginFunc(event: MouseEvent) {
+		try {
+			event.preventDefault();
+
+			if (
+				!loginValidation({
+					email: loginEmail,
+					password: loginPassword,
+				})
+			) {
+				throw new Error("Invalid data");
+			}
+
+			if ((await login(loginEmail, loginPassword)) != 0) {
+				throw new Error("Login error");
+			}
+
+			dispatch(
+				auth({
+					name: loginEmail,
+					email: loginEmail,
+				})
+			);
+
+			handleClose();
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	function handleClose() {
 		setOpenAuth(false);
 	}
@@ -58,119 +105,171 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 					<p>ARI-ai</p>
 				</div>
 				{regOrLog === "reg" ? (
-					<>
-						<div className="flex flex-col gap-2 items-center w-full text-center">
-							<h1 className="text-2xl font-black w-fit">
-								Добро пожаловать!
-							</h1>
-							<h2>Пройдите регистрацию</h2>
-						</div>
-						<form className="flex flex-col gap-5 w-full">
-							<div className="flex flex-col gap-2">
-								<label htmlFor="name">Имя</label>
-								<input
-									ref={nameInput}
-									type="text"
-									id="name"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Придумайте себе имя"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="mail">Почта</label>
-								<input
-									ref={emailInput}
-									type="email"
-									id="mail"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Введите почту"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="password">Пароль</label>
-								<input
-									ref={passwordInput}
-									type="password"
-									id="password"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Придумайте пароль"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="password">Пароль</label>
-								<input
-									ref={submitPassword}
-									type="password"
-									id="password"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Введите еще раз"
-								/>
-							</div>
-							<button
-								type="submit"
-								className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75 w-full"
-								onClick={(e) => registration(e)}
-							>
-								Регистрация
-							</button>
-							<div className="flex gap-3 justify-between items-center">
-								<p>Есть аккаунт? </p>
-								<button
-									onClick={() => setROL("log")}
-									className="underline"
-								>
-									Войти
-								</button>
-							</div>
-						</form>
-					</>
+					<Registration
+						setNameInput={setNameInput}
+						nameInput={nameInput}
+						setEmailInput={setEmailInput}
+						emailInput={emailInput}
+						setPasswordInput={setPasswordInput}
+						passwordInput={passwordInput}
+						submitPassword={submitPassword}
+						setSubmitPassword={setSubmitPassword}
+						registrationFunc={registrationFunc}
+						setROL={setROL}
+					/>
 				) : (
-					<>
-						<div className="flex flex-col gap-2 items-center justify-center w-full">
-							<h1 className="text-2xl font-black">
-								С возвращением!
-							</h1>
-							<h2>Войдите в свой аккаунт</h2>
-						</div>
-						<form className="flex flex-col gap-5 w-full">
-							<div className="flex flex-col gap-2">
-								<label htmlFor="mail">Почта</label>
-								<input
-									type="email"
-									id="mail"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Введите почту"
-								/>
-							</div>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="password">Пароль</label>
-								<input
-									type="password"
-									id="password"
-									className="border-2 rounded-[6px] px-3 py-2"
-									placeholder="Введите пароль"
-								/>
-							</div>
-							<button
-								type="submit"
-								className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75"
-							>
-								Войти
-							</button>
-							<div className="flex gap-3 items-center justify-between">
-								<p className="w-fit">Нет аккаунта? </p>
-								<button
-									onClick={() => setROL("reg")}
-									className="underline w-fit cursor-pointer"
-								>
-									Регистрация
-								</button>
-							</div>
-						</form>
-					</>
+					<Login
+						loginFunc={loginFunc}
+						loginEmail={loginEmail}
+						loginPassword={loginPassword}
+						setLoginEmail={setLoginEmail}
+						setLoginPassword={setLoginPassword}
+						setROL={setROL}
+					/>
 				)}
 			</div>
 		</div>
+	);
+};
+
+const Login = ({
+	loginEmail,
+	setLoginEmail,
+	loginPassword,
+	setLoginPassword,
+	loginFunc,
+	setROL,
+}) => {
+	return (
+		<>
+			<div className="flex flex-col gap-2 items-center justify-center w-full">
+				<h1 className="text-2xl font-black">С возвращением!</h1>
+				<h2>Войдите в свой аккаунт</h2>
+			</div>
+			<form className="flex flex-col gap-5 w-full">
+				<div className="flex flex-col gap-2">
+					<label htmlFor="mail">Почта</label>
+					<input
+						value={loginEmail}
+						onInput={(e) => setLoginEmail(e.currentTarget.value)}
+						type="email"
+						id="mail"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Введите почту"
+					/>
+				</div>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="password">Пароль</label>
+					<input
+						value={loginPassword}
+						onInput={(e) => setLoginPassword(e.currentTarget.value)}
+						type="password"
+						id="password"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Введите пароль"
+					/>
+				</div>
+				<button
+					type="submit"
+					className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75"
+					onClick={(e) => loginFunc(e)}
+				>
+					Войти
+				</button>
+				<div className="flex gap-3 items-center justify-between">
+					<p className="w-fit">Нет аккаунта? </p>
+					<button
+						onClick={() => setROL("reg")}
+						className="underline w-fit cursor-pointer"
+					>
+						Регистрация
+					</button>
+				</div>
+			</form>
+		</>
+	);
+};
+
+const Registration = ({
+	nameInput,
+	setNameInput,
+	emailInput,
+	setEmailInput,
+	passwordInput,
+	setPasswordInput,
+	submitPassword,
+	setSubmitPassword,
+	registrationFunc,
+	setROL,
+}) => {
+	return (
+		<>
+			<div className="flex flex-col gap-2 items-center w-full text-center">
+				<h1 className="text-2xl font-black w-fit">Добро пожаловать!</h1>
+				<h2>Пройдите регистрацию</h2>
+			</div>
+			<form className="flex flex-col gap-5 w-full">
+				<div className="flex flex-col gap-2">
+					<label htmlFor="name">Имя</label>
+					<input
+						value={nameInput}
+						onInput={(e) => setNameInput(e.currentTarget.value)}
+						type="text"
+						id="name"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Придумайте себе имя"
+					/>
+				</div>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="mail">Почта</label>
+					<input
+						value={emailInput}
+						onInput={(e) => setEmailInput(e.currentTarget.value)}
+						type="email"
+						id="mail"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Введите почту"
+					/>
+				</div>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="password">Пароль</label>
+					<input
+						value={passwordInput}
+						onInput={(e) => setPasswordInput(e.currentTarget.value)}
+						type="password"
+						id="password"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Придумайте пароль"
+					/>
+				</div>
+				<div className="flex flex-col gap-2">
+					<label htmlFor="password">Пароль</label>
+					<input
+						value={submitPassword}
+						onInput={(e) =>
+							setSubmitPassword(e.currentTarget.value)
+						}
+						type="password"
+						id="password"
+						className="border-2 rounded-[6px] px-3 py-2"
+						placeholder="Введите еще раз"
+					/>
+				</div>
+				<button
+					type="submit"
+					className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75 w-full"
+					onClick={(e) => registrationFunc(e)}
+				>
+					Регистрация
+				</button>
+				<div className="flex gap-3 justify-between items-center">
+					<p>Есть аккаунт? </p>
+					<button onClick={() => setROL("log")} className="underline">
+						Войти
+					</button>
+				</div>
+			</form>
+		</>
 	);
 };
 

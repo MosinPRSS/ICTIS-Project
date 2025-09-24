@@ -30,7 +30,7 @@ export default function Home() {
 	}, [windowWidth]);
 
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flex flex-col gap-5 p-10">
 			<div
 				className={`flex grow justify-between items-start w-full ${
 					userDevice === "mobile" && "flex-col gap-5"

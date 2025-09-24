@@ -193,21 +193,17 @@ const Sidebar = () => {
 						{user.user ? (
 							<>
 								<Link href="/profile">
-									<button className="hover:bg-white hover:text-black flex items-center space-x-2 pr-2 rounded-xs">
+									<button className="hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs">
 										<div className="h-[2.5rem] w-[2.5rem] border-[1px] rounded-[6px] border-white"></div>
 										<p
-											className={`whitespace-nowrap ${
-												userDevice === "mobile"
-													? "w-[90%]"
-													: "w-[5rem]"
-											} overflow-x-hidden`}
+											className={`whitespace-nowrap overflow-x-hidden`}
 										>
 											{user.user.name}
 										</p>
 									</button>
 								</Link>
 								<button
-									className="hover:bg-white hover:text-black rounded-xs"
+									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={(e) => logOut(e)}
 								>
 									<Image
@@ -222,7 +218,7 @@ const Sidebar = () => {
 							<>
 								<p className="whitespace-nowrap">Гость</p>
 								<button
-									className="hover:bg-white hover:text-black rounded-xs"
+									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={() => setOpenAuth(true)}
 								>
 									<Image

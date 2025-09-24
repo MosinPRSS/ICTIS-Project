@@ -46,7 +46,7 @@ const MyBotsPage = () => {
 
 	return (
 		<div
-			className={`flex w-full h-full overflow-y-scroll gap-5 ${
+			className={`flex w-full h-full p-10 overflow-y-scroll gap-5 ${
 				selectedTheme.options.text
 			} ${userDevice === "mobile" && "flex-col"}`}
 		>

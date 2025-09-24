@@ -52,9 +52,29 @@ export interface IsOpen {
 	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface IValidateData {
+export interface IRegisterValidateData {
 	name: string;
 	email: string;
 	password: string;
 	submitPassword: string;
+}
+export interface ILoginValidateData {
+	email: string;
+	password: string;
+}
+export interface Message {
+	id: string;
+	content: string;
+	isBot: boolean;
+	timestamp: string;
+}
+
+export interface Chat {
+	id: string;
+	name: string;
+	botId: string;
+	messages: Message[];
+	createdAt: string;
+	updatedAt: string;
+	isPinned: boolean;
 }

@@ -105,7 +105,6 @@ const NumberGuessingGame: React.FC = () => {
 				<h1 className="mb-4 text-2xl font-bold text-center text-purple-400">
 					Угадай число
 				</h1>
-
 				<div className="flex justify-center mb-6 space-x-4">
 					<button
 						onClick={() => setDifficulty("easy")}
@@ -136,7 +135,6 @@ const NumberGuessingGame: React.FC = () => {
 						Сложно
 					</button>
 				</div>
-
 				<div className="mb-4 text-center">
 					<p className="mb-2 text-lg">{message}</p>
 					{gameStatus === "playing" && (
@@ -153,7 +151,6 @@ const NumberGuessingGame: React.FC = () => {
 						</>
 					)}
 				</div>
-
 				{gameStatus === "playing" ? (
 					<form
 						onSubmit={handleGuess}
@@ -196,7 +193,6 @@ const NumberGuessingGame: React.FC = () => {
 						</button>
 					</div>
 				)}
-
 				<div className="mt-6 text-xs text-gray-500">
 					<p>
 						Совет: Начните с середины диапазона и двигайтесь в

@@ -4,34 +4,49 @@ import getBotsDashboard from "@/services/getBotsDashboard";
 import { RootState } from "@/store/store";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import Loading from "../Loading";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
-	const [bots, setBots] = useState<IBot[] | null>(null);
+	const [bots, setBots] = useState<IBot[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [find, setFind] = useState<IBot[]>([]);
+	const [count, setCount] = useState(30);
+
+	async function getBots() {
+		try {
+			setIsLoading(true);
+			const data = await getBotsDashboard();
+
+			setBots([...bots, data.results]);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsLoading(false);
+		}
+	}
 
 	useEffect(() => {
-		(async function getBots() {
-			try {
-				setIsLoading(true);
-				const data = await getBotsDashboard();
-				setBots(data);
-			} catch (error) {
-				setBots(null);
-				console.log(error);
-			} finally {
-				setIsLoading(false);
-			}
-		})();
+		getBots();
 	}, []);
 
 	useEffect(() => {
 		if (!bots) return;
-		setFind(bots);
+		setFind(bots[0]);
 	}, [bots]);
 
+	const scroll = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				setCount((prev) => prev + 30);
+			}
+		});
+		observer.observe(scroll.current);
+		return () => observer.disconnect();
+	}, []);
 	function search() {
 		if (!bots) return;
 		setFind(
@@ -63,20 +78,17 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	return (
 		<>
 			{isLoading ? (
-				<motion.div
-					className="w-[50px] h-[50px] border-8 border-dotted border-white rounded-full fixed top-1/2 left-1/2"
-					animate={{ rotate: 360 }}
-					transition={{
-						duration: 2,
-						repeat: Infinity,
-						type: "spring",
-					}}
-				/>
+				<Loading />
 			) : find ? (
-				find.map((bot) => <BotCard key={bot.id} bot={bot} />)
+				<>
+					{find.map((bot) => (
+						<BotCard key={bot.id} bot={bot} />
+					))}
+				</>
 			) : (
 				<p>Ничего не найдено</p>
 			)}
+			<div className="w-full h-[1px]" id="scroll" ref={scroll}></div>
 		</>
 	);
 }

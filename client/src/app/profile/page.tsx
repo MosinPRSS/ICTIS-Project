@@ -34,7 +34,7 @@ const ProfilePage = () => {
 
 	return (
 		<div
-			className={`text-white h-[100vh] w-full flex flex-col justify-between`}
+			className={`text-white p-10 h-[100vh] w-full flex flex-col justify-between`}
 		>
 			<h1 className="text-4xl">Профиль</h1>
 			{user ? (
