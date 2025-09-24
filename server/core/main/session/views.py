@@ -9,7 +9,9 @@ from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from asgiref.sync import sync_to_async
 from adrf.views import APIView as AsyncAPIView
+
 import asyncio
+import datetime
 
 class CreateSession(generics.CreateAPIView):
     queryset = AiSession.objects.filter()
@@ -89,8 +91,23 @@ class UpdateMessage(generics.UpdateAPIView):
 
     def get_queryset(self):
         query = self.kwargs.get("pk")
-        obj = Message.objects.filter(id=query)
-        if obj.session.belongs_to == self.request.user:
-            return obj
+        return Message.objects.filter(session__belongs_to=self.request.user, id=query)
+    
+class DeleteMessage(generics.DestroyAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Message.objects.filter(session__belongs_to=self.request.user)
+    
+    def destroy(self, request, *args, **kwargs):
+        message = self.get_object()
+        Message.objects.filter(
+            session=message.session,
+            id__gte=message.id
+        ).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+         
 
     

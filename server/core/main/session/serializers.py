@@ -83,8 +83,8 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         tokenizer = Tokenization()
         token_count = await tokenizer.adeepseek_tokens(user_input)
 
-        system_prompt = Templates().JANITOR_PROMPT
-        api = OllamaAPI(model_name="deepseek-r1:latest")
+        system_prompt = Templates().SYSTEM_PROMPT
+        api = OllamaAPI(model_name="qwen3:8b")
 
         response_data = await api.send_message(
             system_prompt=system_prompt,

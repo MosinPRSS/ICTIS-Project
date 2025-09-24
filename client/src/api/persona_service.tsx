@@ -83,6 +83,23 @@ export default function usePersonaService() {
     };
 
     const listPersonas = async () => {
+        // Возвращает список (примерный вывод):
+        /*
+        [
+            {
+                "id": "0c679e89-9d67-4dbd-b451-1403d8ee4fc8",
+                "name": "trash",
+                "avatar": "http://localhost:8000/media/Default_Avatar.svg",
+                "description": "actually"
+            },
+            {
+                "id": "eeb0255a-145c-4deb-aa0e-73ff47354837",
+                "name": "hello world",
+                "avatar": "http://localhost:8000/media/Default_Avatar.svg",
+                "description": "actually"
+            }
+        ]
+        */
         try {
             const res = await apiClient.get('p/list');
             return res.data;
