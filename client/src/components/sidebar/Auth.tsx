@@ -1,17 +1,27 @@
 import { Logo } from "@/assets/images/images";
 import { auth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
-import { loginValidation, registrationValidation } from "@/utils/validation";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useAuth } from "@/api/auth_service";
-import { th } from "motion/react-client";
+import { p, th } from "motion/react-client";
+import { useValidate } from "@/hooks/validate";
+import { s } from "motion/react-m";
+import { set } from "zod";
 
 const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
 	const { login, register } = useAuth();
+	const [codeErrors, setCodeErrors] = useState<number[]>([]);
+	const { registrationValidation, loginValidation } = useValidate();
+	const [authError, setAuthError] = useState<
+		| null
+		| "Пользователь с таким email уже существует"
+		| "Некорректные данные для регистрации"
+		| "Пользователь не найден"
+	>(null);
 
 	const dispatch = useDispatch();
 
@@ -26,18 +36,28 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	async function registrationFunc(event: MouseEvent) {
 		try {
 			event.preventDefault();
+			const { isValidate, codeError } = registrationValidation({
+				nameInput: nameInput,
+				emailInput: emailInput,
+				passwordInput: passwordInput,
+				submitPasswordInput: submitPassword,
+			});
 
-			if (
-				!registrationValidation({
-					name: nameInput,
-					email: emailInput,
-					password: passwordInput,
-					submitPassword: submitPassword,
-				})
-			) {
+			if (!isValidate) {
+				setCodeErrors(codeError);
 				throw new Error("Invalid data");
 			}
-			if ((await register(nameInput, emailInput, passwordInput)) != 0) {
+
+			const response = await register(
+				nameInput,
+				emailInput,
+				passwordInput
+			);
+
+			if (response !== 0) {
+				if (response !== -1) {
+					setAuthError(response);
+				}
 				throw new Error("Registration error");
 			}
 
@@ -57,24 +77,30 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	async function loginFunc(event: MouseEvent) {
 		try {
 			event.preventDefault();
+			const { isValidate, codeError } = loginValidation({
+				emailInput: loginEmail,
+				passwordInput: loginPassword,
+			});
 
-			if (
-				!loginValidation({
-					email: loginEmail,
-					password: loginPassword,
-				})
-			) {
+			if (!isValidate) {
+				setCodeErrors(codeError);
 				throw new Error("Invalid data");
 			}
 
-			if ((await login(loginEmail, loginPassword)) != 0) {
+			const response = await login(loginEmail, loginPassword);
+
+			if (response != 0) {
+				setAuthError("Пользователь не найден");
 				throw new Error("Login error");
 			}
 
+			const username = localStorage.getItem("username");
+			const userID = localStorage.getItem("userID");
+
 			dispatch(
 				auth({
-					name: loginEmail,
-					email: loginEmail,
+					name: username,
+					id: userID,
 				})
 			);
 
@@ -87,10 +113,17 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	function handleClose() {
 		setOpenAuth(false);
 	}
+
+	function resetCodeError(code: number) {
+		if (codeErrors.includes(code)) {
+			setCodeErrors(codeErrors.filter((el) => el !== code));
+		}
+	}
+
 	return (
 		<div className="flex justify-center items-center fixed left-0 top-0 w-full h-full backdrop-blur-3xl z-999">
 			<div
-				className={`flex relative flex-col items-center gap-5 bg-white p-10 rounded-[10px] text-black min-w-[25vw] w-fit`}
+				className={`flex relative flex-col items-center gap-5 bg-white p-10 rounded-[10px] text-black min-w-[25vw] w-fit max-w-[95vw]`}
 			>
 				<button
 					className="absolute right-5 top-5"
@@ -116,6 +149,11 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 						setSubmitPassword={setSubmitPassword}
 						registrationFunc={registrationFunc}
 						setROL={setROL}
+						codeErrors={codeErrors}
+						resetCodeError={resetCodeError}
+						authError={authError}
+						setAuthError={setAuthError}
+						setCodeErrors={setCodeErrors}
 					/>
 				) : (
 					<Login
@@ -125,6 +163,11 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 						setLoginEmail={setLoginEmail}
 						setLoginPassword={setLoginPassword}
 						setROL={setROL}
+						codeErrors={codeErrors}
+						resetCodeError={resetCodeError}
+						authError={authError}
+						setAuthError={setAuthError}
+						setCodeErrors={setCodeErrors}
 					/>
 				)}
 			</div>
@@ -139,7 +182,16 @@ const Login = ({
 	setLoginPassword,
 	loginFunc,
 	setROL,
+	codeErrors,
+	resetCodeError,
+	authError,
+	setAuthError,
+	setCodeErrors,
 }) => {
+	function resetError(num: number) {
+		resetCodeError(num);
+		setAuthError(null);
+	}
 	return (
 		<>
 			<div className="flex flex-col gap-2 items-center justify-center w-full">
@@ -154,9 +206,15 @@ const Login = ({
 						onInput={(e) => setLoginEmail(e.currentTarget.value)}
 						type="email"
 						id="mail"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 ${
+							codeErrors.includes(102) && "border-red-500"
+						} rounded-[6px] px-3 py-2`}
 						placeholder="Введите почту"
+						onFocus={() => resetError(102)}
 					/>
+					{codeErrors.includes(102) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
 				</div>
 				<div className="flex flex-col gap-2">
 					<label htmlFor="password">Пароль</label>
@@ -165,10 +223,17 @@ const Login = ({
 						onInput={(e) => setLoginPassword(e.currentTarget.value)}
 						type="password"
 						id="password"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 ${
+							codeErrors.includes(103) && "border-red-500"
+						} rounded-[6px] px-3 py-2`}
 						placeholder="Введите пароль"
+						onFocus={() => resetError(103)}
 					/>
+					{codeErrors.includes(103) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
 				</div>
+				{authError && <p className="text-red-500">{authError}</p>}
 				<button
 					type="submit"
 					className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75"
@@ -179,7 +244,11 @@ const Login = ({
 				<div className="flex gap-3 items-center justify-between">
 					<p className="w-fit">Нет аккаунта? </p>
 					<button
-						onClick={() => setROL("reg")}
+						onClick={() => {
+							setROL("reg");
+							setAuthError(null);
+							setCodeErrors([]);
+						}}
 						className="underline w-fit cursor-pointer"
 					>
 						Регистрация
@@ -201,7 +270,17 @@ const Registration = ({
 	setSubmitPassword,
 	registrationFunc,
 	setROL,
+	codeErrors,
+	resetCodeError,
+	authError,
+	setAuthError,
+	setCodeErrors,
 }) => {
+	function resetError(num: number) {
+		resetCodeError(num);
+		setAuthError(null);
+	}
+
 	return (
 		<>
 			<div className="flex flex-col gap-2 items-center w-full text-center">
@@ -216,9 +295,15 @@ const Registration = ({
 						onInput={(e) => setNameInput(e.currentTarget.value)}
 						type="text"
 						id="name"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 rounded-[6px] px-3 py-2 ${
+							codeErrors.includes(101) && "border-red-500"
+						}`}
+						onFocus={() => resetError(101)}
 						placeholder="Придумайте себе имя"
 					/>
+					{codeErrors.includes(101) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
 				</div>
 				<div className="flex flex-col gap-2">
 					<label htmlFor="mail">Почта</label>
@@ -227,9 +312,25 @@ const Registration = ({
 						onInput={(e) => setEmailInput(e.currentTarget.value)}
 						type="email"
 						id="mail"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 rounded-[6px] px-3 py-2 ${
+							(codeErrors.includes(102) ||
+								codeErrors.includes(121)) &&
+							"border-red-500"
+						}`}
+						onFocus={() => {
+							resetError(102);
+							resetError(121);
+						}}
 						placeholder="Введите почту"
 					/>
+					{codeErrors.includes(102) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
+					{codeErrors.includes(121) && (
+						<p className="text-red-500">
+							Почта должна соответствовать формату: example@ex.com
+						</p>
+					)}
 				</div>
 				<div className="flex flex-col gap-2">
 					<label htmlFor="password">Пароль</label>
@@ -238,9 +339,34 @@ const Registration = ({
 						onInput={(e) => setPasswordInput(e.currentTarget.value)}
 						type="password"
 						id="password"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 rounded-[6px] px-3 py-2 ${
+							(codeErrors.includes(103) ||
+								codeErrors.includes(122) ||
+								codeErrors.includes(123) ||
+								codeErrors.includes(111)) &&
+							"border-red-500"
+						}`}
+						onFocus={() => {
+							resetError(103);
+							resetError(122);
+							resetError(123);
+							resetError(111);
+						}}
 						placeholder="Придумайте пароль"
 					/>
+					{codeErrors.includes(103) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
+					{codeErrors.includes(122) && (
+						<p className="text-red-500">
+							Пароль должен содержать не менее 8 символов
+						</p>
+					)}
+					{codeErrors.includes(123) && (
+						<p className="text-red-500">
+							Пароль не соответствует формату
+						</p>
+					)}
 				</div>
 				<div className="flex flex-col gap-2">
 					<label htmlFor="password">Пароль</label>
@@ -251,10 +377,25 @@ const Registration = ({
 						}
 						type="password"
 						id="password"
-						className="border-2 rounded-[6px] px-3 py-2"
+						className={`border-2 rounded-[6px] px-3 py-2 ${
+							(codeErrors.includes(104) ||
+								codeErrors.includes(111)) &&
+							"border-red-500"
+						}`}
+						onFocus={() => {
+							resetError(104);
+							resetError(111);
+						}}
 						placeholder="Введите еще раз"
 					/>
+					{codeErrors.includes(104) && (
+						<p className="text-red-500">Заполните поле</p>
+					)}
+					{codeErrors.includes(111) && (
+						<p className="text-red-500">Пароли не совпадают</p>
+					)}
 				</div>
+				{authError && <p className="text-red-500">{authError}</p>}
 				<button
 					type="submit"
 					className="bg-violet-100 py-2 px-3 rounded-[10px] hover:bg-black hover:text-white duration-75 w-full"
@@ -264,7 +405,14 @@ const Registration = ({
 				</button>
 				<div className="flex gap-3 justify-between items-center">
 					<p>Есть аккаунт? </p>
-					<button onClick={() => setROL("log")} className="underline">
+					<button
+						onClick={() => {
+							setROL("log");
+							setAuthError(null);
+							setCodeErrors([]);
+						}}
+						className="underline"
+					>
 						Войти
 					</button>
 				</div>

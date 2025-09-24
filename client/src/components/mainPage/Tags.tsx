@@ -1,9 +1,20 @@
+import useTagsService from "@/api/tags_service";
 import { IFindBot } from "@/interfaces/interfaces";
 import { useEffect, useState } from "react";
-const tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7", "tag8"];
-const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
-	const [tagsList, setTags] = useState<string[]>(tags);
 
+const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
+	const tagsFunc = useTagsService({ amount: 10 });
+	const [tagsList, setTags] = useState<string[]>(["tag"]);
+
+	useEffect(() => {
+		(async function getTags() {
+			const response = await tagsFunc.getPopularTags();
+
+			if (!response) return;
+
+			setTags(response);
+		})();
+	}, []);
 	function addTag(tag: string) {
 		setSelectedTags([...selectedTags, tag]);
 		setTags(tagsList.filter((t) => t !== tag));

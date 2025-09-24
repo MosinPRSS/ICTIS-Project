@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 const NumberGuessingGame: React.FC = () => {
@@ -98,6 +100,13 @@ const NumberGuessingGame: React.FC = () => {
 		const hint = targetNumber % 2 === 0 ? "Число четное" : "Число нечетное";
 		return `Подсказка: ${hint}. Попыток использовано: ${attempts}`;
 	};
+
+	const router = useRouter();
+	useEffect(() => {
+		if (gameStatus === "lost") {
+			router.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+		}
+	}, [gameStatus]);
 
 	return (
 		<div className="flex justify-center items-center p-4 min-h-screen text-white bg-gray-900">

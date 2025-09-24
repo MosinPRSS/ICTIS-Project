@@ -53,14 +53,14 @@ export interface IsOpen {
 }
 
 export interface IRegisterValidateData {
-	name: string;
-	email: string;
-	password: string;
-	submitPassword: string;
+	nameInput: string;
+	emailInput: string;
+	passwordInput: string;
+	submitPasswordInput: string;
 }
 export interface ILoginValidateData {
-	email: string;
-	password: string;
+	emailInput: string;
+	passwordInput: string;
 }
 export interface Message {
 	id: string;

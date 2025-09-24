@@ -17,7 +17,9 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useDispatch } from "react-redux";
-import { login, logout } from "@/store/slices/userSlice";
+import { auth, logout } from "@/store/slices/userSlice";
+import { logoutApi } from "@/api/token_service";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
 	const windowWidth = useWindow();
@@ -33,16 +35,45 @@ const Sidebar = () => {
 
 	useEffect(() => {
 		setUserDevice(windowWidth);
-		if (userDevice !== "mobile") {
-			setCollapse(false);
+
+		if (windowWidth === "mobile") {
+			setCollapse(true);
 		}
 	}, [windowWidth]);
 
 	const dispatch = useDispatch();
 
 	function logOut(event: MouseEvent) {
+		event.preventDefault();
+		logoutApi();
 		dispatch(logout());
 	}
+
+	const router = useRouter();
+	function redirect(e: MouseEvent, href: string) {
+		e.preventDefault();
+		if (!user.user) {
+			setOpenAuth(true);
+		} else {
+			router.push(href);
+		}
+	}
+
+	useEffect(() => {
+		const username = localStorage.getItem("username");
+		const userID = localStorage.getItem("userID");
+
+		console.log(username, userID);
+
+		if (!username || !userID) return;
+
+		dispatch(
+			auth({
+				name: username,
+				id: userID,
+			})
+		);
+	}, []);
 
 	return (
 		<>
@@ -100,21 +131,21 @@ const Sidebar = () => {
 
 					<div className={`flex flex-col p-1 pt-5 space-y-1`}>
 						{navButtons.map((button) => (
-							<Link key={button.name} href={button.href}>
-								<button
-									className={`w-full hover:bg-white hover:text-black flex items-center text-white transition duration-10 p-3 space-x-1 rounded-xs`}
-								>
-									<Image
-										src={button.icon}
-										alt={`${button.name}-icon`}
-										width={30}
-										height={30}
-									/>
-									<p className={`whitespace-nowrap`}>
-										{button.desc}
-									</p>
-								</button>
-							</Link>
+							<button
+								key={button.name}
+								onClick={(e) => redirect(e, button.href)}
+								className={`w-full hover:bg-white hover:text-black flex items-center text-white transition duration-10 p-3 space-x-1 rounded-xs`}
+							>
+								<Image
+									src={button.icon}
+									alt={`${button.name}-icon`}
+									width={30}
+									height={30}
+								/>
+								<p className={`whitespace-nowrap`}>
+									{button.desc}
+								</p>
+							</button>
 						))}
 					</div>
 				</div>
@@ -154,6 +185,7 @@ const Sidebar = () => {
 							alt="collapse-icon"
 							width={30}
 							height={30}
+							style={{ minWidth: 30 + "px" }}
 						/>
 					</motion.div>
 				</button>
@@ -172,6 +204,7 @@ const Sidebar = () => {
 							alt="donut-icon"
 							width={20}
 							height={20}
+							style={{ minWidth: 30 + "px" }}
 						/>
 						<p className={`whitespace-nowrap`}>Темы</p>
 					</button>
@@ -183,6 +216,7 @@ const Sidebar = () => {
 								alt="question-icon"
 								width={20}
 								height={20}
+								style={{ minWidth: 30 + "px" }}
 							/>
 							<p className={`whitespace-nowrap`}>Нужна помощь?</p>
 						</button>
@@ -192,8 +226,8 @@ const Sidebar = () => {
 					>
 						{user.user ? (
 							<>
-								<Link href="/profile">
-									<button className="hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs">
+								<Link href="/profile" className="max-w-[85%]">
+									<button className="max-w-[100%] hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs">
 										<div className="h-[2.5rem] w-[2.5rem] border-[1px] rounded-[6px] border-white"></div>
 										<p
 											className={`whitespace-nowrap overflow-x-hidden`}
