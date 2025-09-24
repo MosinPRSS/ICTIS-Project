@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from ..models import Personas
+from main.models import Persona
 class PersonaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Personas
+        model = Persona
         fields = [
             "id",
             "name",

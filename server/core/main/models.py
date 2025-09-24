@@ -6,7 +6,6 @@ from typing import *
 from taggit.managers import TaggableManager
 import uuid
 from main.ai_modules.tokenizer import Tokenization
-from asgiref.sync import sync_to_async
 
 # class PublicDescription(models.Model)
 #   belongs_to = bot | user
@@ -55,7 +54,7 @@ class User(AbstractBaseUser):
         return self.is_superuser
 
 
-class Chatbots(models.Model):
+class Chatbot(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField(default="")
@@ -76,14 +75,14 @@ class Chatbots(models.Model):
 
     tags = TaggableManager(blank=True)
     
-class Favorites(models.Model):
+class Favorite(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    bot_id = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
+    bot_id = models.ForeignKey(to=Chatbot, on_delete=models.CASCADE)
 
 # class Tags(models.Model):
 #    belongs_to = models.ForeignKey(to=Chatbots, on_delete=models.SET_NULL)
 
-class Personas(models.Model):
+class Persona(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
@@ -93,8 +92,8 @@ class Personas(models.Model):
 class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    chatbot = models.ForeignKey(to=Chatbots, on_delete=models.CASCADE)
-    persona = models.ForeignKey(to=Personas, on_delete=models.SET_NULL, null=True)
+    chatbot = models.ForeignKey(to=Chatbot, on_delete=models.CASCADE)
+    persona = models.ForeignKey(to=Persona, on_delete=models.SET_NULL, null=True)
 
     # time working
     created_at = models.DateTimeField(auto_now_add=True)
@@ -104,7 +103,7 @@ class AiSession(models.Model):
     temperatute = models.FloatField(default=0.7)
     tokens = models.IntegerField(default=1000)
 
-class Messages(models.Model):
+class Message(models.Model):
     session = models.ForeignKey(to=AiSession, on_delete=models.CASCADE)
     content = models.TextField(default="")
     role = models.TextField()
@@ -138,7 +137,7 @@ class Messages(models.Model):
     
 class PreviousVersionMessage(models.Model):
     # TODO SOON
-    message_id = models.ForeignKey(to=Messages, on_delete=models.CASCADE)
+    message_id = models.ForeignKey(to=Message, on_delete=models.CASCADE)
     content = models.TextField(default="")
     timestamp = models.DateTimeField(auto_now_add=True)
 

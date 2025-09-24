@@ -1,11 +1,11 @@
 from rest_framework import generics
-from ..models import *
+from main.models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 
 class CreatePersona(generics.CreateAPIView):
-    queryset = Personas.objects.all()
+    queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
     permission_classes = [IsAuthenticated]
 
@@ -17,13 +17,13 @@ class GetPersona(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Personas.objects.filter(belongs_to=self.request.user)
+        return Persona.objects.filter(belongs_to=self.request.user)
 
     def get_object(self):
         persona_id = self.kwargs.get("pk")
         try:
             return self.get_queryset().get(id=persona_id)
-        except Personas.DoesNotExist:
+        except Persona.DoesNotExist:
             raise NotFound("This persona isnt yours.")
         
 class ListUserPersonas(generics.ListCreateAPIView):
@@ -31,20 +31,20 @@ class ListUserPersonas(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Personas.objects.filter(belongs_to=self.request.user)
+        return Persona.objects.filter(belongs_to=self.request.user)
     
 class UpdatePersona(generics.UpdateAPIView):
     serializer_class = PersonaSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Personas.objects.filter(belongs_to=self.request.user)
+        return Persona.objects.filter(belongs_to=self.request.user)
     
     def get_object(self):
         persona_id = self.kwargs.get("pk")
         try:
             return self.get_queryset().get(id=persona_id)
-        except Personas.DoesNotExist:
+        except Persona.DoesNotExist:
             raise NotFound("Persona not found")
     
 class DeletePersona(generics.DestroyAPIView):
@@ -52,10 +52,10 @@ class DeletePersona(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Personas.objects.filter(belongs_to=self.request.user)
+        return Persona.objects.filter(belongs_to=self.request.user)
     def get_object(self):
         persona_id = self.kwargs.get("pk")
         try:
             return self.get_queryset().get(id=persona_id)
-        except Personas.DoesNotExist:
+        except Persona.DoesNotExist:
             raise NotFound("Persona not found")

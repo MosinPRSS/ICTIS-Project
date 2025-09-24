@@ -1,7 +1,7 @@
 import aiohttp
 from typing import Dict, Any, Optional
 from main.ai_modules.collector import PromptTools as pt
-from main.models import Messages
+from main.models import Message
 
 
 class Common:
@@ -67,7 +67,7 @@ class OllamaAPI:
         think: bool = False,
         **kwargs,
     ) -> Optional[Dict[str, Any]]:
-        history_qs = Messages.aget_recent_messages_with_token_limit(
+        history_qs = Message.aget_recent_messages_with_token_limit(
             session_id, token_limit=12000
         )
         history = await history_qs

@@ -7,7 +7,6 @@ from ..models import *
 from rest_framework import serializers
 from main.ai_modules.collector import PromptTools as pt
 import asyncio
-from django.db import transaction
    
 class SessionSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
@@ -47,7 +46,7 @@ class SessionSerializer(serializers.ModelSerializer):
         )
         if fst_message:
             eval_c = Tokenization().deepseek_tokens(fst_message)
-            Messages.objects.create(
+            Message.objects.create(
                 session=session,
                 role="assistant",
                 content=fst_message,
@@ -59,7 +58,7 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
     session = serializers.UUIDField(write_only=True)
     
     class Meta:
-        model = Messages
+        model = Message
         fields = [
             "session",
             "content",
@@ -106,14 +105,14 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         ai_content = response_data["message"].get("content", "")
         eval_count = response_data.get("eval_count", 0)
 
-        user_message = await Messages.objects.acreate(
+        user_message = await Message.objects.acreate(
             session=session_obj,
             content=user_input,
             role="user",
             eval_count=token_count,
         )
 
-        ai_message = await Messages.objects.acreate(
+        ai_message = await Message.objects.acreate(
             session=session_obj,
             content=ai_content,
             role="assistant",
@@ -127,7 +126,7 @@ class MessageSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
 
     class Meta:
-        model = Messages
+        model = Message
         fields = [
             "id",
             "session",

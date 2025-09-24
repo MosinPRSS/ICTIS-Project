@@ -9,7 +9,7 @@ from taggit.models import Tag
 class BotSerializer(serializers.ModelSerializer, TaggitSerializer):
     tags = TagListSerializerField()
     class Meta:
-        model = Chatbots
+        model = Chatbot
         fields = [
             "id",
             "chatname",
@@ -42,54 +42,14 @@ class BotSerializer(serializers.ModelSerializer, TaggitSerializer):
         instance = super().create(validated_data)
         return instance
 
-class ShowBotSerializer(TaggitSerializer, serializers.ModelSerializer):
-    # OUTDATED
-    bot_owner = serializers.CharField(source='belongs_to.username', read_only=True)
-    avatar_owner = serializers.CharField(source='belongs_to.avatar_url', read_only=True)
-    user_id = serializers.CharField(source='belongs_to.id', read_only=True)
-    tags = TagListSerializerField()
-    class Meta:
-        model = Chatbots
-        fields = [
-            "__all__",
-            "tags",
-            "user_id",
-            "bot_owner",
-            "avatar_owner"
-        ]
-        extra_kwargs = {
-            "id": {"read_only": True},
-            "chatname": {"required": True},
-            "name": {"required": True},
-            "description": {"required": True},
-            "avatar": {"required": False},
-            "is_public": {"required": True},
-            "hide_info": {"required": True},
-            "first_message" : {"required": True},
-            "scenario": {"required": False},
-            "public_description": {"required": False},
-            "tags": {"required": False},
-        }
-    def create(self, validated_data):
-        validated_data["belongs_to"] = self.context["request"].user
-        return super().create(validated_data)
-    
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        if instance.hide_info:
-            allowed_fields = ["id", "name", "public_description", "avatar", "hide_info", "is_public", "tags"]
-            filtered_data = {field: data[field] for field in allowed_fields if field in data}
-            return filtered_data
-
-        return data
         
 class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
-        model = Chatbots
+        model = Chatbot
         fields = '__all__'
         extra_kwargs = {
-            field: {'required': False} for field in fields 
+            field: {'required': False} for field in fields
         }
 
 class PublicBotSerializer(serializers.ModelSerializer, TaggitSerializer):
@@ -97,7 +57,7 @@ class PublicBotSerializer(serializers.ModelSerializer, TaggitSerializer):
     session_count = serializers.IntegerField(read_only=True)
     tags = TagListSerializerField()
     class Meta:
-        model = Chatbots
+        model = Chatbot
         fields = [
             'id',
             'name',

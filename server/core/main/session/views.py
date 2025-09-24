@@ -23,7 +23,7 @@ class ListSessions(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        latest_message_subquery = Messages.objects.filter(
+        latest_message_subquery = Message.objects.filter(
             session=OuterRef('pk')
         ).order_by('-timestamp').values('content')[:1]
 
@@ -52,7 +52,7 @@ class GetMessagesOfSession(generics.ListCreateAPIView):
 
     def get_queryset(self):
         query = self.kwargs.get("pk")
-        return Messages.objects.filter(
+        return Message.objects.filter(
             session=query
         ).order_by("timestamp").select_related(
             "session__chatbot",
@@ -86,5 +86,11 @@ class GenerateAnswer(AsyncAPIView):
 class UpdateMessage(generics.UpdateAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        query = self.kwargs.get("pk")
+        obj = Message.objects.filter(id=query)
+        if obj.session.belongs_to == self.request.user:
+            return obj
 
     

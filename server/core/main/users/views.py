@@ -73,7 +73,7 @@ class GetAnotherUser(generics.RetrieveAPIView):
     
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
-        bots = Chatbots.objects.filter(belongs_to=user, is_public=True)
+        bots = Chatbot.objects.filter(belongs_to=user, is_public=True)
 
         user_data = ListUsersSerializer(user).data
         bot_data = PublicBotSerializer(bots, many=True, context={'request': request}).data

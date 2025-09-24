@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 
 
 class CreateBot(generics.CreateAPIView):
-    queryset = Chatbots.objects.all()
+    queryset = Chatbot.objects.all()
     serializer_class = BotSerializer
     permission_classes = [IsAuthenticated] 
 
@@ -24,13 +24,13 @@ class UpdateBot(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
+        return Chatbot.objects.filter(belongs_to=self.request.user)
     
     def get_object(self):
         bot_id = self.kwargs.get("pk")
         try:
             return self.get_queryset().get(id=bot_id)
-        except Chatbots.DoesNotExist:
+        except Chatbot.DoesNotExist:
             raise NotFound("This bot isnt yours.")
         
 class GetBot(generics.RetrieveAPIView):
@@ -38,7 +38,7 @@ class GetBot(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Chatbots.objects.annotate(
+        queryset = Chatbot.objects.annotate(
             session_count=Count("aisession", distinct=True)
         )
         return queryset
@@ -48,26 +48,17 @@ class GetBot(generics.RetrieveAPIView):
         try: 
             bot = self.get_queryset().get(id=bot_id)
             if bot.belongs_to != self.request.user:
-                if not bot.is_public: 
+                if not bot.is_public:
                     raise PermissionDenied("This bot is not yours")
                 else: return bot
             else: return bot
-        except Chatbots.DoesNotExist:
+        except Chatbot.DoesNotExist:
             raise NotFound("Bot not found")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
-
-class ListPublicBots(generics.ListCreateAPIView): 
-    # outdated - do not use. // for test uses only
-    serializer_class = ShowBotSerializer
-    permission_classes = [AllowAny]
-    pagination_class = StandardResultsPagination
-    
-    def get_queryset(self):
-        return Chatbots.objects.filter(is_public=True).select_related('belongs_to')
     
 class ListPublicBotsV2(generics.ListCreateAPIView):
     serializer_class = PublicBotSerializer
@@ -92,7 +83,7 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
 
         order_prefix = "-" if method == 1 else ""
 
-        queryset = Chatbots.objects.filter(is_public=True).annotate(
+        queryset = Chatbot.objects.filter(is_public=True).annotate(
             session_count=Count("aisession", distinct=True)
         )
 
@@ -114,35 +105,13 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
-
-class ListPublicBotsToNotRegistered(generics.ListCreateAPIView):
-    # outdated - do not use.
-    serializer_class = ShowBotSerializer
-    permission_classes = [AllowAny]
-    
-    def get_queryset(self):
-        return Chatbots.objects.filter(is_public=True).select_related(
-            'belongs_to'
-            ).only(
-                'id', 'name', 
-                'public_description', 'avatar', 
-                'belongs_to__username', 'belongs_to__avatar'
-                )
-    
-class ListUserBots(generics.ListCreateAPIView):
-    # outdated - use /u/read/<uuid:pk>
-    serializer_class = BotSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Chatbots.objects.filter(belongs_to=self.request.user)
     
 class SearchBots(generics.ListCreateAPIView):
     serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        queryset = Chatbots.objects.filter(is_public=True)
+        queryset = Chatbot.objects.filter(is_public=True)
         query = self.request.query_params.get("q", None)
         try:
             return queryset.filter(
@@ -195,7 +164,7 @@ class SearchByTags(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        queryset = Chatbots.objects.filter(is_public=True)
+        queryset = Chatbot.objects.filter(is_public=True)
         query = self.request.query_params.get("query", None)
         if query:
             tags = query.split(',')
@@ -204,55 +173,6 @@ class SearchByTags(generics.ListCreateAPIView):
             for tag in tags:
                 q_objects |= Q(tags__name=tag)
             return queryset.filter(q_objects).distinct()
-        return Chatbots.objects.none()
-    
-class GetPopularBotsBySession(generics.ListCreateAPIView):
-    # outdated
-    serializer_class = ShowBotSerializer
-    permission_classes = [AllowAny]
-
-    def get_queryset(self):
-        num = self.kwargs.get("pk")
-
-        # getting most used bots by session
-        sessionquery = AiSession.objects.values('chatbot').annotate(
-            num_sessions=Count('id')
-        ).order_by('-num_sessions')[:num]
-
-        ids = [item['chatbot'] for item in sessionquery]
-        bots = Chatbots.objects.filter(
-            is_public=True, 
-            id__in=ids).annotate(
-                total_messages=Count('aisession__messages')
-            )
-        
-        return bots
-        
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-
-        data = serializer.data
-        bot_ids = [item['id'] for item in data]
-        bot_sessions = AiSession.objects.filter(
-            chatbot_id__in=bot_ids
-            ).values(
-                'chatbot'
-            ).annotate(
-                count=Count('id')
-            )
-        session_count = {item['chatbot']: item['count'] for item in bot_sessions}
-        enriched_data = []
-        for bot_data in data:
-            bot_id = bot_data['id']
-            bot_data['num_sessions'] = session_count.get(bot_id, 0)
-            bot_data['num_messages'] = getattr(self.get_queryset().filter(
-                id=bot_id
-                ).first(), 'total_messages', 0)
-            enriched_data.append(bot_data)
-
-        return Response(enriched_data)
-
-
+        return Chatbot.objects.none()
 
         
