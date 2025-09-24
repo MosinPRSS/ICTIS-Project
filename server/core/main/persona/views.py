@@ -45,7 +45,7 @@ class UpdatePersona(generics.UpdateAPIView):
         try:
             return self.get_queryset().get(id=persona_id)
         except Personas.DoesNotExist:
-            raise NotFound("This persona isnt yours.")
+            raise NotFound("Persona not found")
     
 class DeletePersona(generics.DestroyAPIView):
     serializer_class = PersonaSerializer
@@ -53,3 +53,9 @@ class DeletePersona(generics.DestroyAPIView):
 
     def get_queryset(self):
         return Personas.objects.filter(belongs_to=self.request.user)
+    def get_object(self):
+        persona_id = self.kwargs.get("pk")
+        try:
+            return self.get_queryset().get(id=persona_id)
+        except Personas.DoesNotExist:
+            raise NotFound("Persona not found")

@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
         if self.avatar and hasattr(self.avatar, 'url'):
             return self.avatar.url
         else:
-            return f"{settings.MEDIA_URL}/Default_Avatar.svg"
+            return f"{settings.HOST_URL}/media/Default_Avatar.svg"
         
     def has_perm(self, perm, obj=None):
         return self.is_superuser

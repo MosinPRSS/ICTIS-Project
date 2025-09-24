@@ -149,6 +149,7 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = 'main.User'
 
+HOST_URL = "http://127.0.0.1:8000"
 
 ASGI_APPLICATION = "core.asgi.application"
 # Internationalization

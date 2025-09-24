@@ -56,11 +56,10 @@ export default function useUserService() {
                 return null;
             }
         } catch (error: any) {
-            console.error("Ошибка при загрузке пользователя:", error);
             if (error.response?.status === 404) {
                 return null;
             }
-            throw error;
+            throw new Error("U_ERROR_READ");
         }
     }, []);
 
@@ -98,8 +97,7 @@ export default function useUserService() {
 
             return res.data;
         } catch (error) {
-            console.error('Ошибка при обновлении пользователя:', error);
-            throw error;
+            throw new Error('U_ERROR_UPDATE');
         }
     }, []);
 
@@ -110,11 +108,10 @@ export default function useUserService() {
             const res = await apiClient.delete('u/delete');
             return res.status; // возвращает 200 ОК
         } catch (error: any) {
-            console.error('Ошибка при удалении пользователя');
-            return error;
+            throw new Error('U_ERROR_DELETE');
         }
         
-    }, [])
+    }, []);
 
     return { 
         readUser, 

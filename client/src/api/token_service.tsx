@@ -10,6 +10,10 @@ function AuthClean() {
     localStorage.removeItem('avatarUrl');
 }
 
+
+// здесь содержатся куча проверок токенов
+// в основном, автоматическая проверка используется всегда
+// однако
 export const verifyToken = async (token: string): Promise<boolean> => {
     try {
         const res = await axios.post(`${env_api}a/api-token/`, {
