@@ -59,9 +59,9 @@ class Chatbot(models.Model):
     chatname = models.TextField(default="")
     avatar = models.ImageField(upload_to="img/bot/", default="img/bot/Default_Avatar.svg")
     
-    description = models.TextField(max_length=16384)
-    scenario = models.TextField(max_length=8192)
-    first_message = models.TextField(max_length=3000)
+    description = models.TextField(default="")
+    scenario = models.TextField(default="")
+    first_message = models.TextField(default="")
 
     rate = models.IntegerField(default=0) # TODO
     is_public = models.BooleanField(default=False)

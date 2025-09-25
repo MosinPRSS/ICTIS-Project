@@ -40,7 +40,7 @@ class GetBot(generics.RetrieveAPIView):
     def get_queryset(self):
         queryset = Chatbot.objects.annotate(
             session_count=Count("aisession", distinct=True)
-        )
+        ).prefetch_related('tags')
         return queryset
 
     def get_object(self):

@@ -68,7 +68,7 @@ class OllamaAPI:
         **kwargs,
     ) -> Optional[Dict[str, Any]]:
         history_qs = Message.aget_recent_messages_with_token_limit(
-            session_id, token_limit=12000
+            session_id, token_limit=20000
         )
         history = await history_qs
 
