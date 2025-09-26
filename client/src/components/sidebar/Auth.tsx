@@ -1,15 +1,42 @@
 import { Logo } from "@/assets/images/images";
 import { auth } from "@/store/slices/userSlice";
-import { RootState } from "@/store/store";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { useAuth } from "@/api/auth_service";
-import { p, th } from "motion/react-client";
 import { useValidate } from "@/hooks/validate";
-import { s } from "motion/react-m";
-import { set } from "zod";
+
+interface LoginProps {
+	loginEmail: string;
+	setLoginEmail: Dispatch<SetStateAction<string>>;
+	loginPassword: string;
+	setLoginPassword: Dispatch<SetStateAction<string>>;
+	loginFunc: (event: React.MouseEvent) => Promise<void>;
+	setROL: Dispatch<SetStateAction<"reg" | "log">>;
+	codeErrors: number[];
+	resetCodeError: (code: number) => void;
+	authError: string | null;
+	setAuthError: Dispatch<SetStateAction<string | null>>;
+	setCodeErrors: Dispatch<SetStateAction<number[]>>;
+}
+
+interface RegistrationProps {
+	nameInput: string;
+	setNameInput: Dispatch<SetStateAction<string>>;
+	emailInput: string;
+	setEmailInput: Dispatch<SetStateAction<string>>;
+	passwordInput: string;
+	setPasswordInput: Dispatch<SetStateAction<string>>;
+	submitPassword: string;
+	setSubmitPassword: Dispatch<SetStateAction<string>>;
+	registrationFunc: (event: React.MouseEvent) => Promise<void>;
+	setROL: Dispatch<SetStateAction<"reg" | "log">>;
+	codeErrors: number[];
+	resetCodeError: (code: number) => void;
+	authError: string | null;
+	setAuthError: Dispatch<SetStateAction<string | null>>;
+	setCodeErrors: Dispatch<SetStateAction<number[]>>;
+}
 
 const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
@@ -29,7 +56,6 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
 	const [submitPassword, setSubmitPassword] = useState("");
-
 	const [loginEmail, setLoginEmail] = useState("");
 	const [loginPassword, setLoginPassword] = useState("");
 
@@ -157,7 +183,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 					/>
 				) : (
 					<Login
-						loginFunc={loginFunc}
+						// loginFunc={loginFunc}
 						loginEmail={loginEmail}
 						loginPassword={loginPassword}
 						setLoginEmail={setLoginEmail}
@@ -187,7 +213,7 @@ const Login = ({
 	authError,
 	setAuthError,
 	setCodeErrors,
-}) => {
+}: LoginProps) => {
 	function resetError(num: number) {
 		resetCodeError(num);
 		setAuthError(null);
@@ -275,7 +301,7 @@ const Registration = ({
 	authError,
 	setAuthError,
 	setCodeErrors,
-}) => {
+}: RegistrationProps) => {
 	function resetError(num: number) {
 		resetCodeError(num);
 		setAuthError(null);

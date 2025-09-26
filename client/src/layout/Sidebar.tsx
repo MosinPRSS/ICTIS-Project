@@ -105,8 +105,6 @@ const Sidebar = () => {
 						  }
 				}
 			>
-				{/* 											Заголовок																 */}
-
 				<div>
 					<Link
 						href="/"
@@ -126,8 +124,6 @@ const Sidebar = () => {
 							ARI-ai
 						</h1>
 					</Link>
-
-					{/* 											Навигация сверху																 */}
 
 					<div className={`flex flex-col p-1 pt-5 space-y-1`}>
 						{navButtons.map((button) => (
@@ -149,8 +145,6 @@ const Sidebar = () => {
 						))}
 					</div>
 				</div>
-
-				{/* 											Кнопка сворачивания															 */}
 
 				<button
 					className={` collaps-btn cursor-pointer z-999 bg-white rounded-full flex justify-center items-center fixed ${
@@ -189,8 +183,6 @@ const Sidebar = () => {
 						/>
 					</motion.div>
 				</button>
-
-				{/* 											Навигация снизу																 */}
 
 				<div className={`flex flex-col space-y-1 relative`}>
 					<button
