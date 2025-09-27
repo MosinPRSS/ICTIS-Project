@@ -1,17 +1,19 @@
-import { IPersona, ISelectedBot } from "@/interfaces/interfaces";
+import { IPersona } from "@/interfaces/interfaces";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { addIcon, closeIcon, uploadIcon } from "@/assets/images/images";
+import { uploadIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
-
-let ID = 0;
+import usePersonaService from "@/api/persona_service";
+import { addUserPersona } from "@/store/slices/userPersonasSlice";
+import { useDispatch } from "react-redux";
+import { openMessage } from "@/store/slices/messageSlice";
 
 const newPersona: IPersona = {
-	id: ID,
-	name: "Новый бот",
-	description: "Описание",
+	id: 0,
+	name: "Новая персона",
+	description: "Описание персоны",
 	avatar: "https://via.placeholder.com/150",
 };
 
@@ -22,16 +24,18 @@ const NewPersonaSettings = ({
 }: IPersona) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
+	const { createPersona } = usePersonaService();
 
-	const [botInfo, setBotInfo] = useState(newPersona);
+	const [personaInfo, setPersonaInfo] = useState(newPersona);
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		setBotInfo(newPersona);
+		setPersonaInfo(newPersona);
 	}, [newPersona]);
 
-	function changeBot(updatedBot: IPersona) {
-		setBotInfo(updatedBot);
+	function changePersona(updatedPersona: IPersona) {
+		setPersonaInfo(updatedPersona);
 	}
 
 	function handleSubmit(e: React.FormEvent) {
@@ -42,13 +46,35 @@ const NewPersonaSettings = ({
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
 
-	function saveBot() {
-		setBotInfo({
-			...botInfo,
-			id: ID++,
-		});
-		setMyPersonas(myPersonas ? [...myPersonas, botInfo] : [botInfo]);
-		setSelectedPersona(null);
+	async function savePersona(e: MouseEvent) {
+		e.preventDefault();
+		try {
+			setPersonaInfo({
+				...personaInfo,
+				id: new Date(),
+			});
+
+			const response = await createPersona(personaInfo);
+
+			if (!response) {
+				throw new Error("Failed to create bot");
+			}
+
+			dispatch(
+				addUserPersona({
+					id: new Date(),
+					name: personaInfo.name,
+					description: personaInfo.description,
+					avatar: personaInfo.avatar,
+				})
+			);
+			dispatch(openMessage("Бот успешно создан"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedPersona(null);
+		}
 	}
 
 	return (
@@ -66,8 +92,8 @@ const NewPersonaSettings = ({
 					<div className="flex items-center gap-3">
 						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
 						<div>
-							<p>{botInfo.name}</p>
-							<p>{botInfo.description}</p>
+							<p>{personaInfo.name}</p>
+							<p>{personaInfo.description}</p>
 						</div>
 					</div>
 
@@ -78,7 +104,7 @@ const NewPersonaSettings = ({
 					>
 						<button
 							className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-							onClick={saveBot}
+							onClick={(e) => savePersona(e)}
 						>
 							Сохранить
 						</button>
@@ -95,23 +121,6 @@ const NewPersonaSettings = ({
 						userDevice === "mobile" && "flex-col"
 					}`}
 				>
-					<div
-						className={`${
-							userDevice !== "mobile" && "w-[45%]"
-						} flex gap-5`}
-					>
-						<button
-							className={`h-fit border-[1px] rounded-[10px] px-5 py-2 hover:scale-103 ${selectedTheme.options.background}`}
-						>
-							Чат
-						</button>
-						<button
-							className={`h-fit border-[1px] rounded-[10px] px-5 py-2 hover:scale-103 ${selectedTheme.options.background}`}
-						>
-							Удалить
-						</button>
-					</div>
-
 					<form
 						className={`${
 							userDevice !== "mobile" && "w-[45%]"
@@ -124,10 +133,10 @@ const NewPersonaSettings = ({
 								type="text"
 								id="name"
 								className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-								value={botInfo.name}
+								value={personaInfo.name}
 								onChange={(e) => {
-									changeBot({
-										...botInfo,
+									changePersona({
+										...personaInfo,
 										name: e.target.value,
 									});
 								}}
@@ -141,10 +150,10 @@ const NewPersonaSettings = ({
 							<textarea
 								id="description"
 								className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-								value={botInfo.description}
+								value={personaInfo.description}
 								onChange={(e) => {
-									changeBot({
-										...botInfo,
+									changePersona({
+										...personaInfo,
 										description: e.target.value,
 									});
 								}}

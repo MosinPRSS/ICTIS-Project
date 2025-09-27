@@ -14,8 +14,12 @@ export const userBotsSlice = createSlice({
 		addUserBot: ({ userBots }, { payload }) => {
 			userBots = [...userBots, payload];
 		},
+		initUserBots: (state, { payload }) => {
+			state.userBots = payload;
+		},
 	},
 });
 
-export const { removeUserBot, addUserBot } = userBotsSlice.actions;
+export const { removeUserBot, addUserBot, initUserBots } =
+	userBotsSlice.actions;
 export default userBotsSlice;

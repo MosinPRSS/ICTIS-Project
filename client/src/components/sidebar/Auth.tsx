@@ -115,8 +115,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 
 			const response = await login(loginEmail, loginPassword);
 
-			if (response != 0) {
-				setAuthError("Пользователь не найден");
+			if (response != 200) {
 				throw new Error("Login error");
 			}
 
@@ -132,6 +131,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 
 			handleClose();
 		} catch (error) {
+			setAuthError("Пользователь не найден");
 			console.log(error);
 		}
 	}
@@ -183,7 +183,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 					/>
 				) : (
 					<Login
-						// loginFunc={loginFunc}
+						loginFunc={loginFunc}
 						loginEmail={loginEmail}
 						loginPassword={loginPassword}
 						setLoginEmail={setLoginEmail}

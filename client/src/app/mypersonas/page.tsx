@@ -7,21 +7,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import { motion } from "motion/react";
-import getMyPersonas from "@/services/getMyPersonas";
 import PersonaSettings from "@/components/myPersonasPage/PersonaSettings";
 import NewPersonaSettings from "@/components/myPersonasPage/NewPersonaSettings";
-
-let ID = 0;
-const newPersona: IPersona = {
-	id: ID,
-	name: "Новый бот",
-	description: "Описание",
-	avatar: "https://via.placeholder.com/150",
-};
+import Message from "@/components/Message";
+import usePersonaService from "@/api/persona_service";
 
 const MyPersonasPage = () => {
-	const { selectedTheme } = useSelector((state: RootState) => state);
+	const { selectedTheme, message, userPersonas } = useSelector(
+		(state: RootState) => state
+	);
+	const { listPersonas } = usePersonaService();
 	const windowWidth = useWindow();
+
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [MyPersonas, setMyPersonas] = useState<IPersona[] | null>(null);
 	const [selectedPersona, setSelectedPersona] = useState<IPersona | null>(
@@ -30,7 +27,8 @@ const MyPersonasPage = () => {
 
 	async function getData() {
 		try {
-			const data = await getMyPersonas();
+			const data = await listPersonas();
+
 			setMyPersonas(data);
 		} catch (error) {
 			setMyPersonas(null);
@@ -39,7 +37,11 @@ const MyPersonasPage = () => {
 	}
 
 	useEffect(() => {
-		getData();
+		if (userPersonas.userPersonas) {
+			setMyPersonas(userPersonas.userPersonas);
+		} else {
+			getData();
+		}
 	}, []);
 
 	useEffect(() => {
@@ -70,7 +72,9 @@ const MyPersonasPage = () => {
 								e.target.style.transform = "rotate(180deg)";
 							}}
 							onClick={() => {
-								setSelectedPersona(newPersona);
+								setSelectedPersona({
+									id: 0,
+								});
 							}}
 						>
 							<Image
@@ -82,18 +86,16 @@ const MyPersonasPage = () => {
 					</div>
 					{MyPersonas &&
 						MyPersonas.length > 0 &&
-						MyPersonas.map((bot) => (
+						MyPersonas.map((persona) => (
 							<button
-								key={bot.id}
+								key={persona.id}
 								className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
-								onClick={() => setSelectedPersona(bot)}
+								onClick={() => setSelectedPersona(persona)}
 							>
 								<div className="w-full rounded-t-xl h-[50%] bg-black"></div>
 								<div className="flex flex-col gap-2 p-3">
-									<p>{bot.name}</p>
-									<p>by {bot.author}</p>
-									<p>{bot.description}</p>
-									<p>Теги: {bot.tags}</p>
+									<p>{persona.name}</p>
+									<p>{persona.description}</p>
 								</div>
 							</button>
 						))}
@@ -116,6 +118,7 @@ const MyPersonasPage = () => {
 			) : (
 				<></>
 			)}
+			{message.isOpen && <Message />}
 		</div>
 	);
 };

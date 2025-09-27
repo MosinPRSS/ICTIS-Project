@@ -11,13 +11,20 @@ export interface IUser {
 	createDate: Date;
 }
 export interface IBot {
-	id: number;
-	name: string;
-	author: string;
-	description: string;
-	publicDescription: string;
-	tags: string[];
-	isPublic?: boolean;
+	id?: number | Date | string;
+	name?: string;
+	chatname?: string;
+	description?: string;
+	public_description?: string;
+	first_message?: string;
+	scenario?: string;
+
+	avatar?: File | null;
+
+	is_public?: boolean | false;
+	hide_info?: boolean | false;
+
+	tags?: string[];
 }
 
 export interface ISelectedBot extends IBot {
@@ -25,12 +32,10 @@ export interface ISelectedBot extends IBot {
 }
 
 export interface IPersona {
-	id: number;
-	name: string;
-	author: string;
-	description: string;
-	tags: string[];
-	link: string;
+	id: Date | number;
+	name?: string;
+	description?: string;
+	avatar?: File | null;
 }
 
 export interface IAuth {

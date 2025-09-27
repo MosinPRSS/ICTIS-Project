@@ -1,23 +1,23 @@
 import { IBot, ISelectedBot } from "@/interfaces/interfaces";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-	addIcon,
-	closeIcon,
-	editIcon,
-	uploadIcon,
-} from "@/assets/images/images";
+import { addIcon, closeIcon, uploadIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
-
-let ID = 0;
+import useBotService from "@/api/bot_service";
+import { addUserBot } from "@/store/slices/userBotsSlice";
+import { openMessage } from "@/store/slices/messageSlice";
+import { text } from "stream/consumers";
 
 const newBot: IBot = {
-	id: ID,
+	id: 0,
 	name: "Новый бот",
+	chatname: "Новый бот",
 	description: "Описание",
-	publicDescription: "Публичное описание",
+	public_description: "Публичное описание",
+	scenario: "Сценарий",
+	first_message: "Первое сообщение",
 	avatar: "https://via.placeholder.com/150",
 	tags: [],
 };
@@ -26,12 +26,15 @@ const NewBotSettings = ({
 	setSelectedBot,
 	myBots,
 	setMyBots,
+	getBots,
 }: ISelectedBot) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
+	const { createBot } = useBotService();
 
 	const [botInfo, setBotInfo] = useState(newBot);
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		setBotInfo(newBot);
@@ -70,13 +73,28 @@ const NewBotSettings = ({
 		}
 	};
 
-	function saveBot() {
-		setBotInfo({
-			...botInfo,
-			id: ID++,
-		});
-		setMyBots(myBots ? [...myBots, botInfo] : [botInfo]);
-		setSelectedBot(null);
+	async function saveBot(e: MouseEvent) {
+		e.preventDefault();
+		try {
+			setBotInfo({
+				...botInfo,
+				id: new Date(),
+			});
+
+			const response = await createBot(botInfo);
+
+			if (!response) {
+				throw new Error("Failed to create bot");
+			}
+
+			await getBots();
+			dispatch(openMessage("Бот успешно создан"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedBot(null);
+		}
 	}
 
 	return (
@@ -106,7 +124,7 @@ const NewBotSettings = ({
 					>
 						<button
 							className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-							onClick={saveBot}
+							onClick={(e) => saveBot(e)}
 						>
 							Сохранить
 						</button>
@@ -120,7 +138,7 @@ const NewBotSettings = ({
 				</div>
 
 				<form
-					className={`w-full h-full flex flex-wrap justify-between items-center overflow-y-auto`}
+					className={`w-full h-full flex flex-wrap gap-3 justify-between items-center overflow-y-auto`}
 					onSubmit={(e) => handleSubmit(e)}
 				>
 					<label
@@ -137,6 +155,24 @@ const NewBotSettings = ({
 								changeBot({
 									...botInfo,
 									name: e.target.value,
+								});
+							}}
+						/>
+					</label>
+					<label
+						htmlFor="chat-name"
+						className="flex flex-col gap-3 w-[45%]"
+					>
+						<p>Имя в чате</p>
+						<input
+							type="text"
+							id="chat-name"
+							className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
+							value={botInfo.chatname}
+							onChange={(e) => {
+								changeBot({
+									...botInfo,
+									chatname: e.target.value,
 								});
 							}}
 						/>
@@ -166,11 +202,47 @@ const NewBotSettings = ({
 						<textarea
 							id="public-description"
 							className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-							value={botInfo.publicDescription}
+							value={botInfo.public_description}
 							onChange={(e) => {
 								changeBot({
 									...botInfo,
-									publicDescription: e.target.value,
+									public_description: e.target.value,
+								});
+							}}
+						/>
+					</label>
+					<label
+						htmlFor="scenario"
+						className="flex flex-col gap-3 w-[45%]"
+					>
+						<p>Сценарий</p>
+						<input
+							type="text"
+							id="scenario"
+							className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
+							value={botInfo.scenario}
+							onChange={(e) => {
+								changeBot({
+									...botInfo,
+									scenario: e.target.value,
+								});
+							}}
+						/>
+					</label>
+					<label
+						htmlFor="first-message"
+						className="flex flex-col gap-3 w-[45%]"
+					>
+						<p>Первое сообщение</p>
+						<input
+							type="text"
+							id="first-message"
+							className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
+							value={botInfo.first_message}
+							onChange={(e) => {
+								changeBot({
+									...botInfo,
+									first_message: e.target.value,
 								});
 							}}
 						/>
@@ -245,14 +317,33 @@ const NewBotSettings = ({
 						<button
 							type="button"
 							className={`w-[60px] h-[30px] ${
-								botInfo.isPublic
+								botInfo.is_public
 									? "bg-green-500 justify-end"
 									: "bg-gray-500 justify-start"
 							} rounded-[15px] flex items-center p-1 px-2 border-[1px]`}
 							onClick={() => {
 								setBotInfo({
 									...botInfo,
-									isPublic: !botInfo.isPublic,
+									is_public: !botInfo.is_public,
+								});
+							}}
+						>
+							<div className="w-[14px] h-[14px] bg-white rounded-full"></div>
+						</button>
+					</div>
+					<div className="flex gap-3 items-center">
+						<p>Скрыть информацию</p>
+						<button
+							type="button"
+							className={`w-[60px] h-[30px] ${
+								botInfo.is_public
+									? "bg-green-500 justify-end"
+									: "bg-gray-500 justify-start"
+							} rounded-[15px] flex items-center p-1 px-2 border-[1px]`}
+							onClick={() => {
+								setBotInfo({
+									...botInfo,
+									hide_info: !botInfo.hide_info,
 								});
 							}}
 						>

@@ -4,6 +4,7 @@ import themeSlice from "./slices/themeSlice";
 import chatsSlice from "./slices/chatsSlice";
 import userBotsSlice from "./slices/userBotsSlice";
 import userPersonasSlice from "./slices/userPersonasSlice";
+import messageSlice from "./slices/messageSlice";
 
 export const store = configureStore({
 	reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
 		chats: chatsSlice.reducer,
 		userBots: userBotsSlice.reducer,
 		userPersonas: userPersonasSlice.reducer,
+		message: messageSlice.reducer,
 	},
 });
 

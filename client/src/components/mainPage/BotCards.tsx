@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
+import { useRouter } from "next/navigation";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
@@ -18,7 +19,6 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 		try {
 			setIsLoading(true);
 			const data = await getBotsDashboard();
-
 			setBots([...bots, data.results]);
 		} catch (error) {
 			console.log(error);
@@ -95,14 +95,14 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 
 export function BotCard({ bot }: { bot: IBot }) {
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const router = useRouter();
+	function redirect(e: MouseEvent, id: string) {
+		e.preventDefault();
+		router.push(`/bot/${id}`);
+	}
 	return (
-		<Link
-			href={{
-				pathname: `/bot/`,
-				query: {
-					bot: bot.id,
-				},
-			}}
+		<button
+			onClick={(e) => redirect(e, bot.id)}
 			className="text-left w-[15rem] h-[20rem] bg-violet-800 border-[1px] border-white rounded-xl hover:scale-105 transition duration-75 cursor-pointer  relative"
 		>
 			<div className="w-full rounded-t-xl h-[50%] bg-black" />
@@ -110,7 +110,6 @@ export function BotCard({ bot }: { bot: IBot }) {
 				className={`${selectedTheme.options.background} overflow-y-auto w-full h-[50%] p-5 text-white flex flex-col gap-2 rounded-b-xl`}
 			>
 				<p className="font-semibold">{bot.name}</p>
-				<p className="text-sm text-gray-300">by {bot.author}</p>
 				<p className="text-sm mt-2 line-clamp-2">{bot.description}</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<p>Теги: </p>
@@ -122,6 +121,6 @@ export function BotCard({ bot }: { bot: IBot }) {
 						))}
 				</div>
 			</div>
-		</Link>
+		</button>
 	);
 }

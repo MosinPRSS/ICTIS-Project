@@ -1,26 +1,10 @@
 import apiClient from "./api_client";
-
-interface BotFields {
-    name?: string,
-    chatname?: string,
-    description?: string,
-    public_description?: string,
-    first_message?: string,
-    scenario?: string,
-
-    avatar?: File | null,
-
-    is_public?: boolean | false,
-    hide_info?: boolean | false,
-
-    tags?: []
-}
+import { IBot } from "@/interfaces/interfaces";
 
 export default function useBotService() {
-
-    // Все взаимодействие с ботами.
-    // Обычный вывод при конфигурации публичен + не скрытая инфа
-    /*
+	// Все взаимодействие с ботами.
+	// Обычный вывод при конфигурации публичен + не скрытая инфа
+	/*
     {
         "id": "2866b4bc-63d4-4052-ba6f-ba83cb98b1f1",
         "name": "test6",
@@ -47,95 +31,106 @@ export default function useBotService() {
     }
     
     */
-    
-    const createBot = async(
-        fields: BotFields
-    ) => {
-        if (fields.name === undefined) throw new Error("NAME_REQUIRED");
-        if (fields.description === undefined) throw new Error("DESC_REQUIRED");
-        if (fields.first_message === undefined) throw new Error("FSTMESSAGE_REQUIRED");
 
-        const formData = new FormData();
+	const createBot = async (fields: IBot) => {
+		console.log(fields);
 
-        formData.append("name", fields.name);
-        formData.append("chatname", fields.chatname ?? fields.name);
-        formData.append("description", fields.description);
-        formData.append("public_description", fields.public_description ?? "");
-        formData.append("first_message", fields.first_message);
-        formData.append("scenario", fields.scenario ?? "");
+		if (fields.name === undefined) throw new Error("NAME_REQUIRED");
+		if (fields.description === undefined) throw new Error("DESC_REQUIRED");
+		if (fields.first_message === undefined)
+			throw new Error("FSTMESSAGE_REQUIRED");
 
-        formData.append("is_public", String(Boolean(fields.is_public)));
-        formData.append("hide_info", String(Boolean(fields.hide_info)));
+		const formData = new FormData();
 
-        // для авы
-        if (fields.avatar !== undefined) {
-            formData.append('avatar', fields.avatar instanceof File ? fields.avatar : '');
-        }
+		formData.append("name", fields.name);
+		formData.append("chatname", fields.chatname ?? fields.name);
+		formData.append("description", fields.description);
+		formData.append("public_description", fields.public_description ?? "");
+		formData.append("first_message", fields.first_message);
+		formData.append("scenario", fields.scenario ?? "");
 
-        try {
-            const res = await apiClient.post("b/create", formData);
-            return res.data;
+		formData.append("is_public", String(Boolean(fields.is_public)));
+		formData.append("hide_info", String(Boolean(fields.hide_info)));
+		formData.append("tags", fields.tags);
 
-        } catch (error: any) {
-            throw new Error("B_ERROR_CREATE");
-        }
-    };
-    const readBot = async(
-        pk: string
-    ) => {
-        try {
-            const res = await apiClient.get(`b/read/${pk}`);
-            return res.data;
-        } catch (error: any) {
-            throw new Error("B_ERROR_READ")
-        }
-    };
+		// для авы
+		if (fields.avatar !== undefined) {
+			formData.append(
+				"avatar",
+				fields.avatar instanceof File ? fields.avatar : ""
+			);
+		}
 
-    const updateBot = async (
-        fields: BotFields, 
-        pk: string
-    ) => {
-        const formData = new FormData();
+		try {
+			console.log(formData);
 
-        if (fields.name !== undefined) formData.append("name", fields.name);
-        if (fields.chatname !== undefined) formData.append("chatname", fields.chatname);
-        if (fields.description !== undefined) formData.append("description", fields.description);
-        if (fields.public_description !== undefined) formData.append("public_description", fields.public_description);
-        if (fields.first_message !== undefined) formData.append("first_message", fields.first_message);
-        if (fields.scenario !== undefined) formData.append("scenario", fields.scenario);
+			const res = await apiClient.post("b/create", formData);
+			console.log(res);
 
-        if (fields.is_public !== undefined) formData.append("is_public", String(Boolean(fields.is_public)));
-        if (fields.hide_info !== undefined) formData.append("hide_info", String(Boolean(fields.hide_info)));
+			return res.data;
+		} catch (error: any) {
+			throw new Error("B_ERROR_CREATE");
+		}
+	};
+	const readBot = async (pk: string) => {
+		try {
+			const res = await apiClient.get(`b/read/${pk}`);
+			return res.data;
+		} catch (error: any) {
+			throw new Error("B_ERROR_READ");
+		}
+	};
 
-        if (fields.avatar !== undefined) {
-            formData.append('avatar', fields.avatar instanceof File ? fields.avatar : '');
-        }
+	const updateBot = async (fields: IBot, pk: string) => {
+		const formData = new FormData();
 
-        try {
-            const res = await apiClient.patch(`b/update/${pk}`, formData);
-            return res.data;
-        } catch (error: any) {
-            throw new Error("B_ERROR_UPDATE");
-        }
-    };
+		if (fields.name !== undefined) formData.append("name", fields.name);
+		if (fields.chatname !== undefined)
+			formData.append("chatname", fields.chatname);
+		if (fields.description !== undefined)
+			formData.append("description", fields.description);
+		if (fields.public_description !== undefined)
+			formData.append("public_description", fields.public_description);
+		if (fields.first_message !== undefined)
+			formData.append("first_message", fields.first_message);
+		if (fields.scenario !== undefined)
+			formData.append("scenario", fields.scenario);
 
-    const deleteBot = async(
-        pk: string
-    ) => {
-        try {
-            const res = await apiClient.delete(`b/delete/${pk}`);
-            return res.status // должно вернуть 204
-        } catch (error: any) {
-            throw new Error("B_ERROR_DELETE");
-        }
-    };
+		if (fields.is_public !== undefined)
+			formData.append("is_public", String(Boolean(fields.is_public)));
+		if (fields.hide_info !== undefined)
+			formData.append("hide_info", String(Boolean(fields.hide_info)));
 
-    const listBot = async() => {
-        // Пока не будет сейчас серьезно 
-        // реализовано на этой неделе
-        // Однако листинг поддерживает кучу параметров...
+		if (fields.avatar !== undefined) {
+			formData.append(
+				"avatar",
+				fields.avatar instanceof File ? fields.avatar : ""
+			);
+		}
 
-        /*
+		try {
+			const res = await apiClient.patch(`b/update/${pk}`, formData);
+			return res.data;
+		} catch (error: any) {
+			throw new Error("B_ERROR_UPDATE");
+		}
+	};
+
+	const deleteBot = async (pk: string) => {
+		try {
+			const res = await apiClient.delete(`b/delete/${pk}`);
+			return res.status; // должно вернуть 204
+		} catch (error: any) {
+			throw new Error("B_ERROR_DELETE");
+		}
+	};
+
+	const listBot = async () => {
+		// Пока не будет сейчас серьезно
+		// реализовано на этой неделе
+		// Однако листинг поддерживает кучу параметров...
+
+		/*
         {
             "count": 1,
             "next": null,
@@ -172,25 +167,23 @@ export default function useBotService() {
         
         */
 
-        try {
-            const res = await apiClient.get(
-                "b/list",
-                {
-                    skipAuth: true
-                }
-            );
-            return res.data;
-        } catch (error: any) {
-            throw new Error("B_ERROR_LIST");
-        }
-    }
-    
-    return {
-        createBot,
-        readBot,
-        updateBot,
-        deleteBot,
+		try {
+			const res = await apiClient.get("b/list", {
+				skipAuth: true,
+			});
 
-        listBot,
-    };
+			return res.data;
+		} catch (error: any) {
+			throw new Error("B_ERROR_LIST");
+		}
+	};
+
+	return {
+		createBot,
+		readBot,
+		updateBot,
+		deleteBot,
+
+		listBot,
+	};
 }

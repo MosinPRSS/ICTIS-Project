@@ -3,13 +3,14 @@ import { addIcon } from "@/assets/images/images";
 import BotSettings from "@/components/myBotsPage/BotSettings";
 import { useWindow } from "@/hooks/window";
 import { IBot } from "@/interfaces/interfaces";
-import getMyBots from "@/services/getMyBots";
 import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import { motion } from "motion/react";
 import NewBotSettings from "@/components/myBotsPage/NewBotSettings";
+import Message from "@/components/Message";
+import useBotService from "@/api/bot_service";
 
 const newBot: IBot = {
 	id: 0,
@@ -20,7 +21,11 @@ const newBot: IBot = {
 };
 
 const MyBotsPage = () => {
-	const { selectedTheme } = useSelector((state: RootState) => state);
+	const { selectedTheme, message, userBots } = useSelector(
+		(state: RootState) => state
+	);
+	const { listBot } = useBotService();
+
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [myBots, setMyBots] = useState<IBot[] | null>(null);
@@ -28,7 +33,7 @@ const MyBotsPage = () => {
 
 	async function getData() {
 		try {
-			const data = await getMyBots();
+			const data = await listBot();
 			setMyBots(data);
 		} catch (error) {
 			setMyBots(null);
@@ -37,7 +42,11 @@ const MyBotsPage = () => {
 	}
 
 	useEffect(() => {
-		getData();
+		if (userBots.userBots) {
+			setMyBots(userBots.userBots);
+		} else {
+			getData();
+		}
 	}, []);
 
 	useEffect(() => {
@@ -109,11 +118,13 @@ const MyBotsPage = () => {
 						setSelectedBot={setSelectedBot}
 						myBots={myBots}
 						setMyBots={setMyBots}
+						getBots={getData}
 					/>
 				)
 			) : (
 				<></>
 			)}
+			{message.isOpen && <Message />}
 		</div>
 	);
 };

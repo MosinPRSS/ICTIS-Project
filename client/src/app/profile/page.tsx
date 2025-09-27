@@ -34,6 +34,10 @@ const ProfilePage = () => {
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
 
+	useEffect(() => {
+		console.log(userInfo);
+	}, [userInfo]);
+
 	function handleDelete() {
 		deleteUser();
 	}
@@ -68,9 +72,37 @@ const ProfilePage = () => {
 							</div>
 						</div>
 						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
+							<p>Имя</p>
+							{isChange ? (
+								<textarea
+									value={userInfo.username}
+									onChange={(e) =>
+										setUserInfo({
+											...userInfo,
+											username: e.target.value,
+										})
+									}
+									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+								/>
+							) : (
+								<p
+									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+								>
+									{userInfo.username}
+								</p>
+							)}
+						</div>
+						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
 							<p>Описание</p>
 							{isChange ? (
 								<textarea
+									onChange={(e) =>
+										setUserInfo({
+											...userInfo,
+											description: e.target.value,
+										})
+									}
+									value={userInfo.description}
 									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
 								/>
 							) : (
@@ -91,7 +123,10 @@ const ProfilePage = () => {
 										Сохранить
 									</button>
 									<button
-										onClick={() => setIsChange(false)}
+										onClick={() => {
+											setUserInfo(user.user);
+											setIsChange(false);
+										}}
 										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
 									>
 										Отмена

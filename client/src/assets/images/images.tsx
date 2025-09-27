@@ -18,6 +18,13 @@ import uploadIcon from "./upload-icon.svg";
 import ratingIcon from "./rating-icon.svg";
 import new_botIcon from "./new_bots-icon.svg";
 import trendingIcon from "./trending-icon.svg";
+import infoIcon from "./info-icon.svg";
+import settingsIcon from "./settings-icon.svg";
+import leftIcon from "./left-icon.svg";
+import cancelIcon from "./cancel-icon.svg";
+import sendIcon from "./send-icon.svg";
+import clockIcon from "./clock-icon.svg";
+import errorIcon from "./error-icon.svg";
 export {
 	botIcon,
 	donutIcon,
@@ -39,4 +46,11 @@ export {
 	ratingIcon,
 	new_botIcon,
 	trendingIcon,
+	infoIcon,
+	settingsIcon,
+	leftIcon,
+	cancelIcon,
+	sendIcon,
+	clockIcon,
+	errorIcon,
 };

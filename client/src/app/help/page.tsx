@@ -1,4 +1,4 @@
-import NumberGuessingGame from "@/components/game";
+import NumberGuessingGame from "@/components/helpPage/game";
 import React from "react";
 
 const HelpPage = () => {

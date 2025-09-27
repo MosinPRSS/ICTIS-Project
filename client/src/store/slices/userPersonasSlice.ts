@@ -14,8 +14,12 @@ export const userPersonasSlice = createSlice({
 		addUserPersona: ({ userPersonas }, { payload }) => {
 			userPersonas = [...userPersonas, payload];
 		},
+		initUserPersonas: (state, { payload }) => {
+			state.userPersonas = payload;
+		},
 	},
 });
 
-export const { removeUserPersona, addUserPersona } = userPersonasSlice.actions;
+export const { removeUserPersona, addUserPersona, initUserPersonas } =
+	userPersonasSlice.actions;
 export default userPersonasSlice;

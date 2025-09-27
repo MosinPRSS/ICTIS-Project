@@ -20,6 +20,11 @@ import { useDispatch } from "react-redux";
 import { auth, logout } from "@/store/slices/userSlice";
 import { logoutApi } from "@/api/token_service";
 import { useRouter } from "next/navigation";
+import useBotService from "@/api/bot_service";
+import usePersonaService from "@/api/persona_service";
+import { initUserBots } from "@/store/slices/userBotsSlice";
+import { initUserPersonas } from "@/store/slices/userPersonasSlice";
+import useUserService from "@/api/user_service";
 
 const Sidebar = () => {
 	const windowWidth = useWindow();
@@ -29,6 +34,38 @@ const Sidebar = () => {
 	const [isCollapsed, setCollapse] = useState(true);
 	const [openThemes, setOpenThemes] = useState(false);
 	const [openAuth, setOpenAuth] = useState(false);
+
+	const { readUser } = useUserService();
+	const { listBot } = useBotService();
+	const { listPersonas } = usePersonaService();
+
+	useEffect(() => {
+		(async function getUserData() {
+			const user = localStorage.getItem("userID");
+
+			if (!user) {
+				return;
+			}
+
+			const userResponse = await readUser(user);
+			const botsResponse = await listBot();
+			const personasResponse = await listPersonas();
+			console.log(userResponse, botsResponse, personasResponse);
+
+			if (!botsResponse || !personasResponse || !userResponse) {
+				return;
+			}
+
+			dispatch(
+				initUserBots(botsResponse),
+				initUserPersonas(personasResponse),
+				auth(userResponse)
+			);
+
+			return;
+		})();
+	}, []);
+
 	function collapse() {
 		setCollapse((isCollapsed) => !isCollapsed);
 	}
@@ -62,8 +99,6 @@ const Sidebar = () => {
 	useEffect(() => {
 		const username = localStorage.getItem("username");
 		const userID = localStorage.getItem("userID");
-
-		console.log(username, userID);
 
 		if (!username || !userID) return;
 

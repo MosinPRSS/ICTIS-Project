@@ -1,34 +1,28 @@
 import apiClient from "./api_client";
 
 export default function useSessionService() {
-    // ОЧЕНЬ ВАЖНЫЕ МОМЕНТЫ.
-    // 1. перед самим созданием сессии пользователю нужно выбрать персону (отобразить всех персон)
-    // 2. генерация сообщений будет ОЧЕНЬ долгой на локалке.
-    // 3. Методы для взаимодейстия с сообщениями вынесены в message_service.tsx
-    const createSession = async(
-        persona_id: string,
-        chatbot_id: string,
-    ) => {
-        try {
-            const res = await apiClient.post(
-                "c/create",
-                {
-                    "persona": persona_id,
-                    "chatbot": chatbot_id
-                }
-            );
-            return res.data; 
-            // хотя по сути должно сразу перекидывать в чат
-            // и сразу быть произведен метод readMessages 
-            // (оставлен) здесь т.к. задействуется метод
-        } catch (error: any) {
-            throw new Error("S_ERROR_CREATE");
-        }
-    };
+	// ОЧЕНЬ ВАЖНЫЕ МОМЕНТЫ.
+	// 1. перед самим созданием сессии пользователю нужно выбрать персону (отобразить всех персон)
+	// 2. генерация сообщений будет ОЧЕНЬ долгой на локалке.
+	// 3. Методы для взаимодейстия с сообщениями вынесены в message_service.tsx
+	const createSession = async (persona_id: string, chatbot_id: string) => {
+		try {
+			const res = await apiClient.post("c/create", {
+				persona: persona_id,
+				chatbot: chatbot_id,
+			});
+			return res.data;
+			// хотя по сути должно сразу перекидывать в чат
+			// и сразу быть произведен метод readMessages
+			// (оставлен) здесь т.к. задействуется метод
+		} catch (error: any) {
+			throw new Error("S_ERROR_CREATE");
+		}
+	};
 
-    const readSessions = async() => {
-        // примерный вывод сессий
-        /*
+	const readSessions = async () => {
+		// примерный вывод сессий
+		/*
         [
             {
                 "id": "2a8f18dc-f8de-4d97-8fb2-8f0d914649d6",
@@ -65,34 +59,31 @@ export default function useSessionService() {
             }
         ]
         */
-        try {
-            const res = await apiClient.get("c/list/chats");
-            return res.data;
-        } catch (error: any) {
-            throw new Error("S_ERROR_READ")
-        }
-    };
+		try {
+			const res = await apiClient.get("c/list/chats");
 
-    const deleteSession = async(
-        session_id: string,
-    ) => {
-        // лист сессий можно получить из метода
-        // readSessions()
-        try {
-            const res = await apiClient.delete(`c/delete/${session_id}`);
-            return res.status; // 204 должно вернуть
-        } catch (error: any) {
-            throw new Error("S_ERROR_DELETE");
-        }
-    };
+			return res.data;
+		} catch (error: any) {
+			throw new Error("S_ERROR_READ");
+		}
+	};
 
-    const readMessages = async(
-        session: string,
-    ) => {
-        // важный момент - акцент на роли: assistant и user
-        // role: assistant - это БОТ.
-        // Примерный вывод:
-        /*
+	const deleteSession = async (session_id: string) => {
+		// лист сессий можно получить из метода
+		// readSessions()
+		try {
+			const res = await apiClient.delete(`c/delete/${session_id}`);
+			return res.status; // 204 должно вернуть
+		} catch (error: any) {
+			throw new Error("S_ERROR_DELETE");
+		}
+	};
+
+	const readMessages = async (session: string) => {
+		// важный момент - акцент на роли: assistant и user
+		// role: assistant - это БОТ.
+		// Примерный вывод:
+		/*
         [
             {
                 "id": 47,
@@ -147,19 +138,19 @@ export default function useSessionService() {
         ]
         
         */
-        try {
-            const res = await apiClient.get(`c/list/messages/${session}`);
-            return res.data;
-        } catch (error: any) {
-            throw new Error("M_ERROR_GET_MESSAGES");
-        }
-    };
-    
-    return {
-        createSession,
-        deleteSession,
+		try {
+			const res = await apiClient.get(`c/list/messages/${session}`);
+			return res.data;
+		} catch (error: any) {
+			throw new Error("M_ERROR_GET_MESSAGES");
+		}
+	};
 
-        readSessions,
-        readMessages
-    };
+	return {
+		createSession,
+		deleteSession,
+
+		readSessions,
+		readMessages,
+	};
 }

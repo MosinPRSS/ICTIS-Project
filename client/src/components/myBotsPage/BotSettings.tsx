@@ -10,11 +10,14 @@ import {
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
+import useBotService from "@/api/bot_service";
+import { openMessage } from "@/store/slices/messageSlice";
 
 const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [isChange, setIsChange] = useState(false);
+	const { updateBot } = useBotService();
 
 	const [botInfo, setBotInfo] = useState(initialBot);
 	const { selectedTheme } = useSelector((state: RootState) => state);
@@ -56,9 +59,28 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 		}
 	};
 
-	function saveBot() {
-		setSelectedBot(botInfo);
-		setIsChange(false);
+	const dispatch = useDispatch();
+	async function updateBotFunc(e: MouseEvent) {
+		e.preventDefault();
+		try {
+			setBotInfo({
+				...botInfo,
+				id: new Date(),
+			});
+
+			const response = await updateBot(botInfo);
+
+			if (!response) {
+				throw new Error("Failed to create bot");
+			}
+
+			dispatch(openMessage("Бот успешно создан"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedBot(null);
+		}
 	}
 
 	function cancelEdit() {
@@ -99,7 +121,7 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 						>
 							<button
 								className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-								onClick={saveBot}
+								onClick={(e) => updateBotFunc(e)}
 							>
 								Сохранить
 							</button>

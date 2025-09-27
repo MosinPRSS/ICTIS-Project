@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { closeIcon, editIcon, uploadIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
+import usePersonaService from "@/api/persona_service";
+import { openMessage } from "@/store/slices/messageSlice";
 
 const PersonaSettings = ({
 	initialPersona,
@@ -14,16 +16,17 @@ const PersonaSettings = ({
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [isChange, setIsChange] = useState(false);
+	const { updatePersona } = usePersonaService();
 
-	const [botInfo, setBotInfo] = useState(initialPersona);
-	const { selectedTheme } = useSelector((state: RootState) => state);
+	const [personaInfo, setPersonaInfo] = useState(initialPersona);
+	const { selectedTheme, user } = useSelector((state: RootState) => state);
 
 	useEffect(() => {
-		setBotInfo(initialPersona);
+		setPersonaInfo(initialPersona);
 	}, [initialPersona]);
 
 	function changeBot(updatedBot: IBot) {
-		setBotInfo(updatedBot);
+		setPersonaInfo(updatedBot);
 	}
 
 	function handleSubmit(e: React.FormEvent) {
@@ -34,14 +37,33 @@ const PersonaSettings = ({
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
 
-	function saveBot() {
-		setSelectedPersona(botInfo);
-		setIsChange(false);
-		console.log("Сохраненный бот:", botInfo);
+	const dispatch = useDispatch();
+	async function updatePersonaFunc(e: MouseEvent) {
+		e.preventDefault();
+		try {
+			setPersonaInfo({
+				...personaInfo,
+				id: new Date(),
+			});
+
+			const response = await updatePersona(personaInfo, user.user.id);
+
+			if (!response) {
+				throw new Error("Failed to create bot");
+			}
+
+			dispatch(openMessage("Бот успешно создан"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedPersona(personaInfo);
+			setIsChange(false);
+		}
 	}
 
 	function cancelEdit() {
-		setBotInfo(initialPersona);
+		setPersonaInfo(initialPersona);
 		setIsChange(false);
 	}
 
@@ -66,8 +88,8 @@ const PersonaSettings = ({
 					<div className="flex items-center gap-3">
 						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
 						<div>
-							<p>{botInfo.name}</p>
-							<p>{botInfo.description}</p>
+							<p>{personaInfo.name}</p>
+							<p>{personaInfo.description}</p>
 						</div>
 					</div>
 					{isChange ? (
@@ -78,7 +100,7 @@ const PersonaSettings = ({
 						>
 							<button
 								className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-								onClick={saveBot}
+								onClick={(e) => updatePersonaFunc(e)}
 							>
 								Сохранить
 							</button>
@@ -135,10 +157,10 @@ const PersonaSettings = ({
 									type="text"
 									id="name"
 									className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-									value={botInfo.name}
+									value={personaInfo.name}
 									onChange={(e) => {
 										changeBot({
-											...botInfo,
+											...personaInfo,
 											name: e.target.value,
 										});
 									}}
@@ -152,10 +174,10 @@ const PersonaSettings = ({
 								<textarea
 									id="description"
 									className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-									value={botInfo.description}
+									value={personaInfo.description}
 									onChange={(e) => {
 										changeBot({
-											...botInfo,
+											...personaInfo,
 											description: e.target.value,
 										});
 									}}
@@ -192,7 +214,7 @@ const PersonaSettings = ({
 								<p
 									className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3`}
 								>
-									{botInfo.name}
+									{personaInfo.name}
 								</p>
 							</div>
 							<div className="flex flex-col gap-3">
@@ -200,7 +222,7 @@ const PersonaSettings = ({
 								<p
 									className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3`}
 								>
-									{botInfo.description}
+									{personaInfo.description}
 								</p>
 							</div>
 							<div className="flex flex-col gap-3">

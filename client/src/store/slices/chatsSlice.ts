@@ -19,7 +19,7 @@ export const chatsSlice = createSlice({
 			chats = [...chats, payload];
 		},
 		setSelectedChat: ({ selectedChat }, { payload }) => {
-			selectedChat = payload;
+			selectedChat = payload.payload;
 		},
 	},
 });

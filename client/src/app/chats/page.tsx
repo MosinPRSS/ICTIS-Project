@@ -1,4 +1,5 @@
 "use client";
+import useSessionService from "@/api/session_service";
 import Loading from "@/components/Loading";
 import { useWindow } from "@/hooks/window";
 import getChats from "@/services/getChats";
@@ -7,6 +8,7 @@ import { RootState } from "@/store/store";
 import { select } from "motion/react-client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -43,78 +45,24 @@ interface Bot {
 const ChatInterface: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const { readSessions } = useSessionService();
 	const { chats } = useSelector((state: RootState) => state.chats);
 
 	const dispatch = useDispatch();
+	const router = useRouter();
 
 	useEffect(() => {
 		(async function getBots() {
 			try {
 				setIsLoading(true);
-				const data = await getChats();
-				dispatch(
-					initChats([
-						{
-							id: "11",
-							name: "Bot 11",
-							author: "author 6",
-							description:
-								"Умный ассистент для решения различных задач",
-							tags: ["Природа", "Игры"],
-							lastMessage:
-								"Здравствуй! Я твой виртуальный собеседник. О чём поговорим?",
-							lastMessageTime: "2 мин назад",
-							messageCount: 23,
-							chats: [
-								{
-									id: "1",
-									name: "Чат с Bot 11",
-									messages: [
-										{
-											id: "1",
-											content:
-												"Здравствуй! Я твой виртуальный собеседник. О чём поговорим?",
-											isBot: true,
-											timestamp: "10:30",
-										},
-										{
-											id: "2",
-											content: "Привет! Как дела?",
-											isBot: false,
-											timestamp: "10:31",
-										},
-										{
-											id: "3",
-											content:
-												"Всё отлично, спасибо! Готов помочь с любыми вопросами.",
-											isBot: true,
-											timestamp: "10:31",
-										},
-									],
-									createdAt: "2024-01-15T10:30:00.000Z",
-									updatedAt: "2024-01-15T10:31:00.000Z",
-									isPinned: true,
-								},
-								{
-									id: "2",
-									name: "Обсуждение проекта",
-									messages: [
-										{
-											id: "1",
-											content:
-												"Давайте обсудим ваш проект. С чего начнем?",
-											isBot: true,
-											timestamp: "14:20",
-										},
-									],
-									createdAt: "2024-01-16T14:20:00.000Z",
-									updatedAt: "2024-01-16T14:20:00.000Z",
-									isPinned: false,
-								},
-							],
-						},
-					])
-				);
+				const response = await readSessions();
+				console.log(response);
+
+				if (!response) {
+					throw new Error("Failed to get chats");
+				}
+
+				dispatch(initChats(response));
 			} catch (error) {
 				dispatch(initChats(null));
 				console.log(error);
@@ -124,24 +72,23 @@ const ChatInterface: React.FC = () => {
 		})();
 	}, []);
 
-	const filteredBots =
+	const filteredChats =
 		chats &&
 		chats.filter(
-			(bot) =>
-				bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				bot.description
+			(chat) =>
+				chat.chatbot.name
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase()) ||
+				chat.description
 					.toLowerCase()
 					.includes(searchQuery.toLowerCase())
 		);
 
-	const getFirstChatForBot = (bot: Bot) => {
-		return bot.chats.length > 0 ? bot.chats[0] : null;
-	};
+	const redirect = async (e: MouseEvent, chat) => {
+		e.preventDefault();
 
-	const getLastMessage = (chat: Chat) => {
-		return chat.messages.length > 0
-			? chat.messages[chat.messages.length - 1].content
-			: "Нет сообщений";
+		sessionStorage.setItem("selectedChat", JSON.stringify(chat));
+		router.push(`/chats/${chat.id}`);
 	};
 
 	return (
@@ -163,25 +110,17 @@ const ChatInterface: React.FC = () => {
 			) : (
 				chats && (
 					<div className="space-y-4 flex-1 overflow-y-auto">
-						{filteredBots.map((bot) => {
-							const firstChat = getFirstChatForBot(bot);
-
+						{filteredChats.map((chat) => {
 							return (
-								<Link
-									href={`/chats/${bot.id}`}
-									key={bot.id}
-									className="flex items-center gap-4 p-4 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200"
-									onClick={() => {
-										localStorage.setItem(
-											"selectedChat",
-											JSON.stringify(bot)
-										);
-									}}
+								<button
+									key={chat.id}
+									className="flex w-full items-center gap-4 p-4 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200"
+									onClick={(e) => redirect(e, chat)}
 								>
 									<div className="relative">
 										<Image
-											src={bot.avatar}
-											alt={bot.name}
+											src={chat.chatbot.avatar}
+											alt={chat.chatbot.name}
 											className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-400/30"
 											width={48}
 											height={48}
@@ -191,35 +130,21 @@ const ChatInterface: React.FC = () => {
 									<div className="flex-1 min-w-0">
 										<div className="flex items-center justify-between mb-1">
 											<h3 className="font-semibold text-white truncate">
-												{bot.name}
+												{chat.chatbot.chatname}
 											</h3>
-											<span className="text-xs text-white/60">
-												{bot.lastMessageTime}
-											</span>
 										</div>
 
-										{firstChat ? (
-											<>
-												<p className="text-sm text-white/70 truncate mb-1">
-													{firstChat.name}
-												</p>
-												<p className="text-xs text-white/50 truncate">
-													{getLastMessage(firstChat)}
-												</p>
-											</>
-										) : (
-											<p className="text-sm text-white/70">
-												Нет доступных чатов
-											</p>
-										)}
+										<p className="text-sm text-white/70 truncate mb-1 text-start">
+											{chat.last_message}
+										</p>
 									</div>
-								</Link>
+								</button>
 							);
 						})}
 
-						{filteredBots.length === 0 && (
+						{filteredChats.length === 0 && (
 							<div className="text-center py-8 text-white/60">
-								<p>Боты не найдены :/</p>
+								<p>Чаты не найдены :/</p>
 							</div>
 						)}
 					</div>
