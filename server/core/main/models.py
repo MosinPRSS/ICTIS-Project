@@ -19,7 +19,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField('active', default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    avatar = models.ImageField(upload_to='img/user/', default="img/user/Default_Avatar.svg")
+    avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
 
     view_nsfw = models.BooleanField(default=False) # TODO: SOON
@@ -57,7 +57,7 @@ class Chatbot(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField(default="")
     chatname = models.TextField(default="")
-    avatar = models.ImageField(upload_to="img/bot/", default="img/bot/Default_Avatar.svg")
+    avatar = models.ImageField(upload_to="img/bot/", default="Default_Avatar.svg")
     
     description = models.TextField(default="")
     scenario = models.TextField(default="")
@@ -84,7 +84,7 @@ class Persona(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
-    avatar = models.ImageField(upload_to="img/personas/", default="img/personas/Default_Avatar.svg")
+    avatar = models.ImageField(upload_to="img/personas/", default="Default_Avatar.svg")
     description = models.TextField(max_length=8192)
 
 class AiSession(models.Model):

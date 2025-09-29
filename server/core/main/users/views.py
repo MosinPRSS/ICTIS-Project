@@ -36,9 +36,9 @@ class UserDetailView(generics.RetrieveAPIView):
         is_own_profile = user == request.user
 
         if is_own_profile:
-            bots = Chatbots.objects.filter(belongs_to=user)
+            bots = Chatbot.objects.filter(belongs_to=user)
         else:
-            bots = Chatbots.objects.filter(belongs_to=user, is_public=True)
+            bots = Chatbot.objects.filter(belongs_to=user, is_public=True)
 
         user_data = ListUsersSerializer(user).data
         bot_data = PublicBotSerializer(bots, many=True, context={'request': request}).data

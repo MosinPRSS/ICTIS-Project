@@ -5,7 +5,7 @@ from ..models import *
 from django.db.models import OuterRef, Subquery
 from .serializers import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 from django.shortcuts import get_object_or_404
 from asgiref.sync import sync_to_async
 from adrf.views import APIView as AsyncAPIView
@@ -17,8 +17,6 @@ class CreateSession(generics.CreateAPIView):
     queryset = AiSession.objects.filter()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
-
-
 
 class ListSessions(generics.ListCreateAPIView):
     serializer_class = ShowSessionsSerializer
@@ -34,7 +32,19 @@ class ListSessions(generics.ListCreateAPIView):
         )
         return queryset
     
+class UpdateSession(generics.UpdateAPIView):
+    serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_object(self):
+        try:
+            queryset =  AiSession.objects.filter(
+                belongs_to=self.request.user,
+                id=self.kwargs.get("pk")
+            )
+            return queryset
+        except Exception:
+            raise NotFound({"error": "Session not found"})
     
 class DeleteSession(generics.DestroyAPIView):
     serializer_class = SessionByIDSerializer

@@ -21,11 +21,15 @@ class SessionSerializer(serializers.ModelSerializer):
             "persona",
             "persona_name",
             "last_message",
+            "temperature",
+            "tokens"
         ]
         extra_kwargs = {
             "chatbot": {"required": True},
             "persona": {"required": True},
             "persona_name": {"read_only": True},
+            "tokens": {"default": 1000},
+            "temperature": {"default": 0.7},
         }
     def create(self, validated_data):
         chatbot = validated_data.get('chatbot')
@@ -35,6 +39,10 @@ class SessionSerializer(serializers.ModelSerializer):
         if not chatbot.is_public and chatbot.belongs_to != user:
             raise serializers.ValidationError({
                 "error": "This bot not belongs you"
+            })
+        if persona.belongs_to != user:
+            raise serializers.ValidationError({
+                "error": "Persona not found"
             })
         validated_data['belongs_to'] = user
         session = super().create(validated_data)
