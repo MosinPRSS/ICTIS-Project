@@ -178,6 +178,15 @@ export default function useBotService() {
 		}
 	};
 
+	const listUserBots = async () => {
+		try {
+			const res = await apiClient.get("b/list/user");
+
+			return res.data;
+		} catch (error: any) {
+			throw new Error("B_ERROR_LIST_USER");
+		}
+	}
 	return {
 		createBot,
 		readBot,
@@ -185,5 +194,6 @@ export default function useBotService() {
 		deleteBot,
 
 		listBot,
+		listUserBots
 	};
 }

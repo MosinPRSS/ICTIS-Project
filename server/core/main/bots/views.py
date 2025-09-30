@@ -106,6 +106,13 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
         serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     
+class ListUserBots(generics.ListCreateAPIView):
+    serializer_class = PublicBotSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsPagination
+    def get_queryset(self):
+        return Chatbot.objects.filter(belongs_to=self.request.user)
+    
 class SearchBots(generics.ListCreateAPIView):
     serializer_class = PublicBotSerializer
     permission_classes = [AllowAny]
