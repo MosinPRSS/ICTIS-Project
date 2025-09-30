@@ -127,6 +127,8 @@ const Chat = () => {
 						: message
 				)
 			);
+			setMessageInput("");
+			setMessages((prev) => [...prev, response]);
 		} catch (error) {
 			setMessages((prev) =>
 				prev.map((message) =>
@@ -138,7 +140,7 @@ const Chat = () => {
 			dispatch(openMessage("Произошла ошибка при отправке сообщения"));
 			console.log(error);
 		} finally {
-			setMessageInput("");
+			
 		}
 	};
 

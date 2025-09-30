@@ -102,7 +102,7 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
             system_prompt=system_prompt,
             session_id=session_obj.id,
             user_input=user_input,
-            temperature=session_obj.temperatute,
+            temperature=session_obj.temperature,
             tokens=session_obj.tokens,
             char_name=session_obj.chatbot.name,
             char_desc=session_obj.chatbot.description,    
@@ -132,7 +132,7 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         )
 
         # обновим время сессии
-        session_obj.updated_at = sync_to_async(timezone.now())
+        session_obj.updated_at = timezone.now()
 
         return ai_message
     

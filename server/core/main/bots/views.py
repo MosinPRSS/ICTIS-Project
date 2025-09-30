@@ -128,7 +128,7 @@ class DeleteBot(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        chatbot = get_object_or_404(Chatbots, id=self.kwargs.get("pk"))
+        chatbot = get_object_or_404(Chatbot, id=self.kwargs.get("pk"))
         if chatbot.belongs_to_id != self.request.user.id:
             raise PermissionDenied("Not yours.")
         return chatbot
@@ -149,7 +149,7 @@ class GetTopTags(generics.ListCreateAPIView):
                 tags = Tag.objects.annotate(
                     num_times=Count('taggit_taggeditem_items')
                 ).filter(
-                    taggit_taggeditem_items__content_type__model='chatbots'
+                    taggit_taggeditem_items__content_type__model='chatbot'
                 ).order_by('-num_times')[:num]
                 serializer = TagSerializer(tags, many=True)
                 return Response(serializer.data)
