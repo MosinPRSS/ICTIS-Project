@@ -50,7 +50,6 @@ const Sidebar = () => {
 			const userResponse = await readUser(user);
 			const botsResponse = await listBot();
 			const personasResponse = await listPersonas();
-			console.log(userResponse, botsResponse, personasResponse);
 
 			if (!botsResponse || !personasResponse || !userResponse) {
 				return;
@@ -72,10 +71,7 @@ const Sidebar = () => {
 
 	useEffect(() => {
 		setUserDevice(windowWidth);
-
-		if (windowWidth === "mobile") {
-			setCollapse(true);
-		}
+		setCollapse(windowWidth === "mobile");
 	}, [windowWidth]);
 
 	const dispatch = useDispatch();

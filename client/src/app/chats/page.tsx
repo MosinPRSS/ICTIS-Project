@@ -1,13 +1,9 @@
 "use client";
 import useSessionService from "@/api/session_service";
 import Loading from "@/components/Loading";
-import { useWindow } from "@/hooks/window";
-import getChats from "@/services/getChats";
-import { initChats, setSelectedChat } from "@/store/slices/chatsSlice";
+import { initChats } from "@/store/slices/chatsSlice";
 import { RootState } from "@/store/store";
-import { select } from "motion/react-client";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -56,7 +52,6 @@ const ChatInterface: React.FC = () => {
 			try {
 				setIsLoading(true);
 				const response = await readSessions();
-				console.log(response);
 
 				if (!response) {
 					throw new Error("Failed to get chats");

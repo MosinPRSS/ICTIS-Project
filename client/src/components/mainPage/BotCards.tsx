@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import { useRouter } from "next/navigation";
+import { log } from "console";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
@@ -19,7 +20,7 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 		try {
 			setIsLoading(true);
 			const data = await getBotsDashboard();
-			setBots([...bots, data.results]);
+			setBots(bots.length === 0 ? data.results : [...bots, data.results]);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -33,7 +34,8 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 
 	useEffect(() => {
 		if (!bots) return;
-		setFind(bots[0]);
+
+		setFind(bots);
 	}, [bots]);
 
 	const scroll = useRef<HTMLDivElement>(null);
@@ -49,6 +51,7 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	}, []);
 	function search() {
 		if (!bots) return;
+
 		setFind(
 			bots.filter((bot) => {
 				// Фильтрация по поиску

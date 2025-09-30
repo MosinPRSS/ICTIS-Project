@@ -4,13 +4,15 @@ import { IBot } from "@/interfaces/interfaces";
 import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Link from "next/link";
 import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import useSessionService from "@/api/session_service";
 import { useDispatch } from "react-redux";
 import { openMessage } from "@/store/slices/messageSlice";
+import { closeIcon } from "@/assets/images/images";
+import Image from "next/image";
+import CreateSession from "@/components/botPage/CreateSession";
 
 const BotPage = () => {
 	const windowWidth = useWindow();
@@ -19,11 +21,11 @@ const BotPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { selectedTheme } = useSelector((state: RootState) => state);
 	const { readBot } = useBotService();
-	const { readSessions, createSession } = useSessionService();
+
+	const [isCreatingSession, setIsCreatingSession] = useState(false);
 
 	const router = useRouter();
 	const params = useParams();
-	const dispatch = useDispatch();
 
 	useEffect(() => {
 		(async function () {
@@ -48,42 +50,6 @@ const BotPage = () => {
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
 
-	const redirect = async (e: MouseEvent, id: string) => {
-		try {
-			e.preventDefault();
-
-			const sessionsResponse = await readSessions();
-			if (!sessionsResponse) {
-				throw new Error("Failed to get sessions");
-			}
-
-			const session = sessionsResponse.find(
-				(session) => session.chatbot.id === id
-			);
-			if (session) {
-				console.log(session);
-
-				sessionStorage.setItem("selectedChat", JSON.stringify(session));
-				router.push(`/chats/${session.id}`);
-			} else {
-				const newSession = await createSession(
-					"4cbb52a8-d84e-4cf6-8ff6-808e39e7f72c",
-					id
-				);
-				if (newSession) {
-					console.log(newSession);
-
-					sessionStorage.setItem(
-						"selectedChat",
-						JSON.stringify(newSession)
-					);
-					router.push(`/chats/${newSession.id}`);
-				}
-			}
-		} catch (error) {
-			dispatch(openMessage("Произошла ошибка"));
-		}
-	};
 	return (
 		<>
 			{isLoading ? (
@@ -117,7 +83,9 @@ const BotPage = () => {
 									</div>
 									<button
 										className={`mb-10 text-center rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
-										onClick={(e) => redirect(e, bot.id)}
+										onClick={() =>
+											setIsCreatingSession(true)
+										}
 									>
 										Чат
 									</button>
@@ -193,6 +161,12 @@ const BotPage = () => {
 							</div>
 						</div>
 					</div>
+					{isCreatingSession && (
+						<CreateSession
+							setIsCreatingSession={setIsCreatingSession}
+							botID={bot.id}
+						/>
+					)}
 				</div>
 			) : (
 				<p className="text-center">Бот не найден</p>

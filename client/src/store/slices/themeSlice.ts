@@ -18,9 +18,21 @@ export const themeSlice = createSlice({
 		setTheme: (state, { payload }) => {
 			state.theme = payload.theme;
 			state.options = payload.options;
+
+			localStorage.setItem("theme", JSON.stringify(state));
+		},
+
+		initTheme: (state) => {
+			if (localStorage.getItem("theme")) {
+				const theme = JSON.parse(localStorage.getItem("theme"));
+				state.theme = theme.theme;
+				state.options = theme.options;
+			} else {
+				localStorage.setItem("theme", JSON.stringify(initialState));
+			}
 		},
 	},
 });
 
-export const { setTheme } = themeSlice.actions;
+export const { setTheme, initTheme } = themeSlice.actions;
 export default themeSlice;
