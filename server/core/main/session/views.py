@@ -23,11 +23,41 @@ class ListSessions(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        latest_session_per_bot = AiSession.objects.filter(
+            belongs_to=self.request.user,
+            chatbot=OuterRef('chatbot')
+        ).order_by('-updated_at').values('pk')[:1]
+
+        latest_sessions = AiSession.objects.filter(
+            belongs_to=self.request.user,
+            pk__in=Subquery(latest_session_per_bot)
+        )
+        
+        # последнее сообщение
         latest_message_subquery = Message.objects.filter(
             session=OuterRef('pk')
         ).order_by('-timestamp').values('content')[:1]
 
-        queryset = AiSession.objects.filter(belongs_to=self.request.user).annotate(
+        return latest_sessions.annotate(
+            last_message=Subquery(latest_message_subquery)
+        )
+
+class ListSessionsByBot(generics.ListCreateAPIView):
+    serializer_class = ShowSessionsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        bot_id = self.kwargs.get("pk")
+        if bot_id == None:
+            raise NotFound("No chats with this bot")
+        latest_message_subquery = Message.objects.filter(
+            session=OuterRef('pk')
+        ).order_by('-timestamp').values('content')[:1]
+
+        queryset = AiSession.objects.filter(
+            belongs_to=self.request.user,
+            chatbot=self.kwargs.get("pk")
+            ).annotate(
             last_message=Subquery(latest_message_subquery)
         )
         return queryset

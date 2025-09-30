@@ -98,7 +98,7 @@ class AiSession(models.Model):
     updated_at = models.DateTimeField(auto_now=True) # TODO - сделать возврат по времени для сортировки сессий пользователя
 
     # options part
-    temperatute = models.FloatField(default=0.7)
+    temperature = models.FloatField(default=0.7)
     tokens = models.IntegerField(default=1000)
 
 class Message(models.Model):

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from main.ai_modules.tokenizer import Tokenization
 from main.ai_modules.services import OllamaAPI
 from main.ai_modules.templates import Templates
@@ -7,6 +8,7 @@ from ..models import *
 from rest_framework import serializers
 from main.ai_modules.collector import PromptTools as pt
 import asyncio
+from asgiref.sync import sync_to_async
    
 class SessionSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
@@ -22,7 +24,9 @@ class SessionSerializer(serializers.ModelSerializer):
             "persona_name",
             "last_message",
             "temperature",
-            "tokens"
+            "tokens",
+            "created_at",
+            "updated_at",
         ]
         extra_kwargs = {
             "chatbot": {"required": True},
@@ -127,6 +131,9 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
             eval_count=eval_count,
         )
 
+        # обновим время сессии
+        session_obj.updated_at = sync_to_async(timezone.now())
+
         return ai_message
     
 class MessageSerializer(serializers.ModelSerializer):
@@ -171,8 +178,16 @@ class ShowSessionsSerializer(serializers.ModelSerializer):
             "id",
             "last_message",
             "chatbot",
-            "persona"
+            "persona",
+            "tokens",
+            "temperature",
+            "created_at",
+            "updated_at"
         ]
+        extra_kwargs = {
+            "tokens": {"read_only": True},
+            "temperature": {"read_only": True},
+        }
 
 class SessionByIDSerializer(serializers.ModelSerializer):
     class Meta:
