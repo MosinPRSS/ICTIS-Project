@@ -44,6 +44,7 @@ const Chat = () => {
 	const { readMessages, deleteSession } = useSessionService();
 	const { sendMessage } = useMessageService();
 	const dispatch = useDispatch();
+	const [isDisabled, setIsDisabled] = useState(false);
 
 	const router = useRouter();
 	const params = useParams();

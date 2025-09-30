@@ -65,18 +65,6 @@ const GenerationSettings = ({ setShowGenerationSettings }) => {
 						</div>
 					</div>
 
-					<div>
-						<label className="block text-sm font-medium mb-2">
-							Стиль ответов
-						</label>
-						<select className="w-full p-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-white">
-							<option>Сбалансированный</option>
-							<option>Профессиональный</option>
-							<option>Креативный</option>
-							<option>Краткий</option>
-						</select>
-					</div>
-
 					<button
 						onClick={() => setShowGenerationSettings(false)}
 						className={`w-full mt-4 py-3 ${selectedTheme.options.middleground} hover:bg-amber-50 rounded-xl hover:text-black font-medium transition-colors`}
