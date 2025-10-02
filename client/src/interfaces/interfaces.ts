@@ -67,11 +67,15 @@ export interface ILoginValidateData {
 	emailInput: string;
 	passwordInput: string;
 }
-export interface Message {
-	id: string;
+export interface IMessage {
+	id: number;
+	session: string;
+	role: string;
+	name: string;
+	avatar: File | null;
 	content: string;
-	isBot: boolean;
-	timestamp: string;
+	timestamp: Date;
+	eval_count: number;
 }
 
 export interface Chat {

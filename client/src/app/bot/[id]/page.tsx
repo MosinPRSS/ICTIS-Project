@@ -7,11 +7,6 @@ import { useSelector } from "react-redux";
 import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
-import useSessionService from "@/api/session_service";
-import { useDispatch } from "react-redux";
-import { openMessage } from "@/store/slices/messageSlice";
-import { closeIcon } from "@/assets/images/images";
-import Image from "next/image";
 import CreateSession from "@/components/botPage/CreateSession";
 
 const BotPage = () => {

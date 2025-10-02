@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useWindow } from "@/hooks/window";
 import { useParams, useRouter } from "next/navigation";
@@ -7,44 +7,38 @@ import useSessionService from "@/api/session_service";
 import Loading from "@/components/Loading";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import {
-	cancelIcon,
-	clockIcon,
-	errorIcon,
 	infoIcon,
 	leftIcon,
 	sendIcon,
 	settingsIcon,
 } from "@/assets/images/images";
 import useMessageService from "@/api/message_service";
-import { set } from "zod";
 import BotOptions from "@/components/chatPage/BotOptions";
 import GenerationSettings from "@/components/chatPage/GenerationSettings";
 import ChatList from "@/components/chatPage/ChatList";
 import BotInfo from "@/components/chatPage/BotInfo";
 import DeleteConfirm from "@/components/chatPage/DeleteConfirm";
+import Message from "@/components/chatPage/Message";
+import { motion } from "motion/react";
 
 const Chat = () => {
 	const [showBotInfo, setShowBotInfo] = useState(false);
-	const [editingChatName, setEditingChatName] = useState("");
 	const [showChatList, setShowChatList] = useState(false);
 	const [showBotOptions, setShowBotOptions] = useState(false);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const [showGenerationSettings, setShowGenerationSettings] = useState(false);
 	const [messageInput, setMessageInput] = useState("");
-	const [editingChatId, setEditingChatId] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [messages, setMessages] = useState([]);
 	const [botChats, setBotChats] = useState(null);
 	const [chatsLoading, setChatsLoading] = useState(false);
 
-	const { readMessages, deleteSession } = useSessionService();
+	const { readMessages } = useSessionService();
 	const { sendMessage } = useMessageService();
 	const dispatch = useDispatch();
-	const [isDisabled, setIsDisabled] = useState(false);
+	const [isMessageSending, setIsMessageSending] = useState(false);
 
 	const router = useRouter();
 	const params = useParams();
@@ -80,27 +74,12 @@ const Chat = () => {
 		})();
 	}, []);
 
-	const updateChatName = (chatId: string, newName: string) => {
-		setChats((prev) =>
-			prev.map((chat) =>
-				chat.id === chatId ? { ...chat, name: newName } : chat
-			)
-		);
-		setEditingChatId(null);
-	};
-
-	const togglePinChat = (chatId: string) => {
-		setChats((prev) =>
-			prev.map((chat) =>
-				chat.id === chatId
-					? { ...chat, isPinned: !chat.isPinned }
-					: chat
-			)
-		);
-	};
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const send = async (e: MouseEvent | KeyboardEvent) => {
 		e.preventDefault();
+		inputRef.current.disabled = true;
+		setIsMessageSending(true);
 		if (!messageInput.trim() || !selectedChat) return;
 
 		const tempMessage = {
@@ -141,16 +120,11 @@ const Chat = () => {
 			dispatch(openMessage("Произошла ошибка при отправке сообщения"));
 			console.log(error);
 		} finally {
-			
+			inputRef.current.disabled = false;
+			setIsMessageSending(false);
 		}
 	};
 
-	const redirect = async (e: MouseEvent, chat) => {
-		e.preventDefault();
-
-		sessionStorage.setItem("selectedChat", JSON.stringify(chat));
-		router.push(`/chats/${chat.id}`);
-	};
 	return (
 		<>
 			{isLoading ? (
@@ -227,61 +201,19 @@ const Chat = () => {
 
 						<div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
 							{messages.map((message) => (
-								<div
+								<Message
+									message={message}
 									key={message.id}
-									className={`flex ${
-										message.role !== "user"
-											? "justify-start"
-											: "justify-end"
-									}`}
-								>
-									<div
-										className={`relative w-[45%] px-4 py-3 rounded-2xl ${
-											message.role !== "user"
-												? "bg-white/10 text-white"
-												: "bg-purple-600 text-white"
-										}`}
-									>
-										<p className="text-sm">
-											{message.content}
-										</p>
-										<p className="text-xs opacity-70 mt-1 text-right">
-											{new Date(
-												message.timestamp
-											).toLocaleTimeString()}
-										</p>
-										<div
-											className={`absolute bottom-[-5px] p-0 left-[-5px] w-5 h-5 rounded-full ${
-												message.status === "error" &&
-												"bg-red-500"
-											}`}
-										>
-											{message.status === "pending" ? (
-												<Image
-													src={clockIcon}
-													alt="clock-icon"
-													width={30}
-													height={30}
-												/>
-											) : (
-												message.status === "error" && (
-													<Image
-														src={errorIcon}
-														alt="error-icon"
-														width={30}
-														height={30}
-													/>
-												)
-											)}
-										</div>
-									</div>
-								</div>
+									userDevice={userDevice}
+									setMessages={setMessages}
+								/>
 							))}
 						</div>
 
 						<div className="bg-black/20 backdrop-blur-xl border-t border-white/10 p-4">
 							<div className="flex items-center gap-3">
 								<input
+									ref={inputRef}
 									type="text"
 									placeholder="Напишите сообщение..."
 									value={messageInput}
@@ -299,12 +231,24 @@ const Chat = () => {
 									className="p-3 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 									aria-label="Отправить сообщение"
 								>
-									<Image
-										src={sendIcon}
-										alt="send-icon"
-										width={20}
-										height={20}
-									/>
+									{isMessageSending ? (
+										<motion.div
+											className="w-[20px] h-[20px] border-8 border-dotted border-white rounded-full top-1/2 left-1/2"
+											animate={{ rotate: 360 }}
+											transition={{
+												duration: 2,
+												repeat: Infinity,
+												type: "spring",
+											}}
+										/>
+									) : (
+										<Image
+											src={sendIcon}
+											alt="send-icon"
+											width={20}
+											height={20}
+										/>
+									)}
 								</button>
 							</div>
 						</div>

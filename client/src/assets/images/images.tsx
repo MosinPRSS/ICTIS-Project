@@ -25,7 +25,13 @@ import cancelIcon from "./cancel-icon.svg";
 import sendIcon from "./send-icon.svg";
 import clockIcon from "./clock-icon.svg";
 import errorIcon from "./error-icon.svg";
+import deleteIcon from "./delete-icon.svg";
+import okIcon from "./ok-icon.svg";
+import copyIcon from "./copy-icon.svg";
 export {
+	copyIcon,
+	okIcon,
+	deleteIcon,
 	botIcon,
 	donutIcon,
 	Logo,

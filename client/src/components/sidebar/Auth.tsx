@@ -1,10 +1,11 @@
 import { Logo } from "@/assets/images/images";
 import { auth } from "@/store/slices/userSlice";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@/api/auth_service";
 import { useValidate } from "@/hooks/validate";
+import { useRouter } from "next/navigation";
 
 interface LoginProps {
 	loginEmail: string;
@@ -51,6 +52,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	>(null);
 
 	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const [nameInput, setNameInput] = useState("");
 	const [emailInput, setEmailInput] = useState("");

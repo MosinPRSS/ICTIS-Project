@@ -80,6 +80,7 @@ const Sidebar = () => {
 		event.preventDefault();
 		logoutApi();
 		dispatch(logout());
+		router.refresh();
 	}
 
 	const router = useRouter();

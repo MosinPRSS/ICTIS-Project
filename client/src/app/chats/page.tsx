@@ -25,19 +25,6 @@ interface Chat {
 	isPinned: boolean;
 }
 
-interface Bot {
-	id: string;
-	name: string;
-	avatar: string;
-	author: string;
-	description: string;
-	tags: string[];
-	lastMessage: string;
-	lastMessageTime: string;
-	messageCount: number;
-	chats: Chat[];
-}
-
 const ChatInterface: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);

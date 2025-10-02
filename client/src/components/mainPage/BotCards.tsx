@@ -2,13 +2,10 @@
 import { IBot, IFindBot } from "@/interfaces/interfaces";
 import getBotsDashboard from "@/services/getBotsDashboard";
 import { RootState } from "@/store/store";
-import { motion } from "motion/react";
-import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import { useRouter } from "next/navigation";
-import { log } from "console";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
