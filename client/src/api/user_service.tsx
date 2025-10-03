@@ -50,7 +50,7 @@ export default function useUserService() {
 			const res = await apiClient.get(`u/read/${id}`);
 
 			if (res.status === 200 && res.data?.user) {
-				return res.data.user;
+				return res.data;
 			} else {
 				console.warn(
 					"Пользователь не найден или ответ не содержит user"

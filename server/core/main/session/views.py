@@ -40,7 +40,7 @@ class ListSessions(generics.ListCreateAPIView):
 
         return latest_sessions.annotate(
             last_message=Subquery(latest_message_subquery)
-        )
+        ).order_by("-updated_at")
 
 class ListSessionsByBot(generics.ListCreateAPIView):
     serializer_class = ShowSessionsSerializer
@@ -87,7 +87,6 @@ class DeleteSession(generics.DestroyAPIView):
         return session
     
 # Messages section
-    
 class GetMessagesOfSession(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
