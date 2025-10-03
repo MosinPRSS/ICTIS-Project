@@ -74,7 +74,11 @@ export default function useBotService() {
 	};
 	const readBot = async (pk: string) => {
 		try {
-			const res = await apiClient.get(`b/read/${pk}`);
+			const res = await apiClient.get(`b/read/${pk}`,
+				{
+					skipAuth: true,
+				}
+			);
 			return res.data;
 		} catch (error: any) {
 			throw new Error("B_ERROR_READ");
@@ -179,6 +183,7 @@ export default function useBotService() {
 	};
 
 	const listUserBots = async () => {
+		// ОТНОСИТСЯ К САМОМУ ПОЛЬЗОВАТЕЛЮ
 		try {
 			const res = await apiClient.get("b/list/user");
 

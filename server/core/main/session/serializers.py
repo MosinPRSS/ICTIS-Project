@@ -12,16 +12,18 @@ from asgiref.sync import sync_to_async
    
 class SessionSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
-    chatbot_name = serializers.CharField(source="chatbot.name", read_only=True)
-    persona_name = serializers.CharField(source="persona.name", read_only=True)
+    chatbot_info = PublicBotSerializer(source="chatbot", read_only=True)
+    persona_info = PersonaSerializer(source="persona", read_only=True)
+    user_id = serializers.UUIDField(source="belongs_to.id", read_only=True)
     class Meta:
         model = AiSession
         fields = [
             "id",
+            "user_id",
             "chatbot",
-            "chatbot_name",
+            "chatbot_info",       
             "persona",
-            "persona_name",
+            "persona_info",
             "last_message",
             "temperature",
             "tokens",
@@ -31,7 +33,6 @@ class SessionSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "chatbot": {"required": True},
             "persona": {"required": True},
-            "persona_name": {"read_only": True},
             "tokens": {"default": 1000},
             "temperature": {"default": 0.7},
         }
@@ -172,10 +173,12 @@ class ShowSessionsSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
     persona = PersonaSerializer(read_only=True)
     chatbot = PublicBotSerializer(read_only=True)
+    user_id = serializers.UUIDField(source="belongs_to.id", read_only=True)
     class Meta:
         model = AiSession
         fields = [
             "id",
+            "user_id",
             "last_message",
             "chatbot",
             "persona",

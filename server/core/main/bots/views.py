@@ -35,7 +35,7 @@ class UpdateBot(generics.UpdateAPIView):
         
 class GetBot(generics.RetrieveAPIView):
     serializer_class = PublicBotSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Chatbot.objects.annotate(

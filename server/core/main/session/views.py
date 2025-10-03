@@ -62,13 +62,42 @@ class ListSessionsByBot(generics.ListCreateAPIView):
         )
         return queryset
     
+class GetSession(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ShowSessionsSerializer  # будет использоваться для сессии
+
+    def get_queryset(self):
+        latest_message_subquery = Message.objects.filter(
+            session=OuterRef('pk')
+        ).order_by('-timestamp').values('content')[:1]
+
+        return AiSession.objects.filter(
+            belongs_to=self.request.user
+        ).annotate(
+            last_message=Subquery(latest_message_subquery)
+        )
+
+    def retrieve(self, request, *args, **kwargs):
+        session = self.get_object()
+
+        session_serializer = self.get_serializer(session)
+
+        # Получаем все сообщения для этой сессии
+        messages = Message.objects.filter(session=session).order_by('timestamp')
+        message_serializer = MessageSerializer(messages, many=True)
+
+        return Response({
+            "session": session_serializer.data,
+            "messages": message_serializer.data
+        })
+    
 class UpdateSession(generics.UpdateAPIView):
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
+    def get_queryset(self):
         try:
-            queryset =  AiSession.objects.filter(
+            queryset = AiSession.objects.filter(
                 belongs_to=self.request.user,
                 id=self.kwargs.get("pk")
             )

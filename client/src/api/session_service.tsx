@@ -1,5 +1,8 @@
 import apiClient from "./api_client";
 
+// АПДЕЙТ - ДОБАВЛЕНО user_id 
+// ДЛЯ ПРОВЕРКИ КОРРЕКТНОСТИ ПРИНАДЛЕЖНОСТИ
+
 export default function useSessionService() {
 	// ОЧЕНЬ ВАЖНЫЕ МОМЕНТЫ.
 	// 1. перед самим созданием сессии пользователю нужно выбрать персону (отобразить всех персон)
@@ -25,37 +28,80 @@ export default function useSessionService() {
 		/*
         [
             {
-                "id": "2a8f18dc-f8de-4d97-8fb2-8f0d914649d6",
-                "last_message": "hello, хз, i am test3",
+                "id": "0dbf1be6-c3d7-4d14-88e8-1354330ff8a9",
+                "user_id": "2a0bca70-2305-4d70-a906-3f178d112184",
+                "last_message": "Привет. Я test3. Ты, наверное, уже знал, но я все равно скажу. Я тот, кто может быть абсолютно случайным, но при этом всегда знает, что делать. Я не думаю, я просто реагирую. И если ты хочешь, я могу быть тем, кто слушает, или тем, кто будет задавать вопросы. Ты, наверное, уже решил, что хочешь, чтобы я был. Но если нет — я тоже могу просто сидеть здесь и ждать.",
                 "chatbot": {
-                    "id": "1d0a1708-3d83-4dff-8860-0a9c0cf62ef1",
+                    "id": "c98a2fa2-c633-48cb-89a7-fd75e23be5e6",
                     "name": "test3",
-                    "chatname": "idk",
+                    "chatname": "man",
                     "avatar": "http://localhost:8000/media/Default_Avatar.svg",
-                    "public_description": "gnome",
-                    "description": "idk",
-                    "scenario": "",
-                    "first_message": "hello, {{user}}, i am {{char}}",
-                    "created_at": "2025-09-24T13:35:46.463742+03:00",
-                    "updated_at": "2025-09-24T13:35:46.463752+03:00",
+                    "public_description": "",
+                    "description": "просто человек, который готов говорить с тобой обо всем и вся вечно",
+                    "scenario": "[сценария нет]",
+                    "first_message": "Привет, я {{char}}, кто ты?",
+                    "created_at": "2025-09-30T17:26:13.307907+03:00",
+                    "updated_at": "2025-10-03T20:10:33.151600+03:00",
                     "rate": 0,
-                    "hide_info": false,
+                    "hide_info": true,
                     "is_public": true,
                     "tags": [],
                     "user": {
                         "id": "2a0bca70-2305-4d70-a906-3f178d112184",
                         "username": "mosinprss",
                         "date_joined": "2025-09-08T17:57:00.710551+03:00",
-                        "avatar": "http://localhost:8000/media/Default_Avatar.svg",
+                        "avatar": "http://localhost:8000/media/img/user/_.jpeg",
                         "description": ""
                     }
                 },
                 "persona": {
-                    "id": "acb785a6-54a5-4169-ab4a-9d70779510bf",
-                    "name": "хз",
+                    "id": "5beed46f-4478-490e-8529-c81ead66b0a8",
+                    "name": "test_persona1",
                     "avatar": "http://localhost:8000/media/Default_Avatar.svg",
-                    "description": "это я"
-                }
+                    "description": "Test Persona for MP"
+                },
+                "tokens": 1000,
+                "temperature": 0.7,
+                "created_at": "2025-09-30T18:27:11.216073+03:00",
+                "updated_at": "2025-09-30T18:27:11.216105+03:00"
+            },
+            {
+                "id": "e562c9e6-29ba-4e16-bfd6-8e85be397659",
+                "user_id": "2a0bca70-2305-4d70-a906-3f178d112184",
+                "last_message": "Привет, я test3, кто ты?",
+                "chatbot": {
+                    "id": "c98a2fa2-c633-48cb-89a7-fd75e23be5e6",
+                    "name": "test3",
+                    "chatname": "man",
+                    "avatar": "http://localhost:8000/media/Default_Avatar.svg",
+                    "public_description": "",
+                    "description": "просто человек, который готов говорить с тобой обо всем и вся вечно",
+                    "scenario": "[сценария нет]",
+                    "first_message": "Привет, я {{char}}, кто ты?",
+                    "created_at": "2025-09-30T17:26:13.307907+03:00",
+                    "updated_at": "2025-10-03T20:10:33.151600+03:00",
+                    "rate": 0,
+                    "hide_info": true,
+                    "is_public": true,
+                    "tags": [],
+                    "user": {
+                        "id": "2a0bca70-2305-4d70-a906-3f178d112184",
+                        "username": "mosinprss",
+                        "date_joined": "2025-09-08T17:57:00.710551+03:00",
+                        "avatar": "http://localhost:8000/media/img/user/_.jpeg",
+                        "description": ""
+                    }
+                },
+                "persona": {
+                    "id": "eeb0255a-145c-4deb-aa0e-73ff47354837",
+                    "name": "hello world",
+                    "avatar": "http://localhost:8000/media/Default_Avatar.svg",
+                    "description": "actually"
+                },
+                "tokens": 14500,
+                "temperature": 0.7,
+                "created_at": "2025-10-02T16:05:49.631307+03:00",
+                "updated_at": "2025-10-03T19:56:49.951034+03:00"
             }
         ]
         */
@@ -67,6 +113,29 @@ export default function useSessionService() {
 			throw new Error("S_ERROR_READ");
 		}
 	};
+
+    const readBotSession = async (id: string) => {
+        // Для списка сессий с ботом у пользователя - вывод такой же,
+        // как у readSessions
+        try {
+            const res = await apiClient.get(`c/list/bot/${id}`);
+            return res.data;
+        } catch (error: any) {
+            throw new Error("S_ERROR_READ_BOT_SESSIONS"); 
+        }
+    }
+
+    const getSession = async (session: string) => {
+        // здесь вернется два поля - session и messages
+        // в сессии вся инфа, что и для readBotSession
+        // а в сообщениях инфа с readMessages
+        try {
+            const res = await apiClient.get(`c/list/chats/${session}`);
+            return res.data;
+        } catch (error: any) {
+            throw new Error("S_ERROR_GET_SESSION");
+        }
+    }
 
 	const deleteSession = async (session_id: string) => {
 		// лист сессий можно получить из метода
@@ -146,11 +215,32 @@ export default function useSessionService() {
 		}
 	};
 
+    const updateGenerationSettings = async (
+        session: string,
+        tokens?: number,
+        temperature?: number, // предупреждение: число с плавающей запятой
+    ) => {
+        // Температура устанавливается в диапазоне от 0.1 до 1
+        // токены от 1 до 10000 (но дать возможность пользователю самому прописать значение)
+        const data = new FormData
+        if (tokens !== undefined) data.append("tokens", tokens);
+        if (temperature !== undefined) data.append("temperature", temperature);
+        try {
+            const res = await apiClient.patch(`c/update/${session}`, data);
+            return res.data; // должен вернуть 200 OK
+        } catch (error: any) {
+            throw new Error("S_ERROR_UPDATE_SETTINGS_GENERATION");
+        }
+    };
+
 	return {
 		createSession,
 		deleteSession,
 
 		readSessions,
 		readMessages,
+        readBotSession,
+
+        updateGenerationSettings,
 	};
 }
