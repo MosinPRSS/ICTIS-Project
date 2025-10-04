@@ -107,6 +107,7 @@ export default function useSessionService() {
         */
 		try {
 			const res = await apiClient.get("c/list/chats");
+			console.log(res.data);
 
 			return res.data;
 		} catch (error: any) {

@@ -74,11 +74,9 @@ export default function useBotService() {
 	};
 	const readBot = async (pk: string) => {
 		try {
-			const res = await apiClient.get(`b/read/${pk}`,
-				{
-					skipAuth: true,
-				}
-			);
+			const res = await apiClient.get(`b/read/${pk}`, {
+				skipAuth: true,
+			});
 			return res.data;
 		} catch (error: any) {
 			throw new Error("B_ERROR_READ");
@@ -129,7 +127,7 @@ export default function useBotService() {
 		}
 	};
 
-	const listBot = async () => {
+	const listBot = async (next: string) => {
 		// Пока не будет сейчас серьезно
 		// реализовано на этой неделе
 		// Однако листинг поддерживает кучу параметров...
@@ -172,7 +170,7 @@ export default function useBotService() {
         */
 
 		try {
-			const res = await apiClient.get("b/list", {
+			const res = await apiClient.get(next, {
 				skipAuth: true,
 			});
 
@@ -191,7 +189,7 @@ export default function useBotService() {
 		} catch (error: any) {
 			throw new Error("B_ERROR_LIST_USER");
 		}
-	}
+	};
 	return {
 		createBot,
 		readBot,
@@ -199,6 +197,6 @@ export default function useBotService() {
 		deleteBot,
 
 		listBot,
-		listUserBots
+		listUserBots,
 	};
 }

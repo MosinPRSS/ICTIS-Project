@@ -5,13 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import { useRouter } from "next/navigation";
-import apiClient from "@/api/api_client";
+import useBotService from "@/api/bot_service";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [find, setFind] = useState<IBot[]>([]);
 	const [next, setNext] = useState("b/list");
+	const { listBot } = useBotService();
 
 	async function getBots() {
 		try {
@@ -20,18 +21,12 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 			}
 			setIsLoading(true);
 
-			const data = await apiClient.get(next, {
-				skipAuth: true,
-			});
+			const data = await listBot(next);
 
-			console.log(data.data);
+			console.log(data);
 
-			setNext(data.data.next);
-			setBots(
-				bots.length === 0
-					? data.data.results
-					: [...bots, data.data.results]
-			);
+			setNext(data.next);
+			setBots(bots.concat(data.results));
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -46,22 +41,36 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	useEffect(() => {
 		if (!bots) return;
 
+		console.log(bots);
+
 		setFind(bots);
 	}, [bots]);
 
 	const scroll = useRef<HTMLDivElement>(null);
+	const observer = useRef(null);
 
 	useEffect(() => {
 		if (!scroll.current) return;
 
-		const observer = new IntersectionObserver((entries) => {
-			if (entries[0].isIntersecting) {
-				getBots();
+		if (observer.current) {
+			observer.current.disconnect();
+		}
+
+		if (next) {
+			observer.current = new IntersectionObserver((entries) => {
+				if (entries[0].isIntersecting) {
+					getBots();
+				}
+			});
+			observer.current.observe(scroll.current);
+		}
+		return () => {
+			if (observer.current) {
+				observer.current.disconnect();
 			}
-		});
-		observer.observe(scroll.current);
-		return () => observer.disconnect();
-	}, [scroll.current]);
+		};
+	}, [scroll.current, next]);
+
 	function search() {
 		if (!bots) return;
 
@@ -97,11 +106,7 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 			{isLoading ? (
 				<Loading />
 			) : (
-				<div
-					className="w-full h-[1px] bg-white"
-					id="scroll"
-					ref={scroll}
-				></div>
+				<div className="w-full h-[1px]" id="scroll" ref={scroll}></div>
 			)}
 		</>
 	);
