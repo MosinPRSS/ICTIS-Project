@@ -4,8 +4,10 @@ import { searchIcon } from "@/assets/images/images";
 import BotCards from "@/components/mainPage/BotCards";
 import Tags from "@/components/mainPage/Tags";
 import { useWindow } from "@/hooks/window";
+import { RootState } from "@/store/store";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Home() {
 	const windowWidth = useWindow();
@@ -13,6 +15,7 @@ export default function Home() {
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [selectedBots, setSelectedBots] = useState<string | null>(null);
 	const input = useRef<HTMLInputElement>(null);
+	const { user } = useSelector((state: RootState) => state);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -37,7 +40,7 @@ export default function Home() {
 				}`}
 			>
 				<h1 className="playpen text-4xl text-white">
-					Добро пожаловать, Qua11ra!
+					Добро пожаловать{user.user && ", " + user.user.name}!
 				</h1>
 				<form
 					id="search-form"

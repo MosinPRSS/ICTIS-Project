@@ -6,10 +6,7 @@ import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
 import useBotService from "@/api/bot_service";
-import { addUserBot } from "@/store/slices/userBotsSlice";
 import { openMessage } from "@/store/slices/messageSlice";
-import { text } from "stream/consumers";
-
 const newBot: IBot = {
 	id: 0,
 	name: "Новый бот",
@@ -22,12 +19,7 @@ const newBot: IBot = {
 	tags: [],
 };
 
-const NewBotSettings = ({
-	setSelectedBot,
-	myBots,
-	setMyBots,
-	getBots,
-}: ISelectedBot) => {
+const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const { createBot } = useBotService();
@@ -87,7 +79,7 @@ const NewBotSettings = ({
 				throw new Error("Failed to create bot");
 			}
 
-			await getBots();
+			await updateBotsList();
 			dispatch(openMessage("Бот успешно создан"));
 		} catch (error) {
 			dispatch(openMessage("Произошла ошибка"));
@@ -113,7 +105,6 @@ const NewBotSettings = ({
 						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
 						<div>
 							<p>{botInfo.name}</p>
-							<p>{botInfo.description}</p>
 						</div>
 					</div>
 
@@ -247,7 +238,8 @@ const NewBotSettings = ({
 							}}
 						/>
 					</label>
-					<div className="flex gap-3 flex-wrap">
+					<div className="flex gap-3 flex-wrap items-center">
+						<p>Теги:</p>
 						{botInfo.tags.map((tag) => (
 							<div
 								key={tag}
@@ -336,7 +328,7 @@ const NewBotSettings = ({
 						<button
 							type="button"
 							className={`w-[60px] h-[30px] ${
-								botInfo.is_public
+								botInfo.hide_info
 									? "bg-green-500 justify-end"
 									: "bg-gray-500 justify-start"
 							} rounded-[15px] flex items-center p-1 px-2 border-[1px]`}

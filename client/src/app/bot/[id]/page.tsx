@@ -8,6 +8,7 @@ import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import CreateSession from "@/components/botPage/CreateSession";
+import Link from "next/link";
 
 const BotPage = () => {
 	const windowWidth = useWindow();
@@ -71,9 +72,13 @@ const BotPage = () => {
 											{bot.name}
 										</h1>
 										<p>
-											{bot.is_public
-												? "Публичный бот"
-												: "Приватный бот"}
+											Автор:{" "}
+											<Link
+												href={`/user/${bot.user.id}`}
+												className="underline hover:text-amber-600"
+											>
+												{bot.user.username}
+											</Link>
 										</p>
 									</div>
 									<button

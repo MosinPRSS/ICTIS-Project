@@ -6,7 +6,6 @@ import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
 import usePersonaService from "@/api/persona_service";
-import { addUserPersona } from "@/store/slices/userPersonasSlice";
 import { useDispatch } from "react-redux";
 import { openMessage } from "@/store/slices/messageSlice";
 
@@ -19,8 +18,7 @@ const newPersona: IPersona = {
 
 const NewPersonaSettings = ({
 	setSelectedPersona,
-	myPersonas,
-	setMyPersonas,
+	updatePersonasList,
 }: IPersona) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
@@ -57,18 +55,11 @@ const NewPersonaSettings = ({
 			const response = await createPersona(personaInfo);
 
 			if (!response) {
-				throw new Error("Failed to create bot");
+				throw new Error("Failed to create persona");
 			}
 
-			dispatch(
-				addUserPersona({
-					id: new Date(),
-					name: personaInfo.name,
-					description: personaInfo.description,
-					avatar: personaInfo.avatar,
-				})
-			);
-			dispatch(openMessage("Бот успешно создан"));
+			await updatePersonasList();
+			dispatch(openMessage("Персона успешно создана!"));
 		} catch (error) {
 			dispatch(openMessage("Произошла ошибка"));
 			console.log(error);

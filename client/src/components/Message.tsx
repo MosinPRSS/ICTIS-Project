@@ -1,6 +1,8 @@
+import { closeIcon } from "@/assets/images/images";
 import { closeMessage } from "@/store/slices/messageSlice";
 import { RootState } from "@reduxjs/toolkit/query";
 import { motion } from "motion/react";
+import Image from "next/image";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -14,6 +16,11 @@ const Message = () => {
 			dispatch(closeMessage());
 		}, 10000);
 	});
+
+	function close() {
+		dispatch(closeMessage());
+	}
+
 	return (
 		<motion.div
 			className={`flex justify-between gap-3 fixed right-5 bottom-5 rounded-xl border-[1px] p-3 ${selectedTheme.options.border} ${selectedTheme.options.background}`}
@@ -23,7 +30,14 @@ const Message = () => {
 			transition={{ duration: 0.4, type: "spring" }}
 		>
 			<p>{message.text}</p>
-			<button onClick={() => dispatch(closeMessage())}>X</button>
+			<button onClick={() => close()}>
+				<Image
+					src={closeIcon}
+					alt="close-icon"
+					width={20}
+					height={20}
+				/>
+			</button>
 		</motion.div>
 	);
 };

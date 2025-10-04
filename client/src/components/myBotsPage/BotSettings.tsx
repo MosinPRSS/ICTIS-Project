@@ -8,19 +8,25 @@ import {
 	uploadIcon,
 } from "@/assets/images/images";
 import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
 import useBotService from "@/api/bot_service";
 import { openMessage } from "@/store/slices/messageSlice";
+import DeleteConfirm from "../DeleteConfirm";
 
-const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
+const BotSettings = ({
+	initialBot,
+	setSelectedBot,
+	updateBotsList,
+}: ISelectedBot) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [isChange, setIsChange] = useState(false);
-	const { updateBot } = useBotService();
+	const { updateBot, deleteBot } = useBotService();
 
 	const [botInfo, setBotInfo] = useState(initialBot);
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const [isShowDelete, setShowDelete] = useState(false);
 
 	useEffect(() => {
 		setBotInfo(initialBot);
@@ -63,18 +69,33 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 	async function updateBotFunc(e: MouseEvent) {
 		e.preventDefault();
 		try {
-			setBotInfo({
-				...botInfo,
-				id: new Date(),
-			});
-
-			const response = await updateBot(botInfo);
+			const response = await updateBot(botInfo, botInfo.id);
 
 			if (!response) {
 				throw new Error("Failed to create bot");
 			}
+			setBotInfo(response);
+			await updateBotsList();
 
-			dispatch(openMessage("Бот успешно создан"));
+			dispatch(openMessage("Информация о боте была обновлена"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedBot(null);
+		}
+	}
+
+	async function deleteBotFunc() {
+		try {
+			const response = await deleteBot(botInfo.id);
+
+			if (!response) {
+				throw new Error("Failed to delete bot");
+			}
+			await updateBotsList();
+
+			dispatch(openMessage("Бот удалён"));
 		} catch (error) {
 			dispatch(openMessage("Произошла ошибка"));
 			console.log(error);
@@ -87,6 +108,10 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 		setBotInfo(initialBot);
 		setIsChange(false);
 	}
+
+	useEffect(() => {
+		console.log(botInfo);
+	}, [botInfo]);
 
 	return (
 		<div className="absolute p-10 left-0 top-0 w-full min-h-full h-fit overflow-y-scroll backdrop-blur-3xl flex justify-center items-center">
@@ -110,7 +135,6 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
 						<div>
 							<p>{botInfo.name}</p>
-							<p>{botInfo.description}</p>
 						</div>
 					</div>
 					{isChange ? (
@@ -153,6 +177,7 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 							Чат
 						</button>
 						<button
+							onClick={() => setShowDelete(true)}
 							className={`h-fit border-[1px] rounded-[10px] px-5 py-2 hover:scale-103 ${selectedTheme.options.background}`}
 						>
 							Удалить
@@ -294,14 +319,14 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 								<button
 									type="button"
 									className={`w-[60px] h-[30px] ${
-										botInfo.isPublic
+										botInfo.is_public
 											? "bg-green-500 justify-end"
 											: "bg-gray-500 justify-start"
 									} rounded-[15px] flex items-center p-1 px-2 border-[1px]`}
 									onClick={() => {
 										setBotInfo({
 											...botInfo,
-											isPublic: !botInfo.isPublic,
+											is_public: !botInfo.is_public,
 										});
 									}}
 								>
@@ -311,7 +336,7 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 						</form>
 					) : (
 						<div
-							className={`w-full flex justify-between items-center gap-5`}
+							className={`w-full flex justify-between gap-5 flex-wrap`}
 						>
 							<div className="flex flex-col gap-3 w-[45%]">
 								<p>Имя</p>
@@ -358,7 +383,7 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 								<p>Публичный бот</p>
 								<div
 									className={`w-[60px] h-[30px] ${
-										botInfo.isPublic
+										botInfo.is_public
 											? "bg-green-500 justify-end"
 											: "bg-gray-500 justify-start"
 									} rounded-[15px] flex items-center p-1 px-2 border-[1px]`}
@@ -370,6 +395,13 @@ const BotSettings = ({ initialBot, setSelectedBot }: ISelectedBot) => {
 					)}
 				</div>
 			</div>
+			{isShowDelete && (
+				<DeleteConfirm
+					setShowDeleteConfirm={setShowDelete}
+					entity={botInfo.name}
+					del={deleteBotFunc}
+				/>
+			)}
 		</div>
 	);
 };

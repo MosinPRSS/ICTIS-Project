@@ -1,10 +1,14 @@
 import { cancelIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const BotInfo = ({ setShowBotInfo, selectedChat }) => {
+	useEffect(() => {
+		console.log(selectedChat);
+	}, []);
+
 	const { selectedTheme } = useSelector((state: RootState) => state);
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">

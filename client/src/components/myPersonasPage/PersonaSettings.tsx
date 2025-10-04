@@ -7,19 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useWindow } from "@/hooks/window";
 import usePersonaService from "@/api/persona_service";
 import { openMessage } from "@/store/slices/messageSlice";
+import DeleteConfirm from "../DeleteConfirm";
 
 const PersonaSettings = ({
 	initialPersona,
 	setSelectedPersona,
-	getPersona,
+	updatePersonasList,
 }: IPersona) => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [isChange, setIsChange] = useState(false);
-	const { updatePersona } = usePersonaService();
+	const { updatePersona, deletePersona } = usePersonaService();
 
 	const [personaInfo, setPersonaInfo] = useState(initialPersona);
 	const { selectedTheme, user } = useSelector((state: RootState) => state);
+	const [isShowDelete, setShowDelete] = useState(false);
 
 	useEffect(() => {
 		setPersonaInfo(initialPersona);
@@ -49,16 +51,35 @@ const PersonaSettings = ({
 			const response = await updatePersona(personaInfo, user.user.id);
 
 			if (!response) {
-				throw new Error("Failed to create bot");
+				throw new Error("Failed to update persona");
 			}
 
-			dispatch(openMessage("Бот успешно создан"));
+			updatePersonasList();
+			dispatch(openMessage("Информация о персоне обновлена!"));
 		} catch (error) {
 			dispatch(openMessage("Произошла ошибка"));
 			console.log(error);
 		} finally {
 			setSelectedPersona(personaInfo);
 			setIsChange(false);
+		}
+	}
+
+	async function deletePersonaFunc() {
+		try {
+			const response = await deletePersona(personaInfo.id);
+
+			if (!response) {
+				throw new Error("Failed to delete bot");
+			}
+			await updatePersonasList();
+
+			dispatch(openMessage("Бот удалён"));
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка"));
+			console.log(error);
+		} finally {
+			setSelectedPersona(null);
 		}
 	}
 
@@ -85,11 +106,10 @@ const PersonaSettings = ({
 					<Image src={closeIcon} alt="close-icon"></Image>
 				</button>
 				<div className="flex items-center justify-between gap-10">
-					<div className="flex items-center gap-3">
+					<div className="flex items-center gap-5">
 						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
 						<div>
-							<p>{personaInfo.name}</p>
-							<p>{personaInfo.description}</p>
+							<p className="text-3xl">{personaInfo.name}</p>
 						</div>
 					</div>
 					{isChange ? (
@@ -235,6 +255,13 @@ const PersonaSettings = ({
 					)}
 				</div>
 			</div>
+			{isShowDelete && (
+				<DeleteConfirm
+					setShowDeleteConfirm={setShowDelete}
+					entity={personaInfo.name}
+					del={deletePersonaFunc}
+				/>
+			)}
 		</div>
 	);
 };

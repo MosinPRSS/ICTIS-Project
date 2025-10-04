@@ -16,15 +16,6 @@ interface Message {
 	timestamp: string;
 }
 
-interface Chat {
-	id: string;
-	name: string;
-	messages: Message[];
-	createdAt: string;
-	updatedAt: string;
-	isPinned: boolean;
-}
-
 const ChatInterface: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);

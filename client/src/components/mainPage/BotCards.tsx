@@ -1,23 +1,37 @@
 "use client";
 import { IBot, IFindBot } from "@/interfaces/interfaces";
-import getBotsDashboard from "@/services/getBotsDashboard";
 import { RootState } from "@/store/store";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import { useRouter } from "next/navigation";
+import apiClient from "@/api/api_client";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [find, setFind] = useState<IBot[]>([]);
-	const [count, setCount] = useState(30);
+	const [next, setNext] = useState("b/list");
 
 	async function getBots() {
 		try {
+			if (!next) {
+				return;
+			}
 			setIsLoading(true);
-			const data = await getBotsDashboard();
-			setBots(bots.length === 0 ? data.results : [...bots, data.results]);
+
+			const data = await apiClient.get(next, {
+				skipAuth: true,
+			});
+
+			console.log(data.data);
+
+			setNext(data.data.next);
+			setBots(
+				bots.length === 0
+					? data.data.results
+					: [...bots, data.data.results]
+			);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -38,14 +52,16 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const scroll = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		if (!scroll.current) return;
+
 		const observer = new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting) {
-				setCount((prev) => prev + 30);
+				getBots();
 			}
 		});
 		observer.observe(scroll.current);
 		return () => observer.disconnect();
-	}, []);
+	}, [scroll.current]);
 	function search() {
 		if (!bots) return;
 
@@ -77,18 +93,16 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	}, [findBots, selectedTags]);
 	return (
 		<>
+			{find && find.map((bot) => <BotCard key={bot.id} bot={bot} />)}
 			{isLoading ? (
 				<Loading />
-			) : find ? (
-				<>
-					{find.map((bot) => (
-						<BotCard key={bot.id} bot={bot} />
-					))}
-				</>
 			) : (
-				<p>Ничего не найдено</p>
+				<div
+					className="w-full h-[1px] bg-white"
+					id="scroll"
+					ref={scroll}
+				></div>
 			)}
-			<div className="w-full h-[1px]" id="scroll" ref={scroll}></div>
 		</>
 	);
 }
@@ -107,9 +121,10 @@ export function BotCard({ bot }: { bot: IBot }) {
 		>
 			<div className="w-full rounded-t-xl h-[50%] bg-black" />
 			<div
-				className={`${selectedTheme.options.background} overflow-y-auto w-full h-[50%] p-5 text-white flex flex-col gap-2 rounded-b-xl`}
+				className={`${selectedTheme.options.background} overflow-y-auto w-full h-[50%] p-5 text-white flex flex-col gap-1 rounded-b-xl`}
 			>
 				<p className="font-semibold">{bot.name}</p>
+				<p>Автор: {bot.user?.username}</p>
 				<p className="text-sm mt-2 line-clamp-2">{bot.description}</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<p>Теги: </p>

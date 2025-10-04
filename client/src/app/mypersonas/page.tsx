@@ -93,7 +93,7 @@ const MyPersonasPage = () => {
 								onClick={() => setSelectedPersona(persona)}
 							>
 								<div className="w-full rounded-t-xl h-[50%] bg-black"></div>
-								<div className="flex flex-col gap-2 p-3">
+								<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
 									<p>{persona.name}</p>
 									<p>{persona.description}</p>
 								</div>
@@ -106,13 +106,13 @@ const MyPersonasPage = () => {
 					<PersonaSettings
 						initialPersona={selectedPersona}
 						setSelectedPersona={setSelectedPersona}
-						getPersona={getData}
+						updatePersonasList={getData}
 					/>
 				) : (
 					<NewPersonaSettings
 						setSelectedPersona={setSelectedPersona}
 						myPersonas={MyPersonas}
-						setMyPersonas={setMyPersonas}
+						updatePersonasList={getData}
 					/>
 				)
 			) : (
