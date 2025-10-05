@@ -60,7 +60,6 @@ const ChatInterface: React.FC = () => {
 	const redirect = async (e: MouseEvent, chat) => {
 		e.preventDefault();
 
-		sessionStorage.setItem("selectedChat", JSON.stringify(chat));
 		router.push(`/chats/${chat.id}`);
 	};
 

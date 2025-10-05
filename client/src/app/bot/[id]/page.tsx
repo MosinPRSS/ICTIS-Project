@@ -3,25 +3,49 @@ import { useWindow } from "@/hooks/window";
 import { IBot } from "@/interfaces/interfaces";
 import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import CreateSession from "@/components/botPage/CreateSession";
 import Link from "next/link";
+import { showAuth } from "@/store/slices/userSlice";
 
 const BotPage = () => {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [bot, setBot] = useState<IBot>();
 	const [isLoading, setIsLoading] = useState(false);
-	const { selectedTheme } = useSelector((state: RootState) => state);
+	const { selectedTheme, user } = useSelector((state: RootState) => state);
 	const { readBot } = useBotService();
 
 	const [isCreatingSession, setIsCreatingSession] = useState(false);
 
 	const router = useRouter();
 	const params = useParams();
+	const dispatch = useDispatch();
+
+	function checkAuth() {
+		if (!user.user) {
+			dispatch(showAuth(true));
+		} else {
+			setIsCreatingSession(true);
+		}
+	}
+
+	function redirectToAuthor() {
+		if (!user.user) {
+			dispatch(showAuth(true));
+			return;
+		}
+
+		const userID = localStorage.getItem("userID");
+		if (userID === bot.user.id) {
+			router.push("/profile");
+		} else {
+			router.push(`/user/${bot.user.id}`);
+		}
+	}
 
 	useEffect(() => {
 		(async function () {
@@ -73,19 +97,19 @@ const BotPage = () => {
 										</h1>
 										<p>
 											Автор:{" "}
-											<Link
-												href={`/user/${bot.user.id}`}
+											<button
+												onClick={() =>
+													redirectToAuthor()
+												}
 												className="underline hover:text-amber-600"
 											>
 												{bot.user.username}
-											</Link>
+											</button>
 										</p>
 									</div>
 									<button
-										className={`mb-10 text-center rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
-										onClick={() =>
-											setIsCreatingSession(true)
-										}
+										className={`mb-10 w-[10rem] text-center rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
+										onClick={() => checkAuth()}
 									>
 										Чат
 									</button>

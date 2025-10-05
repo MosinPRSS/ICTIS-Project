@@ -23,8 +23,6 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 
 			const data = await listBot(next);
 
-			console.log(data);
-
 			setNext(data.next);
 			setBots(bots.concat(data.results));
 		} catch (error) {
@@ -40,8 +38,6 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 
 	useEffect(() => {
 		if (!bots) return;
-
-		console.log(bots);
 
 		setFind(bots);
 	}, [bots]);

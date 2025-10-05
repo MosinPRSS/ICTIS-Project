@@ -1,11 +1,10 @@
 import { Logo } from "@/assets/images/images";
-import { auth } from "@/store/slices/userSlice";
+import { auth, showAuth } from "@/store/slices/userSlice";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@/api/auth_service";
 import { useValidate } from "@/hooks/validate";
-import { useRouter } from "next/navigation";
 
 interface LoginProps {
 	loginEmail: string;
@@ -39,20 +38,14 @@ interface RegistrationProps {
 	setCodeErrors: Dispatch<SetStateAction<number[]>>;
 }
 
-const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
+const Auth = () => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
 	const { login, register } = useAuth();
 	const [codeErrors, setCodeErrors] = useState<number[]>([]);
 	const { registrationValidation, loginValidation } = useValidate();
-	const [authError, setAuthError] = useState<
-		| null
-		| "Пользователь с таким email уже существует"
-		| "Некорректные данные для регистрации"
-		| "Пользователь не найден"
-	>(null);
+	const [authError, setAuthError] = useState<null | string>(null);
 
 	const dispatch = useDispatch();
-	const router = useRouter();
 
 	const [nameInput, setNameInput] = useState("");
 	const [emailInput, setEmailInput] = useState("");
@@ -82,10 +75,10 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 				passwordInput
 			);
 
-			if (response !== 0) {
-				if (response !== -1) {
-					setAuthError(response);
-				}
+			if (response != "Успешно") {
+				setAuthError(
+					response === -1 ? "Ошибка при регистрации" : response
+				);
 				throw new Error("Registration error");
 			}
 
@@ -93,7 +86,8 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 				auth({
 					name: nameInput,
 					email: emailInput,
-				})
+				}),
+				showAuth(false)
 			);
 
 			handleClose();
@@ -128,7 +122,8 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 				auth({
 					name: username,
 					id: userID,
-				})
+				}),
+				showAuth(false)
 			);
 
 			handleClose();
@@ -139,7 +134,7 @@ const Auth = ({ setOpenAuth }: Dispatch<SetStateAction<boolean>>) => {
 	}
 
 	function handleClose() {
-		setOpenAuth(false);
+		dispatch(showAuth(false));
 	}
 
 	function resetCodeError(code: number) {

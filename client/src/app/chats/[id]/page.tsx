@@ -35,7 +35,7 @@ const Chat = () => {
 	const [botChats, setBotChats] = useState(null);
 	const [chatsLoading, setChatsLoading] = useState(false);
 
-	const { readMessages } = useSessionService();
+	const { readMessages, readBotSession } = useSessionService();
 	const { sendMessage } = useMessageService();
 	const dispatch = useDispatch();
 	const [isMessageSending, setIsMessageSending] = useState(false);
@@ -43,9 +43,7 @@ const Chat = () => {
 	const router = useRouter();
 	const params = useParams();
 
-	const [selectedChat, setSelectedChat] = useState(
-		JSON.parse(sessionStorage.getItem("selectedChat"))
-	);
+	const [chatInfo, setSelectedChat] = useState(null);
 
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
@@ -57,17 +55,19 @@ const Chat = () => {
 		(async function () {
 			try {
 				setIsLoading(true);
-				const response = await readMessages(params.id);
 
-				if (!response) {
-					throw new Error("Failed to get messages");
+				const chatResponse = await readBotSession(params.id);
+				const messagesResponse = await readMessages(params.id);
+
+				console.log(chatResponse, messagesResponse);
+
+				if (!chatResponse || !messagesResponse) {
+					throw new Error("Failed to get data");
 				}
 
 				setMessages(response);
 			} catch (error) {
-				dispatch(
-					openMessage("Произошла ошибка при загрузке сообщений")
-				);
+				dispatch(openMessage("Произошла ошибка при загрузке чата"));
 			} finally {
 				setIsLoading(false);
 			}
@@ -80,7 +80,7 @@ const Chat = () => {
 		e.preventDefault();
 		inputRef.current.disabled = true;
 		setIsMessageSending(true);
-		if (!messageInput.trim() || !selectedChat) return;
+		if (!messageInput.trim() || !chatInfo) return;
 
 		const tempMessage = {
 			id: `temp-${Date.now()}`,
@@ -130,7 +130,7 @@ const Chat = () => {
 			{isLoading ? (
 				<Loading />
 			) : (
-				selectedChat && (
+				chatInfo && (
 					<div className={`flex flex-col h-full w-full relative`}>
 						<div className="bg-black/20 backdrop-blur-xl border-b border-white/10 p-4">
 							<div
@@ -149,18 +149,18 @@ const Chat = () => {
 										/>
 									</button>
 									<Image
-										src={selectedChat.chatbot.avatar}
-										alt={selectedChat.chatbot.name}
+										src={chatInfo.chatbot.avatar}
+										alt={chatInfo.chatbot.name}
 										className="w-10 h-10 rounded-full object-cover"
 										width={40}
 										height={40}
 									/>
 									<div className="">
 										<h2 className="font-semibold text-white truncate w-fit">
-											{selectedChat.chatbot.name}
+											{chatInfo.chatbot.name}
 										</h2>
 										<p className="text-sm text-purple-300 truncate w-fit">
-											{selectedChat.chatbot.name}
+											{chatInfo.chatbot.name}
 										</p>
 									</div>
 								</div>
@@ -261,7 +261,7 @@ const Chat = () => {
 									setShowGenerationSettings
 								}
 								setShowChatList={setShowChatList}
-								selectedChat={selectedChat}
+								chatInfo={chatInfo}
 							/>
 						)}
 
@@ -276,7 +276,7 @@ const Chat = () => {
 						{showChatList && (
 							<ChatList
 								setShowChatList={setShowChatList}
-								selectedChat={selectedChat}
+								chatInfo={chatInfo}
 								botChats={botChats}
 								chatsLoading={chatsLoading}
 								setShowDeleteConfirm={setShowDeleteConfirm}
@@ -287,14 +287,14 @@ const Chat = () => {
 						{showBotInfo && (
 							<BotInfo
 								setShowBotInfo={setShowBotInfo}
-								selectedChat={selectedChat}
+								chatInfo={chatInfo}
 							/>
 						)}
 
 						{showDeleteConfirm && (
 							<DeleteConfirm
 								setShowDeleteConfirm={setShowDeleteConfirm}
-								selectedChat={selectedChat}
+								chatInfo={chatInfo}
 								params={params}
 							/>
 						)}

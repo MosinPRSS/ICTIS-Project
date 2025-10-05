@@ -1,6 +1,6 @@
 import apiClient from "./api_client";
 
-// АПДЕЙТ - ДОБАВЛЕНО user_id 
+// АПДЕЙТ - ДОБАВЛЕНО user_id
 // ДЛЯ ПРОВЕРКИ КОРРЕКТНОСТИ ПРИНАДЛЕЖНОСТИ
 
 export default function useSessionService() {
@@ -107,7 +107,6 @@ export default function useSessionService() {
         */
 		try {
 			const res = await apiClient.get("c/list/chats");
-			console.log(res.data);
 
 			return res.data;
 		} catch (error: any) {
@@ -115,28 +114,28 @@ export default function useSessionService() {
 		}
 	};
 
-    const readBotSession = async (id: string) => {
-        // Для списка сессий с ботом у пользователя - вывод такой же,
-        // как у readSessions
-        try {
-            const res = await apiClient.get(`c/list/bot/${id}`);
-            return res.data;
-        } catch (error: any) {
-            throw new Error("S_ERROR_READ_BOT_SESSIONS"); 
-        }
-    }
+	const readBotSession = async (id: string) => {
+		// Для списка сессий с ботом у пользователя - вывод такой же,
+		// как у readSessions
+		try {
+			const res = await apiClient.get(`c/list/bot/${id}`);
+			return res.data;
+		} catch (error: any) {
+			throw new Error("S_ERROR_READ_BOT_SESSIONS");
+		}
+	};
 
-    const getSession = async (session: string) => {
-        // здесь вернется два поля - session и messages
-        // в сессии вся инфа, что и для readBotSession
-        // а в сообщениях инфа с readMessages
-        try {
-            const res = await apiClient.get(`c/list/chats/${session}`);
-            return res.data;
-        } catch (error: any) {
-            throw new Error("S_ERROR_GET_SESSION");
-        }
-    }
+	const getSession = async (session: string) => {
+		// здесь вернется два поля - session и messages
+		// в сессии вся инфа, что и для readBotSession
+		// а в сообщениях инфа с readMessages
+		try {
+			const res = await apiClient.get(`c/list/chats/${session}`);
+			return res.data;
+		} catch (error: any) {
+			throw new Error("S_ERROR_GET_SESSION");
+		}
+	};
 
 	const deleteSession = async (session_id: string) => {
 		// лист сессий можно получить из метода
@@ -216,32 +215,33 @@ export default function useSessionService() {
 		}
 	};
 
-    const updateGenerationSettings = async (
-        session: string,
-        tokens?: number,
-        temperature?: number, // предупреждение: число с плавающей запятой
-    ) => {
-        // Температура устанавливается в диапазоне от 0.1 до 1
-        // токены от 1 до 10000 (но дать возможность пользователю самому прописать значение)
-        const data = new FormData
-        if (tokens !== undefined) data.append("tokens", tokens);
-        if (temperature !== undefined) data.append("temperature", temperature);
-        try {
-            const res = await apiClient.patch(`c/update/${session}`, data);
-            return res.data; // должен вернуть 200 OK
-        } catch (error: any) {
-            throw new Error("S_ERROR_UPDATE_SETTINGS_GENERATION");
-        }
-    };
+	const updateGenerationSettings = async (
+		session: string,
+		tokens?: number,
+		temperature?: number // предупреждение: число с плавающей запятой
+	) => {
+		// Температура устанавливается в диапазоне от 0.1 до 1
+		// токены от 1 до 10000 (но дать возможность пользователю самому прописать значение)
+		const data = new FormData();
+		if (tokens !== undefined) data.append("tokens", tokens);
+		if (temperature !== undefined) data.append("temperature", temperature);
+		try {
+			const res = await apiClient.patch(`c/update/${session}`, data);
+			return res.data; // должен вернуть 200 OK
+		} catch (error: any) {
+			throw new Error("S_ERROR_UPDATE_SETTINGS_GENERATION");
+		}
+	};
 
 	return {
 		createSession,
 		deleteSession,
+		getSession,
 
 		readSessions,
 		readMessages,
-        readBotSession,
+		readBotSession,
 
-        updateGenerationSettings,
+		updateGenerationSettings,
 	};
 }

@@ -50,34 +50,27 @@ export function useAuth() {
 			if (res.status === 201 || res.status === 200) {
 				localStorage.setItem(ACCESS_TOKEN, res.data.access);
 				localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-				localStorage.setItem("userID", res.data.user.id);
-				localStorage.setItem("username", res.data.user.username);
-				localStorage.setItem("avatarUrl", res.data.user.avatar); // нерационально, не использовать
-				return 200;
+				localStorage.setItem("userID", res.data.id);
+				localStorage.setItem("username", res.data.username);
+				localStorage.setItem("avatarUrl", res.data.avatar);
+
+				return "Успешно";
 			} else {
-				if (res.status === 409) {
-					return "Пользователь с таким email уже существует";
+				// Обрабатываем HTTP ошибки
+				switch (res.status) {
+					case 409: {
+						return "Пользователь с таким email уже существует";
+					}
+					case 400: {
+						return "Некорректные данные для регистрации";
+					}
+					default: {
+						return "Ошибка при регистрации";
+					}
 				}
-				if (res.status === 400) {
-					return "Некорректные данные для регистрации";
-				}
-				return -1;
 			}
 		} catch (error: any) {
-			const status = error.response?.status || 500;
-
-			if (status >= 404) {
-			} else {
-				console.error("Ошибка регистрации:", error.message);
-				if (status === 409) {
-					return "Пользователь с таким email уже существует";
-				}
-				if (status === 400) {
-					return "Некорректные данные для регистрации";
-				}
-			}
-
-			return -1;
+			return "Произошла ошибка при подключении к серверу";
 		}
 	};
 

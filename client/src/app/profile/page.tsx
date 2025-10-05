@@ -3,8 +3,12 @@ import useUserService from "@/api/user_service";
 import DeleteConfirm from "@/components/DeleteConfirm";
 import { useWindow } from "@/hooks/window";
 import { IUser } from "@/interfaces/interfaces";
+import { openMessage } from "@/store/slices/messageSlice";
+import { logout } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
@@ -12,34 +16,77 @@ const ProfilePage = () => {
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-	const { readUser, deleteUser } = useUserService();
+	const { readUser, deleteUser, updateUser } = useUserService();
 	const { user } = useSelector((state: RootState) => state);
+	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const [initialData, setInitialData] = useState<IUser | null>(null);
 	const [userInfo, setUserInfo] = useState<IUser | null>(null);
 	const [isChange, setIsChange] = useState(false);
 
-	useEffect(() => {
-		(async function getUserData() {
-			if (!user.user?.id) return;
-
+	async function getUserData() {
+		if (!user.user?.id) return;
+		try {
 			const response = await readUser(user.user.id);
 			console.log(response);
 
-			setUserInfo(response);
-		})();
+			if (!response) {
+				throw new Error("Failed to get user data");
+			}
+
+			setInitialData(response.user);
+		} catch (error) {
+			console.log(error);
+			dispatch(openMessage("Произошла ошибка при получении данных"));
+		}
+	}
+
+	useEffect(() => {
+		setUserInfo(initialData);
+	}, [initialData]);
+
+	useEffect(() => {
+		getUserData();
 	}, [user]);
 
 	useEffect(() => {
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
 
-	useEffect(() => {
-		console.log(userInfo);
-	}, [userInfo]);
+	async function handleUpdate(e: MouseEvent) {
+		e.preventDefault();
+		try {
+			const response = await updateUser(userInfo);
 
-	function handleDelete() {
-		deleteUser();
+			if (!response) {
+				throw new Error("Failed to update user");
+			}
+
+			setInitialData(response);
+		} catch (error) {
+			dispatch(openMessage("Произошла ошибка при обновлении профиля"));
+		} finally {
+			setIsChange(false);
+		}
+	}
+
+	async function handleDelete() {
+		try {
+			const response = await deleteUser();
+			if (!response) {
+				throw new Error("Failed to delete user");
+			}
+
+			dispatch(logout(), openMessage("Профиль удалён"));
+			router.replace("/");
+		} catch (error) {
+			setUserInfo(user.user);
+			dispatch(openMessage("Произошла ошибка при удалении профиля"));
+		} finally {
+			setShowDeleteConfirm(false);
+		}
 	}
 
 	return (
@@ -117,14 +164,14 @@ const ProfilePage = () => {
 							{isChange ? (
 								<>
 									<button
-										onClick={() => setIsChange(false)}
+										onClick={(e) => handleUpdate(e)}
 										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
 									>
 										Сохранить
 									</button>
 									<button
 										onClick={() => {
-											setUserInfo(user.user);
+											setUserInfo(initialData);
 											setIsChange(false);
 										}}
 										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"

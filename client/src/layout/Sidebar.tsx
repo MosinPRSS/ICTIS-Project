@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useDispatch } from "react-redux";
-import { auth, logout } from "@/store/slices/userSlice";
+import { auth, logout, showAuth } from "@/store/slices/userSlice";
 import { logoutApi } from "@/api/token_service";
 import { useRouter } from "next/navigation";
 import useBotService from "@/api/bot_service";
@@ -33,7 +33,6 @@ const Sidebar = () => {
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [isCollapsed, setCollapse] = useState(true);
 	const [openThemes, setOpenThemes] = useState(false);
-	const [openAuth, setOpenAuth] = useState(false);
 
 	const { readUser } = useUserService();
 	const { listBot } = useBotService();
@@ -48,7 +47,7 @@ const Sidebar = () => {
 			}
 
 			const userResponse = await readUser(user);
-			const botsResponse = await listBot();
+			const botsResponse = await listBot("b/list/user");
 			const personasResponse = await listPersonas();
 
 			if (!botsResponse || !personasResponse || !userResponse) {
@@ -87,7 +86,7 @@ const Sidebar = () => {
 	function redirect(e: MouseEvent, href: string) {
 		e.preventDefault();
 		if (!user.user) {
-			setOpenAuth(true);
+			dispatch(showAuth(true));
 		} else {
 			router.push(href);
 		}
@@ -277,7 +276,7 @@ const Sidebar = () => {
 								<p className="whitespace-nowrap">Гость</p>
 								<button
 									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
-									onClick={() => setOpenAuth(true)}
+									onClick={() => dispatch(showAuth(true))}
 								>
 									<Image
 										src={exitIcon}
@@ -291,7 +290,7 @@ const Sidebar = () => {
 					</div>
 				</div>
 			</motion.div>
-			{!user.user && openAuth && <Auth setOpenAuth={setOpenAuth} />}
+			{!user.user && user.isAuth && <Auth />}
 		</>
 	);
 };
