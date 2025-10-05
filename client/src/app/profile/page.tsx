@@ -49,6 +49,10 @@ const ProfilePage = () => {
 
 	useEffect(() => {
 		getUserData();
+	}, []);
+
+	useEffect(() => {
+		getUserData();
 	}, [user]);
 
 	useEffect(() => {
@@ -75,6 +79,7 @@ const ProfilePage = () => {
 	async function handleDelete() {
 		try {
 			const response = await deleteUser();
+			console.log(response);
 			if (!response) {
 				throw new Error("Failed to delete user");
 			}

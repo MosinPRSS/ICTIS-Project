@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import apiClient from "./api_client";
 import axios from "axios";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "./consts";
 
 interface UserFields {
 	username?: string;
@@ -108,6 +109,13 @@ export default function useUserService() {
 		// возможно будет доработан в будущем
 		try {
 			const res = await apiClient.delete("u/delete");
+
+			localStorage.removeItem(ACCESS_TOKEN);
+			localStorage.removeItem(REFRESH_TOKEN);
+			localStorage.removeItem("userID");
+			localStorage.removeItem("username");
+			localStorage.removeItem("avatarUrl");
+
 			return res.status; // возвращает 200 ОК
 		} catch (error: any) {
 			throw new Error("U_ERROR_DELETE");

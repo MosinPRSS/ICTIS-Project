@@ -81,11 +81,15 @@ const Auth = () => {
 				);
 				throw new Error("Registration error");
 			}
+			await login(emailInput, passwordInput);
+
+			const username = localStorage.getItem("username");
+			const userID = localStorage.getItem("userID");
 
 			dispatch(
 				auth({
-					name: nameInput,
-					email: emailInput,
+					id: userID,
+					name: username,
 				}),
 				showAuth(false)
 			);
@@ -118,10 +122,12 @@ const Auth = () => {
 			const username = localStorage.getItem("username");
 			const userID = localStorage.getItem("userID");
 
+			console.log(username, userID);
+
 			dispatch(
 				auth({
-					name: username,
 					id: userID,
+					name: username,
 				}),
 				showAuth(false)
 			);
