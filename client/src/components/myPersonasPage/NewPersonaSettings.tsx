@@ -69,106 +69,132 @@ const NewPersonaSettings = ({
 	}
 
 	return (
-		<div className="absolute p-10 left-0 top-0 w-full min-h-full h-fit overflow-y-scroll backdrop-blur-3xl flex justify-center items-center">
+		<div className="absolute inset-0 min-h-screen h-fit backdrop-blur-3xl flex items-center justify-center">
+			{/* Modal Container */}
 			<div
-				className={`w-[90vw] h-[90vh] flex flex-col gap-10 pt-13 ${
-					userDevice === "mobile" ? "p-5" : "p-13"
-				} border-[1px] overflow-y-scroll ${
-					selectedTheme.options.border
-				} rounded-[10px] relative ${
-					selectedTheme.options.middleground
-				}`}
+				className={`${
+					userDevice === "mobile"
+						? "h-fit w-[90%]"
+						: "h-[90%] w-[90%]"
+				} relative`}
 			>
-				<div className="flex items-center justify-between gap-10">
-					<div className="flex items-center gap-3">
-						<div className="rounded-[10px] bg-black border-[1px] w-20 h-20"></div>
-						<div>
-							<p>{personaInfo.name}</p>
-							<p>{personaInfo.description}</p>
+				{/* Background Glow */}
+				<div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl blur-3xl"></div>
+
+				{/* Modal */}
+				<div className="w-full h-full relative bg-gradient-to-br from-purple-900/80 to-indigo-900/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl ">
+					{/* Header */}
+					<div className="flex items-center justify-between p-6 border-b border-white/10">
+						<div className="flex items-center gap-3">
+							{/* <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+								<Edit3 className="w-6 h-6 text-white" />
+							</div> */}
+							<h1 className="text-2xl font-bold text-white">
+								{personaInfo.name}
+							</h1>
 						</div>
+						<button
+							onClick={() => setSelectedPersona(null)}
+							className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white"
+						>
+							<closeIcon />
+						</button>
 					</div>
 
-					<div
-						className={`flex gap-3 ${
-							userDevice === "mobile" && "flex-col"
-						}`}
-					>
-						<button
-							className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-							onClick={(e) => savePersona(e)}
-						>
-							Сохранить
-						</button>
-						<button
-							className={`hover:scale-103 rounded-[10px] p-3 border-[1px] ${selectedTheme.options.text} ${selectedTheme.options.background}`}
-							onClick={() => setSelectedPersona(null)}
-						>
-							Отмена
-						</button>
-					</div>
-				</div>
-				<div
-					className={`flex gap-3 w-full justify-between ${
-						userDevice === "mobile" && "flex-col"
-					}`}
-				>
-					<form
-						className={`${
-							userDevice !== "mobile" && "w-[45%]"
-						} h-full flex flex-col flex-wrap gap-5 overflow-y-auto`}
-						onSubmit={(e) => handleSubmit(e)}
-					>
-						<label htmlFor="name" className="flex flex-col gap-3">
-							<p>Имя</p>
-							<input
-								type="text"
-								id="name"
-								className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-								value={personaInfo.name}
-								onChange={(e) => {
-									changePersona({
-										...personaInfo,
-										name: e.target.value,
-									});
-								}}
-							/>
-						</label>
-						<label
-							htmlFor="description"
-							className="flex flex-col gap-3"
-						>
-							<p>Описание</p>
-							<textarea
-								id="description"
-								className={`${selectedTheme.options.text} ${selectedTheme.options.background} rounded-[10px] p-3 border-[1px]`}
-								value={personaInfo.description}
-								onChange={(e) => {
-									changePersona({
-										...personaInfo,
-										description: e.target.value,
-									});
-								}}
-							/>
-						</label>
-						<div className="flex flex-col gap-3">
-							<p>Аватар</p>
-							<input
-								id="file-input"
-								type="file"
-								className="hidden"
-							/>
-							<label
-								className={`w-[100px] h-[100px] p-5 flex justify-center items-center ${selectedTheme.options.background} border-[3px] border-dashed rounded-[10px] cursor-pointer`}
-								htmlFor="file-input"
+					{/* Content */}
+					<div className="p-6 h-[90%] w-full">
+						<div className="grid lg:grid-cols-3 gap-6 h-full">
+							{/* Left Column - Avatar & Actions */}
+							<div className="lg:col-span-1 space-y-6">
+								{/* Avatar Section */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+									<h3 className="text-sm font-semibold text-purple-300 uppercase tracking-wide mb-4 flex items-center gap-2">
+										{/* <ImageIcon className="w-4 h-4" /> */}
+										Аватар
+									</h3>
+
+									<div className="space-y-4">
+										{/* Avatar Preview */}
+										<div className="relative group mx-auto w-40 h-40">
+											<div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+											<div className="relative w-full h-full bg-gradient-to-br from-purple-800 to-indigo-800 rounded-3xl flex items-center justify-center border-2 border-white/20"></div>
+											<button className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity">
+												{/* <Upload className="w-8 h-8 text-white" /> */}
+											</button>
+										</div>
+
+										{/* Upload Button */}
+										<button className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
+											{/* <Upload className="w-4 h-4" /> */}
+											Загрузить фото
+										</button>
+									</div>
+								</div>
+
+								{/* Action Buttons */}
+								<div className="space-y-3">
+									{/* <button onClick={() => router.push(`/user/${bot.user.id}`)} className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10"}>
+										Чат
+									</button> */}
+									<button
+										onClick={(e) => savePersona(e)}
+										className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+									>
+										{/* <Save className="w-5 h-5" /> */}
+										Сохранить
+									</button>
+								</div>
+							</div>
+
+							{/* Right Column - Form Fields */}
+							<div
+								className={`lg:col-span-2 space-y-6 ${
+									userDevice === "mobile"
+										? "h-fit"
+										: "h-full overflow-y-auto"
+								}`}
 							>
-								<Image
-									src={uploadIcon}
-									alt="upload-icon"
-									className="w-full h-full"
-								/>
-							</label>
+								{/* Name Field */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3">
+										Имя
+									</label>
+									<input
+										type="text"
+										value={personaInfo.name}
+										onChange={(e) => {
+											changePersona({
+												...personaInfo,
+												name: e.target.value,
+											});
+										}}
+										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+										placeholder="Введите имя бота"
+									/>
+								</div>
+
+								{/* Description Field */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Описание
+									</label>
+									<textarea
+										value={personaInfo.description}
+										onChange={(e) => {
+											changePersona({
+												...personaInfo,
+												description: e.target.value,
+											});
+										}}
+										rows={4}
+										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
+										placeholder="Опишите вашу персону"
+									/>
+								</div>
+							</div>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</div>

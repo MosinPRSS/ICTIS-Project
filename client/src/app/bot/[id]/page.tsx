@@ -9,6 +9,7 @@ import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import CreateSession from "@/components/botPage/CreateSession";
 import { showAuth } from "@/store/slices/userSlice";
+import Image from "next/image";
 
 const BotPage = () => {
 	const windowWidth = useWindow();
@@ -52,6 +53,8 @@ const BotPage = () => {
 				setIsLoading(true);
 				const response = await readBot(params.id);
 
+				console.log(response);
+
 				if (!response) {
 					throw new Error("Failed to get bot");
 				}
@@ -84,12 +87,20 @@ const BotPage = () => {
 						Назад
 					</button>
 					<div
-						className={`w-full min-h-full flex flex-col gap-10 relative`}
+						className={`w-full min-h-full px-5 flex flex-col gap-10 relative`}
 					>
-						<div className="flex items-center justify-between gap-10">
-							<div className="flex gap-5">
-								<div className="rounded-[10px] bg-black border-[1px] w-50 h-50"></div>
-								<div className="flex flex-col justify-between h-60">
+						<div className="flex flex-wrap items-center justify-between gap-10">
+							<div
+								className={`flex gap-5 p-10 rounded-[10px] ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} border-1`}
+							>
+								<Image
+									src={bot.image}
+									alt="bot"
+									width={200}
+									height={200}
+									className="border-1 border-amber-50 rounded-[10px] h-fit"
+								/>
+								<div className="flex flex-col gap-15 justify-between h-full">
 									<div>
 										<h1 className="text-5xl mb-3">
 											{bot.name}
@@ -107,69 +118,27 @@ const BotPage = () => {
 										</p>
 									</div>
 									<button
-										className={`mb-10 w-[10rem] text-center rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
+										className={`w-[10rem] text-center rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
 										onClick={() => checkAuth()}
 									>
 										Чат
 									</button>
 								</div>
 							</div>
-						</div>
-						<div
-							className={`flex gap-3 w-full justify-between flex-col`}
-						>
-							<div
-								className={`w-full flex flex-wrap justify-between items-center gap-5`}
-							>
-								<div className="flex flex-col gap-3 w-[45%]">
+							<div className="flex gap-10 w-fit">
+								<div
+									className={`flex flex-col gap-3 w-fit ${selectedTheme.options.elementBackground} p-5 rounded-[10px] ${selectedTheme.options.border} border-1`}
+								>
 									<p>Имя</p>
 									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
+										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3 ${selectedTheme.options.border} border-1`}
 									>
 										{bot.name}
 									</p>
 								</div>
-								<div className="flex flex-col gap-3 w-[45%]">
-									<p>Имя в чате</p>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.chatname}
-									</p>
-								</div>
-								<div className="flex flex-col gap-3 w-[45%]">
-									<p>Описание</p>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.description}
-									</p>
-								</div>
-								<div className="flex flex-col gap-3 w-[45%]">
-									<p>Публичное описание</p>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.public_description}
-									</p>
-								</div>
-								<div className="flex flex-col gap-3 w-[45%]">
-									<p>Сценарий</p>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.scenario}
-									</p>
-								</div>
-								<div className="flex flex-col gap-3 w-[45%]">
-									<p>Первое сообщение</p>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.first_message}
-									</p>
-								</div>
-								<div className="flex items-center gap-3 flex-wrap">
+								<div
+									className={`flex flex-col gap-3 w-fit ${selectedTheme.options.elementBackground} p-5 rounded-[10px] ${selectedTheme.options.border} border-1`}
+								>
 									<p>Теги: </p>
 									{bot.tags &&
 										bot.tags.map((tag) => (
@@ -181,6 +150,83 @@ const BotPage = () => {
 											</span>
 										))}
 								</div>
+							</div>
+						</div>
+
+						<div
+							className={`w-full flex flex-wrap justify-between items-center gap-10`}
+						>
+							<div
+								className={`flex flex-col gap-3 min-w-[315px] ${
+									userDevice === "mobile"
+										? "w-full"
+										: "w-[45%]"
+								} ${
+									selectedTheme.options.elementBackground
+								} p-5 rounded-[10px] ${
+									selectedTheme.options.border
+								} border-1`}
+							>
+								<p>Описание</p>
+								<p
+									className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
+								>
+									{bot.description}
+								</p>
+							</div>
+							<div
+								className={`flex flex-col gap-3 min-w-[315px] ${
+									userDevice === "mobile"
+										? "w-full"
+										: "w-[45%]"
+								} ${
+									selectedTheme.options.elementBackground
+								} p-5 rounded-[10px] ${
+									selectedTheme.options.border
+								} border-1`}
+							>
+								<p>Публичное описание</p>
+								<p
+									className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
+								>
+									{bot.public_description}
+								</p>
+							</div>
+							<div
+								className={`flex flex-col gap-3 min-w-[315px] ${
+									userDevice === "mobile"
+										? "w-full"
+										: "w-[45%]"
+								} ${
+									selectedTheme.options.elementBackground
+								} p-5 rounded-[10px] ${
+									selectedTheme.options.border
+								} border-1`}
+							>
+								<p>Сценарий</p>
+								<p
+									className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
+								>
+									{bot.scenario}
+								</p>
+							</div>
+							<div
+								className={`flex flex-col gap-3 min-w-[315px] ${
+									userDevice === "mobile"
+										? "w-full"
+										: "w-[45%]"
+								} ${
+									selectedTheme.options.elementBackground
+								} p-5 rounded-[10px] ${
+									selectedTheme.options.border
+								} border-1`}
+							>
+								<p>Первое сообщение</p>
+								<p
+									className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
+								>
+									{bot.first_message}
+								</p>
 							</div>
 						</div>
 					</div>

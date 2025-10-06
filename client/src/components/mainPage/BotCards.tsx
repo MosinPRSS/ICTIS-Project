@@ -78,8 +78,6 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	}
 
 	useEffect(() => {
-		console.log(findBots, selectedTags);
-
 		search();
 	}, [findBots, selectedTags]);
 	return (
@@ -110,9 +108,11 @@ export function BotCard({ bot }: { bot: IBot }) {
 			<div
 				className={`${selectedTheme.options.background} overflow-y-auto w-full h-[50%] p-5 text-white flex flex-col gap-1 rounded-b-xl`}
 			>
-				<p className="font-semibold">{bot.name}</p>
-				<p>Автор: {bot.user?.username}</p>
-				<p className="text-sm mt-2 line-clamp-2">{bot.description}</p>
+				<p className="font-semibold truncate-1">{bot.name}</p>
+				<p className="truncate-1">Автор: {bot.user?.username}</p>
+				<p className="text-sm mt-2 line-clamp-2 truncate">
+					{bot.description}
+				</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<p>Теги: </p>
 					{bot.tags &&

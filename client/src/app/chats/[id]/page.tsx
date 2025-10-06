@@ -270,6 +270,8 @@ const Chat = () => {
 								setShowGenerationSettings={
 									setShowGenerationSettings
 								}
+								chatInfo={chatInfo}
+								setChatInfo={setChatInfo}
 							/>
 						)}
 

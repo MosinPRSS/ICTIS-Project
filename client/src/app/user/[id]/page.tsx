@@ -54,14 +54,14 @@ const UserPage = () => {
 				>
 					<div
 						className={`${
-							selectedTheme.options.elementBackground
-						} ${
 							userDevice === "mobile"
 								? "w-full min-h-fit h-fit"
 								: "w-[50%] h-full overflow-y-auto"
-						} border-1 rounded-[10px] p-10 flex flex-col justify-between gap-10`}
+						} flex flex-col gap-10`}
 					>
-						<div className="flex gap-5 items-center">
+						<div
+							className={`flex gap-5 items-center ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
+						>
 							<div
 								className={`${selectedTheme.options.border} border-[1px] rounded-full bg-black min-w-40 min-h-40`}
 							></div>
@@ -76,7 +76,9 @@ const UserPage = () => {
 								</p>
 							</div>
 						</div>
-						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
+						<div
+							className={`flex flex-col gap-3 h-fit overflow-y-auto ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
+						>
 							<p>Имя</p>
 							<p
 								className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
@@ -84,7 +86,9 @@ const UserPage = () => {
 								{userInfo.user.username}
 							</p>
 						</div>
-						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
+						<div
+							className={`flex flex-col gap-3 h-fit overflow-y-auto ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
+						>
 							<p>Описание</p>
 							<p
 								className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
@@ -94,7 +98,7 @@ const UserPage = () => {
 						</div>
 					</div>
 					<div
-						className={`flex flex-wrap gap-3 ${
+						className={`flex justify-end flex-wrap gap-3 ${
 							userDevice == "mobile"
 								? ""
 								: "w-[50%] h-full overflow-y-scroll"
