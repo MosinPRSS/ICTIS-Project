@@ -8,7 +8,7 @@ import {
 } from "@/assets/images/images";
 import React from "react";
 import Image from "next/image";
-import { IMessage } from "@/interfaces/interfaces";
+import { IMessage } from "@/interfaces/chat";
 import useMessageService from "@/api/message_service";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch } from "react-redux";

@@ -22,8 +22,6 @@ import { logoutApi } from "@/api/token_service";
 import { useRouter } from "next/navigation";
 import useBotService from "@/api/bot_service";
 import usePersonaService from "@/api/persona_service";
-import { initUserBots } from "@/store/slices/userBotsSlice";
-import { initUserPersonas } from "@/store/slices/userPersonasSlice";
 import useUserService from "@/api/user_service";
 
 const Sidebar = () => {
@@ -38,31 +36,31 @@ const Sidebar = () => {
 	const { listBot } = useBotService();
 	const { listPersonas } = usePersonaService();
 
-	useEffect(() => {
-		(async function getUserData() {
-			const user = localStorage.getItem("userID");
+	// useEffect(() => {
+	// 	(async function getUserData() {
+	// 		const user = localStorage.getItem("userID");
 
-			if (!user) {
-				return;
-			}
+	// 		if (!user) {
+	// 			return;
+	// 		}
 
-			const userResponse = await readUser(user);
-			const botsResponse = await listBot("b/list/user");
-			const personasResponse = await listPersonas();
+	// 		const userResponse = await readUser(user);
+	// 		const botsResponse = await listBot("b/list/user");
+	// 		const personasResponse = await listPersonas();
 
-			if (!botsResponse || !personasResponse || !userResponse) {
-				return;
-			}
+	// 		if (!botsResponse || !personasResponse || !userResponse) {
+	// 			return;
+	// 		}
 
-			dispatch(
-				initUserBots(botsResponse),
-				initUserPersonas(personasResponse),
-				auth(userResponse)
-			);
+	// 		dispatch(
+	// 			initUserBots(botsResponse),
+	// 			initUserPersonas(personasResponse),
+	// 			auth(userResponse)
+	// 		);
 
-			return;
-		})();
-	}, []);
+	// 		return;
+	// 	})();
+	// }, []);
 
 	function collapse() {
 		setCollapse((isCollapsed) => !isCollapsed);
@@ -87,9 +85,18 @@ const Sidebar = () => {
 		e.preventDefault();
 		if (!user.user) {
 			dispatch(showAuth(true));
-		} else {
-			router.push(href);
+			return;
 		}
+
+		checkDevice(e, href);
+	}
+
+	function checkDevice(e: MouseEvent, href: string) {
+		e.preventDefault();
+		if (userDevice === "mobile") {
+			setCollapse(true);
+		}
+		router.push(href);
 	}
 
 	useEffect(() => {
@@ -137,8 +144,8 @@ const Sidebar = () => {
 				}
 			>
 				<div>
-					<Link
-						href="/"
+					<button
+						onClick={(e) => checkDevice(e, "/")}
 						className={`overflow-x-hidden w-full ${selectedTheme.options.background} text-white rounded-[10px] p-[10px] flex items-center space-x-1`}
 					>
 						<Image
@@ -154,7 +161,7 @@ const Sidebar = () => {
 						>
 							ARI-ai
 						</h1>
-					</Link>
+					</button>
 
 					<div className={`flex flex-col p-1 pt-5 space-y-1`}>
 						{navButtons.map((button) => (
@@ -249,8 +256,11 @@ const Sidebar = () => {
 					>
 						{user.user ? (
 							<>
-								<Link href="/profile" className="max-w-[85%]">
-									<button className="max-w-[100%] hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs">
+								<div className="max-w-[85%] hover:bg-amber-50">
+									<button
+										onClick={(e) => redirect(e, "/profile")}
+										className="max-w-[100%] hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs"
+									>
 										<div className="h-[2.5rem] w-[2.5rem] border-[1px] rounded-[6px] border-white"></div>
 										<p
 											className={`whitespace-nowrap overflow-x-hidden`}
@@ -258,7 +268,7 @@ const Sidebar = () => {
 											{user.user.name}
 										</p>
 									</button>
-								</Link>
+								</div>
 								<button
 									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={(e) => logOut(e)}

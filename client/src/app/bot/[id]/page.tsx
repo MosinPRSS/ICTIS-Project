@@ -1,6 +1,6 @@
 "use client";
 import { useWindow } from "@/hooks/window";
-import { IBot } from "@/interfaces/interfaces";
+import { IBot } from "@/interfaces/entries";
 import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,6 @@ import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import CreateSession from "@/components/botPage/CreateSession";
-import Link from "next/link";
 import { showAuth } from "@/store/slices/userSlice";
 
 const BotPage = () => {

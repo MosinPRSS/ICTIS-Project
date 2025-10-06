@@ -1,46 +1,17 @@
 import { Logo } from "@/assets/images/images";
 import { auth, showAuth } from "@/store/slices/userSlice";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@/api/auth_service";
 import { useValidate } from "@/hooks/validate";
-
-interface LoginProps {
-	loginEmail: string;
-	setLoginEmail: Dispatch<SetStateAction<string>>;
-	loginPassword: string;
-	setLoginPassword: Dispatch<SetStateAction<string>>;
-	loginFunc: (event: React.MouseEvent) => Promise<void>;
-	setROL: Dispatch<SetStateAction<"reg" | "log">>;
-	codeErrors: number[];
-	resetCodeError: (code: number) => void;
-	authError: string | null;
-	setAuthError: Dispatch<SetStateAction<string | null>>;
-	setCodeErrors: Dispatch<SetStateAction<number[]>>;
-}
-
-interface RegistrationProps {
-	nameInput: string;
-	setNameInput: Dispatch<SetStateAction<string>>;
-	emailInput: string;
-	setEmailInput: Dispatch<SetStateAction<string>>;
-	passwordInput: string;
-	setPasswordInput: Dispatch<SetStateAction<string>>;
-	submitPassword: string;
-	setSubmitPassword: Dispatch<SetStateAction<string>>;
-	registrationFunc: (event: React.MouseEvent) => Promise<void>;
-	setROL: Dispatch<SetStateAction<"reg" | "log">>;
-	codeErrors: number[];
-	resetCodeError: (code: number) => void;
-	authError: string | null;
-	setAuthError: Dispatch<SetStateAction<string | null>>;
-	setCodeErrors: Dispatch<SetStateAction<number[]>>;
-}
+import usePersonaService from "@/api/persona_service";
 
 const Auth = () => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
 	const { login, register } = useAuth();
+	const { createPersona } = usePersonaService();
+
 	const [codeErrors, setCodeErrors] = useState<number[]>([]);
 	const { registrationValidation, loginValidation } = useValidate();
 	const [authError, setAuthError] = useState<null | string>(null);
@@ -94,6 +65,10 @@ const Auth = () => {
 				showAuth(false)
 			);
 
+			await createPersona({
+				name: username,
+				description: `Привет, меня зовут ${username}`,
+			});
 			handleClose();
 		} catch (error) {
 			console.log(error);
@@ -216,7 +191,7 @@ const Login = ({
 	authError,
 	setAuthError,
 	setCodeErrors,
-}: LoginProps) => {
+}) => {
 	function resetError(num: number) {
 		resetCodeError(num);
 		setAuthError(null);
@@ -304,7 +279,7 @@ const Registration = ({
 	authError,
 	setAuthError,
 	setCodeErrors,
-}: RegistrationProps) => {
+}) => {
 	function resetError(num: number) {
 		resetCodeError(num);
 		setAuthError(null);

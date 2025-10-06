@@ -119,6 +119,8 @@ export default function useSessionService() {
 		// как у readSessions
 		try {
 			const res = await apiClient.get(`c/list/bot/${id}`);
+			console.log(res, id);
+
 			return res.data;
 		} catch (error: any) {
 			throw new Error("S_ERROR_READ_BOT_SESSIONS");

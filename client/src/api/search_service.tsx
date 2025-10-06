@@ -1,5 +1,2 @@
-// SOON
-
-export default function useSearchService() {
-    
-}
+const useSearchService = () => {};
+export default useSearchService;

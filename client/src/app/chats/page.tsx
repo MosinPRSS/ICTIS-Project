@@ -9,13 +9,6 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-interface Message {
-	id: string;
-	content: string;
-	isBot: boolean;
-	timestamp: string;
-}
-
 const ChatInterface: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isLoading, setIsLoading] = useState(false);

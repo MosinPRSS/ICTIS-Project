@@ -27,7 +27,6 @@ const UserPage = () => {
 			setLoading(true);
 			try {
 				const response = await readUser(userId.id);
-				console.log(response);
 
 				if (!response) {
 					throw new Error("Failed to get user data");
@@ -51,28 +50,28 @@ const UserPage = () => {
 				<div
 					className={`${
 						userDevice === "mobile" && "flex-col"
-					} flex justify-between items-center w-full gap-10 grow p-10 pb-0`}
+					} flex justify-between items-center h-full w-full gap-10 grow p-10 pb-0`}
 				>
 					<div
 						className={`${
 							selectedTheme.options.elementBackground
 						} ${
 							userDevice === "mobile"
-								? "w-full"
-								: "w-[50%] h-full"
-						} overflow-y-auto  border-1 rounded-[10px] p-10 flex flex-col justify-between gap-10`}
+								? "w-full min-h-fit h-fit"
+								: "w-[50%] h-full overflow-y-auto"
+						} border-1 rounded-[10px] p-10 flex flex-col justify-between gap-10`}
 					>
 						<div className="flex gap-5 items-center">
 							<div
 								className={`${selectedTheme.options.border} border-[1px] rounded-full bg-black min-w-40 min-h-40`}
 							></div>
 							<div>
-								<p>{userInfo.username}</p>
-								<p>{userInfo.email}</p>
+								<p>{userInfo.user.username}</p>
+								<p>{userInfo.user.email}</p>
 								<p className="break-words">
 									Создан:
 									{new Date(
-										userInfo.date_joined
+										userInfo.user.date_joined
 									).toLocaleDateString()}
 								</p>
 							</div>
@@ -82,7 +81,7 @@ const UserPage = () => {
 							<p
 								className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
 							>
-								{userInfo.username}
+								{userInfo.user.username}
 							</p>
 						</div>
 						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
@@ -95,13 +94,15 @@ const UserPage = () => {
 						</div>
 					</div>
 					<div
-						className={`${
-							userDevice == "mobile" ? "" : "w-[50%] h-full"
+						className={`flex flex-wrap gap-3 ${
+							userDevice == "mobile"
+								? ""
+								: "w-[50%] h-full overflow-y-scroll"
 						}`}
 					>
-						{userInfo.userbots &&
-							userInfo.userbots.length !== 0 &&
-							userInfo.userbots.map((bot) => (
+						{userInfo.bots &&
+							userInfo.bots.length !== 0 &&
+							userInfo.bots.map((bot) => (
 								<BotCard bot={bot} key={bot.id} />
 							))}
 					</div>

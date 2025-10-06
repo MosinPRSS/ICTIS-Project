@@ -1,4 +1,4 @@
-import { IPersona } from "@/interfaces/interfaces";
+import { IPersona } from "@/interfaces/entries";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { uploadIcon } from "@/assets/images/images";

@@ -1,4 +1,4 @@
-import { IBot, IPersona } from "@/interfaces/interfaces";
+import { IBot, IPersona } from "@/interfaces/entries";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { closeIcon, editIcon, uploadIcon } from "@/assets/images/images";

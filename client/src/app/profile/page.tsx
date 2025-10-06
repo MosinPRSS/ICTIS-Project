@@ -1,19 +1,21 @@
 "use client";
 import useUserService from "@/api/user_service";
 import DeleteConfirm from "@/components/DeleteConfirm";
-import { useWindow } from "@/hooks/window";
-import { IUser } from "@/interfaces/interfaces";
+import { useWindow, useWindowWidth } from "@/hooks/window";
+import { IUser } from "@/interfaces/entries";
 import { openMessage } from "@/store/slices/messageSlice";
 import { logout } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
-	const windowWidth = useWindow();
-	const [userDevice, setUserDevice] = useState(windowWidth);
+	const window = useWindow();
+	const windowWidth = useWindowWidth();
+	const [userDevice, setUserDevice] = useState(window);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
 	const { readUser, deleteUser, updateUser } = useUserService();
@@ -56,8 +58,8 @@ const ProfilePage = () => {
 	}, [user]);
 
 	useEffect(() => {
-		setUserDevice(windowWidth);
-	}, [windowWidth]);
+		setUserDevice(window);
+	}, [window]);
 
 	async function handleUpdate(e: MouseEvent) {
 		e.preventDefault();
@@ -103,49 +105,117 @@ const ProfilePage = () => {
 				<div
 					className={`${
 						userDevice === "mobile" ? "flex-col" : "h-[90%]"
-					} flex justify-between items-center w-full gap-10 grow p-10 pb-0`}
+					} flex justify-between items-center w-full gap-10 grow pt-15 pl-10 pb-0`}
 				>
 					<div
-						className={`${selectedTheme.options.elementBackground} w-full h-full overflow-y-auto  border-1 rounded-[10px] p-10 flex flex-col justify-between gap-10`}
+						className={`relative w-full h-full flex flex-wrap justify-center gap-10`}
 					>
-						<div className="flex gap-5 items-center">
+						<div
+							className={`flex flex-col ${
+								userDevice === "mobile"
+									? "w-full"
+									: "min-w-fit w-[45%]"
+							} gap-10`}
+						>
 							<div
-								className={`${selectedTheme.options.border} border-[1px] rounded-full bg-black min-w-40 min-h-40`}
-							></div>
-							<div>
-								<p>{userInfo.username}</p>
-								<p>{userInfo.email}</p>
-								<p className="break-words">
-									Создан:
-									{new Date(
-										userInfo.date_joined
-									).toLocaleDateString()}
-								</p>
+								className={`${selectedTheme.options.elementBackground} border-1 rounded-[10px] p-10 h-fit flex flex-col gap-10`}
+							>
+								<div className="flex gap-5">
+									<Image
+										src={userInfo.avatar}
+										alt="avatar"
+										width={100}
+										height={100}
+										className={`${selectedTheme.options.border} text-2xl border-[1px] rounded-[15px] min-w-40 min-h-40`}
+									/>
+									<div className="pt-5 h-fit w-[67%]">
+										<p className="break-words word-break-break-all overflow-hidden">
+											{userInfo.username}
+										</p>
+										<p>{userInfo.email}</p>
+										<p className="break-words">
+											Создан:
+											{new Date(
+												userInfo.date_joined
+											).toLocaleDateString()}
+										</p>
+									</div>
+								</div>
+								<div className="gap-5 flex justify-between items-center">
+									{isChange ? (
+										<>
+											<button
+												onClick={(e) => handleUpdate(e)}
+												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+											>
+												Сохранить
+											</button>
+											<button
+												onClick={() => {
+													setUserInfo(initialData);
+													setIsChange(false);
+												}}
+												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+											>
+												Отмена
+											</button>
+										</>
+									) : (
+										<>
+											<button
+												onClick={() =>
+													setIsChange(true)
+												}
+												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+											>
+												Редактировать
+											</button>
+											<button
+												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+												onClick={() =>
+													setShowDeleteConfirm(true)
+												}
+											>
+												Удалить
+											</button>
+										</>
+									)}
+								</div>
+							</div>
+							<div
+								className={`flex flex-col gap-5 h-fit max-h-[50%] overflow-y-auto ${selectedTheme.options.elementBackground} border-1 rounded-[10px] p-10 `}
+							>
+								<p className="text-2xl">Имя</p>
+								{isChange ? (
+									<textarea
+										value={userInfo.username}
+										onChange={(e) =>
+											setUserInfo({
+												...userInfo,
+												username: e.target.value,
+											})
+										}
+										className={`h-fit ${selectedTheme.options.background} rounded-[10px] p-5`}
+									/>
+								) : (
+									<p
+										className={`w-full overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+									>
+										{userInfo.username}
+									</p>
+								)}
 							</div>
 						</div>
-						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
-							<p>Имя</p>
-							{isChange ? (
-								<textarea
-									value={userInfo.username}
-									onChange={(e) =>
-										setUserInfo({
-											...userInfo,
-											username: e.target.value,
-										})
-									}
-									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
-								/>
-							) : (
-								<p
-									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
-								>
-									{userInfo.username}
-								</p>
-							)}
-						</div>
-						<div className="flex flex-col gap-3 h-[60%] overflow-y-auto grow">
-							<p>Описание</p>
+						<div
+							className={`flex flex-col gap-5 h-[90%] overflow-y-auto ${
+								selectedTheme.options.elementBackground
+							} border-1 rounded-[10px] p-10 ${
+								userDevice === "mobile"
+									? "w-full"
+									: "min-w-fit w-[45%]"
+							}`}
+						>
+							<p className="text-2xl">Описание</p>
 							{isChange ? (
 								<textarea
 									onChange={(e) =>
@@ -155,52 +225,14 @@ const ProfilePage = () => {
 										})
 									}
 									value={userInfo.description}
-									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+									className={`h-full ${selectedTheme.options.background} rounded-[10px] p-5`}
 								/>
 							) : (
 								<p
-									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5 h-full`}
 								>
 									{userInfo.description}
 								</p>
-							)}
-						</div>
-						<div className="flex justify-between items-center">
-							{isChange ? (
-								<>
-									<button
-										onClick={(e) => handleUpdate(e)}
-										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
-									>
-										Сохранить
-									</button>
-									<button
-										onClick={() => {
-											setUserInfo(initialData);
-											setIsChange(false);
-										}}
-										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
-									>
-										Отмена
-									</button>
-								</>
-							) : (
-								<>
-									<button
-										onClick={() => setIsChange(true)}
-										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
-									>
-										Редактировать
-									</button>
-									<button
-										className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
-										onClick={() =>
-											setShowDeleteConfirm(true)
-										}
-									>
-										Удалить
-									</button>
-								</>
 							)}
 						</div>
 					</div>

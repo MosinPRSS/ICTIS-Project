@@ -1,11 +1,12 @@
 "use client";
-import { IBot, IFindBot } from "@/interfaces/interfaces";
+import { IFindBot } from "@/interfaces/interfaces";
 import { RootState } from "@/store/store";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 import { useRouter } from "next/navigation";
 import useBotService from "@/api/bot_service";
+import { IBot } from "@/interfaces/entries";
 
 export default function BotCards({ selectedTags, findBots }: IFindBot) {
 	const [bots, setBots] = useState<IBot[]>([]);
@@ -67,33 +68,18 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 		};
 	}, [scroll.current, next]);
 
-	function search() {
-		if (!bots) return;
+	async function search() {
+		setBots([]);
 
-		setFind(
-			bots.filter((bot) => {
-				// Фильтрация по поиску
-				if (
-					findBots &&
-					!bot.name.toLowerCase().includes(findBots.toLowerCase())
-				) {
-					return false;
-				}
-
-				// Фильтрация по тегам
-				if (
-					selectedTags.length > 0 &&
-					!selectedTags.every((tag) => bot.tags.includes(tag))
-				) {
-					return false;
-				}
-
-				return true;
-			})
-		);
+		if (!findBots || findBots === "") {
+			setNext("b/list");
+			await getBots();
+		}
 	}
 
 	useEffect(() => {
+		console.log(findBots, selectedTags);
+
 		search();
 	}, [findBots, selectedTags]);
 	return (

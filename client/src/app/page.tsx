@@ -66,7 +66,10 @@ export default function Home() {
 				setSelectedTags={setSelectedTags}
 			/>
 			<div className="flex gap-10 items-center flex-wrap mt-20">
-				<BotCards selectedTags={selectedTags} findBots={selectedBots} />
+				<BotCards
+					selectedTags={selectedTags}
+					findBots={input.current?.value}
+				/>
 			</div>
 		</div>
 	);

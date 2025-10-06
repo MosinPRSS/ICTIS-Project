@@ -2,7 +2,7 @@
 import { addIcon } from "@/assets/images/images";
 import BotSettings from "@/components/myBotsPage/BotSettings";
 import { useWindow } from "@/hooks/window";
-import { IBot } from "@/interfaces/interfaces";
+import { IBot } from "@/interfaces/entries";
 import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { motion } from "motion/react";
 import NewBotSettings from "@/components/myBotsPage/NewBotSettings";
 import Message from "@/components/Message";
 import useBotService from "@/api/bot_service";
+import Loading from "@/components/Loading";
 
 const newBot: IBot = {
 	id: 0,
@@ -25,6 +26,7 @@ const MyBotsPage = () => {
 		(state: RootState) => state
 	);
 	const { listUserBots, createBot, deleteBot } = useBotService();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
@@ -32,6 +34,7 @@ const MyBotsPage = () => {
 	const [selectedBot, setSelectedBot] = useState<IBot | null>(null);
 
 	async function getData() {
+		setIsLoading(true);
 		try {
 			const data = await listUserBots();
 			if (!data) {
@@ -42,6 +45,8 @@ const MyBotsPage = () => {
 		} catch (error) {
 			setMyBots(null);
 			console.log(error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -97,55 +102,59 @@ const MyBotsPage = () => {
 					<Image src={addIcon} width={20} height={20} alt="o" />
 				</button> */}
 
-				<div className={`p-10 flex flex-wrap gap-7`}>
-					<div
-						className={`flex justify-center items-center w-[15rem] h-[20rem] gap-10 border-[1px] rounded-[10px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
-					>
-						<motion.button
-							className={`w-30 h-30 p-5 transition duration-200 rounded-full border-[1px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
-							onHoverStart={(e) => {
-								e.target.style.scale = "1.1";
-								e.target.style.transform = "rotate(90deg)";
-							}}
-							onHoverEnd={(e) => {
-								e.target.style.scale = "1";
-								e.target.style.transform = "rotate(180deg)";
-							}}
-							onClick={() => {
-								setSelectedBot(newBot);
-							}}
+				{isLoading ? (
+					<Loading />
+				) : (
+					<div className={`p-10 flex flex-wrap gap-7`}>
+						<div
+							className={`flex justify-center items-center w-[15rem] h-[20rem] gap-10 border-[1px] rounded-[10px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
 						>
-							<Image
-								className="w-full h-full"
-								src={addIcon}
-								alt="add-icon"
-							></Image>
-						</motion.button>
-					</div>
-					{myBots &&
-						myBots.length > 0 &&
-						myBots.map((bot) => (
-							<button
-								key={bot.id}
-								className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
-								onClick={() => setSelectedBot(bot)}
+							<motion.button
+								className={`w-30 h-30 p-5 transition duration-200 rounded-full border-[1px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
+								onHoverStart={(e) => {
+									e.target.style.scale = "1.1";
+									e.target.style.transform = "rotate(90deg)";
+								}}
+								onHoverEnd={(e) => {
+									e.target.style.scale = "1";
+									e.target.style.transform = "rotate(180deg)";
+								}}
+								onClick={() => {
+									setSelectedBot(newBot);
+								}}
 							>
-								<div className="h-[50%] bg-black">
-									<Image
-										src={bot.avatar}
-										alt="bot-avatar"
-										width={30}
-										height={30}
-									/>
-								</div>
-								<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
-									<p>{bot.name}</p>
-									<p>by {bot.author}</p>
-									<p>{bot.description}</p>
-								</div>
-							</button>
-						))}
-				</div>
+								<Image
+									className="w-full h-full"
+									src={addIcon}
+									alt="add-icon"
+								></Image>
+							</motion.button>
+						</div>
+						{myBots &&
+							myBots.length > 0 &&
+							myBots.map((bot) => (
+								<button
+									key={bot.id}
+									className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
+									onClick={() => setSelectedBot(bot)}
+								>
+									<div className="h-[50%] bg-black">
+										<Image
+											src={bot.avatar}
+											alt="bot-avatar"
+											width={30}
+											height={30}
+										/>
+									</div>
+									<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
+										<p>{bot.name}</p>
+										<p>by {bot.author}</p>
+										<p>{bot.description}</p>
+									</div>
+								</button>
+							))}
+					</div>
+				)}
 			</div>
 			{selectedBot !== null ? (
 				selectedBot.id !== 0 ? (

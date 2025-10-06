@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading";
 import usePersonaService from "@/api/persona_service";
-import { IPersona } from "@/interfaces/interfaces";
+import { IPersona } from "@/interfaces/entries";
 import { useRouter } from "next/navigation";
 import useSessionService from "@/api/session_service";
 import { openMessage } from "@/store/slices/messageSlice";
