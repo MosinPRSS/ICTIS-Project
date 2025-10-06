@@ -5,8 +5,8 @@ export function useAuth() {
 	const login = async (email: string, password: string) => {
 		try {
 			const res = await apiClient.post("a/api-token", {
-				email,
-				password,
+				"email": email,
+				"password": password				
 			});
 
 			if (res.status === 200) {
@@ -24,14 +24,7 @@ export function useAuth() {
 				return -1;
 			}
 		} catch (error: any) {
-			const status = error.response?.status || 500;
-
-			if (status >= 404) {
-			} else {
-				throw new Error("U_ERROR_LOGIN");
-			}
-
-			return 404;
+			throw new Error("U_ERROR_LOGIN");
 		}
 	};
 
@@ -42,20 +35,19 @@ export function useAuth() {
 	) => {
 		try {
 			const res = await apiClient.post("u/create", {
-				username,
-				email,
-				password,
+				"username": username,
+				"email": email,
+				"password": password,
 			});
-			console.log(res.data);
 
-			if (res.status === 201 || res.status === 200) {
+			if (res.status === 200) {
 				// localStorage.setItem(ACCESS_TOKEN, res.data.access);
 				// localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 				// localStorage.setItem("userID", res.data.id);                    жду бэк
 				// localStorage.setItem("username", res.data.username);
 				// localStorage.setItem("avatarUrl", res.data.avatar);
 
-				return "Успешно";
+				return res.status;
 			} else {
 				// Обрабатываем HTTP ошибки
 				switch (res.status) {
@@ -71,7 +63,7 @@ export function useAuth() {
 				}
 			}
 		} catch (error: any) {
-			return "Произошла ошибка при подключении к серверу";
+			throw new Error("U_ERROR_REGISTER");
 		}
 	};
 
