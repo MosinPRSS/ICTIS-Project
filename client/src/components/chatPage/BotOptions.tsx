@@ -11,7 +11,7 @@ const BotOptions = ({
 	setShowChatList,
 	setChatsLoading,
 	setBotChats,
-	selectedChat,
+	chatInfo,
 }) => {
 	const { readSessions } = useSessionService();
 	const { selectedTheme } = useSelector((state: RootState) => state);
@@ -30,7 +30,7 @@ const BotOptions = ({
 
 			setBotChats(
 				response.filter(
-					(chat) => chat.chatbot.id === selectedChat.chatbot.id
+					(chat) => chat.chatbot.id === chatInfo.chatbot.id
 				)
 			);
 		} catch (error) {

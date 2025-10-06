@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const ChatList = ({
 	setShowChatList,
-	selectedChat,
+	chatInfo,
 	setShowDeleteConfirm,
 	chatsLoading,
 	botChats,
@@ -20,7 +20,7 @@ const ChatList = ({
 			>
 				<div className="flex items-center justify-between mb-5">
 					<h3 className="text-lg font-semibold text-white">
-						Чаты с {selectedChat.chatbot.name}
+						Чаты с {chatInfo.chatbot.name}
 					</h3>
 					<button
 						onClick={() => setShowChatList(false)}
@@ -38,7 +38,7 @@ const ChatList = ({
 				<div className="flex justify-between items-center flex-col space-y-4 h-full">
 					{/* <button
 											onClick={() =>
-												createNewChat(selectedChat.id)
+												createNewChat(chatInfo.id)
 											}
 											className="w-full flex items-center gap-3 p-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition-colors text-white font-medium"
 										>

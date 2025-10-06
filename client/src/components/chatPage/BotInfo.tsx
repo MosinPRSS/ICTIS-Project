@@ -1,14 +1,10 @@
 import { cancelIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
-const BotInfo = ({ setShowBotInfo, selectedChat }) => {
-	useEffect(() => {
-		console.log(selectedChat);
-	}, []);
-
+const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 	const { selectedTheme } = useSelector((state: RootState) => state);
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -36,16 +32,16 @@ const BotInfo = ({ setShowBotInfo, selectedChat }) => {
 							<Image
 								width={100}
 								height={100}
-								src={selectedChat.chatbot.avatar}
-								alt={selectedChat.chatbot.name}
+								src={chatInfo.chatbot.avatar}
+								alt={chatInfo.chatbot.name}
 								className="w-full h-full object-cover"
 							/>
 						</div>
 						<h3 className="text-2xl font-bold mb-1">
-							{selectedChat.chatbot.name}
+							{chatInfo.chatbot.name}
 						</h3>
 						<button className="hover:underline cursor-pointer flex items-center justify-center gap-1 mx-auto">
-							<span>от {selectedChat.chatbot.author}</span>
+							<span>от {chatInfo.chatbot.author}</span>
 						</button>
 					</div>
 
@@ -54,7 +50,7 @@ const BotInfo = ({ setShowBotInfo, selectedChat }) => {
 							Описание
 						</h4>
 						<p className="text-gray-300 leading-relaxed">
-							{selectedChat.chatbot.description}
+							{chatInfo.chatbot.description}
 						</p>
 					</div>
 
@@ -63,7 +59,7 @@ const BotInfo = ({ setShowBotInfo, selectedChat }) => {
 							Теги
 						</h4>
 						<div className="flex flex-wrap gap-2">
-							{selectedChat.chatbot.tags.map((tag, index) => (
+							{chatInfo.chatbot.tags.map((tag, index) => (
 								<span
 									key={index}
 									className={`px-3 py-1 rounded-full ${selectedTheme.options.middleground} text-sm border`}

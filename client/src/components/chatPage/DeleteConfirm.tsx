@@ -5,7 +5,7 @@ import router from "next/router";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-const DeleteConfirm = ({ setShowDeleteConfirm, selectedChat, params }) => {
+const DeleteConfirm = ({ setShowDeleteConfirm, chatInfo, params }) => {
 	const { deleteSession } = useSessionService();
 	const dispatch = useDispatch();
 	async function deleteChat(e: MouseEvent) {
@@ -18,7 +18,7 @@ const DeleteConfirm = ({ setShowDeleteConfirm, selectedChat, params }) => {
 				throw new Error("Failed to delete chat");
 			}
 
-			sessionStorage.removeItem("selectedChat");
+			sessionStorage.removeItem("chatInfo");
 			dispatch(setSelectedChat(null), openMessage("Чат успешно удален"));
 			router.push("/chats");
 		} catch (error) {
@@ -45,9 +45,9 @@ const DeleteConfirm = ({ setShowDeleteConfirm, selectedChat, params }) => {
 
 				<p className="text-gray-300 mb-6">
 					Вы уверены, что хотите удалить все чаты с{" "}
-					{selectedChat.chatbot.name}
+					{chatInfo.chatbot.name}
 					<span className="font-semibold text-white">
-						{selectedChat.name}
+						{chatInfo.name}
 					</span>
 					?
 				</p>

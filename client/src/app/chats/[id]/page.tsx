@@ -35,7 +35,7 @@ const Chat = () => {
 	const [botChats, setBotChats] = useState(null);
 	const [chatsLoading, setChatsLoading] = useState(false);
 
-	const { readMessages, readBotSession } = useSessionService();
+	const { readSession } = useSessionService();
 	const { sendMessage } = useMessageService();
 	const dispatch = useDispatch();
 	const [isMessageSending, setIsMessageSending] = useState(false);
@@ -43,7 +43,7 @@ const Chat = () => {
 	const router = useRouter();
 	const params = useParams();
 
-	const [chatInfo, setSelectedChat] = useState(null);
+	const [chatInfo, setChatInfo] = useState(null);
 
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
@@ -56,16 +56,16 @@ const Chat = () => {
 			try {
 				setIsLoading(true);
 
-				const chatResponse = await readBotSession(params.id);
-				const messagesResponse = await readMessages(params.id);
+				const response = await readSession(params.id);
 
-				console.log(chatResponse, messagesResponse);
+				console.log(response);
 
-				if (!chatResponse || !messagesResponse) {
+				if (!response) {
 					throw new Error("Failed to get data");
 				}
 
-				setMessages(response);
+				setChatInfo(response.session);
+				setMessages(response.messages);
 			} catch (error) {
 				dispatch(openMessage("Произошла ошибка при загрузке чата"));
 			} finally {
