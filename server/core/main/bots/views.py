@@ -71,15 +71,11 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
         sort_by = self.request.query_params.get("sort_by", "0")
         method = self.request.query_params.get("method", "0")
 
-        try:
-            sort_by = int(sort_by)
-        except ValueError:
-            sort_by = 0
+        try: sort_by = int(sort_by)
+        except ValueError: sort_by = 0
 
-        try:
-            method = int(method)
-        except ValueError:
-            method = 0
+        try: method = int(method)
+        except ValueError: method = 0
 
         order_prefix = "-" if method == 1 else ""
 

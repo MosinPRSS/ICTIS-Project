@@ -3,12 +3,12 @@ import { IFindBot } from "@/interfaces/interfaces";
 import { useEffect, useState } from "react";
 
 const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
-	const tagsFunc = useTagsService({ amount: 10 });
+	const tagsFunc = useTagsService();
 	const [tagsList, setTags] = useState<string[]>(["tag"]);
 
 	useEffect(() => {
 		(async function getTags() {
-			const response = await tagsFunc.getPopularTags();
+			const response = await tagsFunc.getPopularTags(10);
 
 			if (!response) return;
 

@@ -75,7 +75,9 @@ export default function useBotService() {
 	const readBot = async (pk: string) => {
 		try {
 			const res = await apiClient.get(`b/read/${pk}`, {
-				skipAuth: true,
+				headers: {
+					Authorization: "" // спасение
+				}
 			});
 			return res.data;
 		} catch (error: any) {
@@ -127,51 +129,62 @@ export default function useBotService() {
 		}
 	};
 
-	const listBot = async (next: string) => {
+	const listBot = async (
+		next: string,
+		method: number = 1,
+		sort_by: number = 1,
+	) => {
 		// Пока не будет сейчас серьезно
 		// реализовано на этой неделе
 		// Однако листинг поддерживает кучу параметров...
 
+		// sort_by: 0=алфавит, 1=рейтинг, 2=сессии, 3=время
+        // method: 0=возрастание, 1=убывание
+
 		/*
         {
-            "count": 1,
-            "next": null,
-            "previous": null,
-            "results": [
-                {
-                    "id": "1d0a1708-3d83-4dff-8860-0a9c0cf62ef1",
-                    "name": "test3",
-                    "chatname": "idk",
-                    "avatar": "http://localhost:8000/media/Default_Avatar.svg",
-                    "public_description": "gnome",
-                    "description": "idk",
-                    "scenario": "",
-                    "first_message": "hello, {{user}}, i am {{char}}",
-                    "created_at": "2025-09-24T13:35:46.463742+03:00",
-                    "updated_at": "2025-09-24T13:35:46.463752+03:00",
-                    "rate": 0,
-                    "hide_info": false,
-                    "is_public": true,
-                    "tags": [],
-                    "session_count": 1,
-                    "user": {
-                        "id": "2a0bca70-2305-4d70-a906-3f178d112184",
-                        "username": "mosinprss",
-                        "date_joined": "2025-09-08T17:57:00.710551+03:00",
-                        "avatar": "http://localhost:8000/media/Default_Avatar.svg",
-                        "description": ""
-                    }
-                }
-            ]
-        }
-        
-        
+			"count": 2,
+			"next": "http://localhost:8000/api/b/list?method=0&page=2&page_size=1&sort_by=1",
+			"previous": null,
+			"results": [
+				{
+					"id": "1d0a1708-3d83-4dff-8860-0a9c0cf62ef1",
+					"name": "test3",
+					"chatname": "idk",
+					"avatar": "http://localhost:8000/media/Default_Avatar.svg",
+					"public_description": "gnome",
+					"description": "idk",
+					"scenario": "",
+					"first_message": "hello, {{user}}, i am {{char}}",
+					"created_at": "2025-09-24T13:35:46.463742+03:00",
+					"updated_at": "2025-09-24T13:35:46.463752+03:00",
+					"rate": 0,
+					"hide_info": false,
+					"is_public": true,
+					"tags": [],
+					"session_count": 1,
+					"user": {
+						"id": "2a0bca70-2305-4d70-a906-3f178d112184",
+						"username": "mosinprss",
+						"date_joined": "2025-09-08T17:57:00.710551+03:00",
+						"avatar": "http://localhost:8000/media/img/user/_.jpeg",
+						"description": ""
+					}
+				}
+			]
+		}
         
         */
 
 		try {
 			const res = await apiClient.get(next, {
-				skipAuth: true,
+				params: {
+					sort_by: sort_by,
+					method: method
+				},
+				headers: {
+					Authorization: "" // спасение
+				}
 			});
 
 			return res.data;
@@ -190,6 +203,7 @@ export default function useBotService() {
 			throw new Error("B_ERROR_LIST_USER");
 		}
 	};
+
 	return {
 		createBot,
 		readBot,

@@ -114,7 +114,7 @@ export default function useSessionService() {
 		}
 	};
 
-	const readBotSession = async (id: string) => {
+	const readBotSessions = async (id: string) => {
 		// Для списка сессий с ботом у пользователя - вывод такой же,
 		// как у readSessions
 		try {
@@ -125,7 +125,7 @@ export default function useSessionService() {
 		}
 	};
 
-	const getSession = async (session: string) => {
+	const readSession = async (session: string) => {
 		// здесь вернется два поля - session и messages
 		// в сессии вся инфа, что и для readBotSession
 		// а в сообщениях инфа с readMessages
@@ -236,11 +236,11 @@ export default function useSessionService() {
 	return {
 		createSession,
 		deleteSession,
-		getSession,
+		readSession,
 
 		readSessions,
 		readMessages,
-		readBotSession,
+		readBotSessions,
 
 		updateGenerationSettings,
 	};

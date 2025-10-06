@@ -1,10 +1,12 @@
 import apiClient from "./api_client";
 
-export default function useTagsService({ amount }: { amount: number }) {
-	const getPopularTags = async () => {
+export default function useTagsService() {
+	const getPopularTags = async (amount: number) => {
 		try {
 			const res = await apiClient.get(`b/tags/${amount}`, {
-				skipAuth: true,
+				headers: {
+					Authorization: "" // спасение
+				}
 			});
 			if (res.status === 200) {
 				return res.data;
@@ -12,7 +14,7 @@ export default function useTagsService({ amount }: { amount: number }) {
 				return [];
 			}
 		} catch (error) {
-			return [];
+			throw new Error("T_ERROR_LIST");
 		}
 	};
 

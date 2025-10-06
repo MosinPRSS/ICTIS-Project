@@ -10,10 +10,6 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
 	async (config) => {
-		if (config.skipAuth) {
-			return config;
-		}
-
 		if (!config.headers.Authorization) {
 			const token = await getValidAccessToken();
 			if (token) {
