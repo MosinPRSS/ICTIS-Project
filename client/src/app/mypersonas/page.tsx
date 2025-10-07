@@ -12,6 +12,7 @@ import NewPersonaSettings from "@/components/myPersonasPage/NewPersonaSettings";
 import Message from "@/components/Message";
 import usePersonaService from "@/api/persona_service";
 import Loading from "@/components/Loading";
+import Card from "@/components/Card";
 
 const MyPersonasPage = () => {
 	const { selectedTheme, message, userPersonas } = useSelector(
@@ -98,6 +99,7 @@ const MyPersonasPage = () => {
 						{MyPersonas &&
 							MyPersonas.length > 0 &&
 							MyPersonas.map((persona) => (
+<<<<<<< HEAD
 								<motion.button
 									key={persona.id}
 									className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] text-left flex flex-col overflow-hidden"
@@ -132,6 +134,14 @@ const MyPersonasPage = () => {
 										</div>
 									</div>
 								</motion.button>
+=======
+								<Card
+									entity={persona}
+									fun={setSelectedPersona}
+									arg={persona}
+									key={persona.id}
+								/>
+>>>>>>> 6225e14f4361412a6f758df9430bf2648f4912d1
 							))}
 					</div>
 				)}
