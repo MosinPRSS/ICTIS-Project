@@ -54,62 +54,89 @@ const MyPersonasPage = () => {
 	}, [windowWidth]);
 
 	return (
-		<div
-			className={`flex w-full h-full p-10 overflow-y-scroll gap-5 ${
-				selectedTheme.options.text
-			} ${userDevice === "mobile" && "flex-col"}`}
-		>
-			<div className="flex flex-col gap-5">
-				<h1 className="text-3xl">Мои персоны</h1>
+		<div className="bg-gradient-to-r from-[#7F6AAD] to-[#5F4B8B] text-white/80 p-6 min-h-screen font-sans">
+			<div className="max-w-7xl mx-auto">
+				<div className="flex justify-between items-center mb-8">
+					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+						Мои персоны
+					</h1>
+				</div>
 
 				{isLoading ? (
-					<Loading />
+					<div className="flex justify-center items-center h-64">
+						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/90 border-r-2 border-white/30"></div>
+					</div>
 				) : (
-					<div className={`p-10 flex flex-wrap gap-7`}>
-						<div
-							className={`flex justify-center items-center w-[15rem] h-[20rem] gap-10 border-[1px] rounded-[10px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
+					<div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6">
+						<motion.button
+							className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] flex flex-col items-center justify-center gap-4"
+							whileHover={{ scale: 1.02 }}
+							whileTap={{ scale: 0.98 }}
+							onClick={() => {
+								setSelectedPersona({
+									id: 0,
+								});
+							}}
 						>
-							<motion.button
-								className={`w-30 h-30 p-5 transition duration-200 rounded-full border-[1px] ${selectedTheme.options.border} ${selectedTheme.options.elementBackground}`}
-								onHoverStart={(e) => {
-									e.target.style.scale = "1.1";
-									e.target.style.transform = "rotate(90deg)";
-								}}
-								onHoverEnd={(e) => {
-									e.target.style.scale = "1";
-									e.target.style.transform = "rotate(180deg)";
-								}}
-								onClick={() => {
-									setSelectedPersona({
-										id: 0,
-									});
-								}}
-							>
-								<Image
-									className="w-full h-full"
-									src={addIcon}
-									alt="add-icon"
-								></Image>
-							</motion.button>
-						</div>
+							<div className="relative group">
+								<div className="bg-gradient-to-br from-[#7F6AAD]/60 to-[#5F4B8B]/60 rounded-2xl p-3 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+									<Image
+										src={addIcon}
+										alt="add-icon"
+										width={80}
+										height={80}
+										className="transition-all duration-500 group-hover:rotate-90"
+									/>
+								</div>
+								<div className="absolute inset-0 bg-white/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+							</div>
+							<span className="text-xl font-semibold text-white bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+								Добавить персону
+							</span>
+						</motion.button>
+
 						{MyPersonas &&
 							MyPersonas.length > 0 &&
 							MyPersonas.map((persona) => (
-								<button
+								<motion.button
 									key={persona.id}
-									className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
+									className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] text-left flex flex-col overflow-hidden"
+									whileHover={{ scale: 1.02 }}
+									whileTap={{ scale: 0.98 }}
 									onClick={() => setSelectedPersona(persona)}
 								>
-									<div className="w-full rounded-t-xl h-[50%] bg-black"></div>
-									<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
-										<p>{persona.name}</p>
-										<p>{persona.description}</p>
+									<div className="w-full h-[120px] rounded-2xl bg-gradient-to-br from-violet-600/30 to-violet-800/30 backdrop-blur-sm mb-4 flex items-center justify-center border-2 border-white/20">
+										{persona.avatar ? (
+											<Image
+												src={persona.avatar}
+												alt={persona.name}
+												width={80}
+												height={80}
+												className="rounded-xl border-2 border-white/20"
+											/>
+										) : (
+											<div className="text-white/60 text-lg font-semibold">
+												{persona.name?.charAt(0).toUpperCase()}
+											</div>
+										)}
 									</div>
-								</button>
+									
+									<div className="flex flex-col gap-3 flex-1">
+										<h3 className="text-xl font-bold text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent line-clamp-2">
+											{persona.name}
+										</h3>
+										<div className="bg-gradient-to-br from-violet-600/30 to-violet-800/30 backdrop-blur-sm rounded-2xl p-3 flex-1 border-2 border-white/20">
+											<p className="text-white/80 text-sm line-clamp-4 whitespace-pre-wrap">
+												{persona.description || "Описание отсутствует"}
+											</p>
+										</div>
+									</div>
+								</motion.button>
 							))}
 					</div>
 				)}
 			</div>
+
 			{selectedPersona !== null ? (
 				selectedPersona.id !== 0 ? (
 					<PersonaSettings
@@ -124,10 +151,48 @@ const MyPersonasPage = () => {
 						updatePersonasList={getData}
 					/>
 				)
-			) : (
-				<></>
-			)}
+			) : null}
+
 			{message.isOpen && <Message />}
+
+			<style jsx>{`
+				.custom-border-card {
+					position: relative;
+					background-clip: padding-box;
+				}
+
+				.custom-border-card::before {
+					content: '';
+					position: absolute;
+					top: -2px;
+					left: -2px;
+					right: -2px;
+					bottom: -2px;
+					background: linear-gradient(to left, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0));
+					border-radius: 24px;
+					z-index: -1;
+					opacity: 0.8;
+					transition: opacity 0.5s ease;
+				}
+
+				.custom-border-card:hover::before {
+					opacity: 1;
+				}
+
+				.line-clamp-2 {
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+				}
+
+				.line-clamp-4 {
+					display: -webkit-box;
+					-webkit-line-clamp: 4;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+				}
+			`}</style>
 		</div>
 	);
 };

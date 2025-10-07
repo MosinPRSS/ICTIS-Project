@@ -97,95 +97,86 @@ const ProfilePage = () => {
 	}
 
 	return (
-		<div
-			className={`text-white p-10 h-[100vh] w-full flex flex-col justify-between`}
-		>
-			<h1 className="text-4xl">Профиль</h1>
-			{userInfo ? (
-				<div
-					className={`${
-						userDevice === "mobile" ? "flex-col" : "h-[90%]"
-					} flex justify-between items-center w-full gap-10 grow pt-15 pl-10 pb-0`}
-				>
-					<div
-						className={`relative w-full h-full flex flex-wrap justify-center gap-10`}
-					>
-						<div
-							className={`flex flex-col ${
-								userDevice === "mobile"
-									? "w-full"
-									: "min-w-fit w-[45%]"
-							} gap-10`}
-						>
-							<div
-								className={`${selectedTheme.options.elementBackground} border-1 rounded-[10px] p-10 h-fit flex flex-col gap-10`}
-							>
-								<div className="flex gap-5">
-									<Image
-										src={userInfo.avatar}
-										alt="avatar"
-										width={100}
-										height={100}
-										className={`${selectedTheme.options.border} text-2xl border-[1px] rounded-[15px] min-w-40 min-h-40`}
-									/>
-									<div className="pt-5 h-fit w-[67%]">
-										<p className="break-words word-break-break-all overflow-hidden">
+		<div className="bg-gradient-to-r from-[#7F6AAD] to-[#5F4B8B] text-white/80 p-6 min-h-screen font-sans">
+			<div className="max-w-6xl mx-auto">
+				<div className="flex justify-between items-center mb-8">
+					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+						Профиль
+					</h1>
+				</div>
+
+				{userInfo ? (
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<div className="lg:col-span-2 space-y-6">
+							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
+								<div className="flex flex-col sm:flex-row items-start gap-6">
+									<div className="relative group">
+										<Image
+											src={userInfo.avatar}
+											alt="avatar"
+											width={120}
+											height={120}
+											className="rounded-2xl border-3 border-white/30 bg-white/10 transition-all duration-500"
+										/>
+										<div className="absolute inset-0 bg-white/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+									</div>
+									<div className="flex-1 space-y-3">
+										<h2 className="text-2xl font-bold text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
 											{userInfo.username}
+										</h2>
+										<p className="text-white/80 bg-gradient-to-r from-white/90 to-white/70 bg-clip-text text-transparent">
+											{userInfo.email}
 										</p>
-										<p>{userInfo.email}</p>
-										<p className="break-words">
-											Создан:
-											{new Date(
-												userInfo.date_joined
-											).toLocaleDateString()}
+										<p className="text-white/60 text-sm">
+											Создан: {new Date(userInfo.date_joined).toLocaleDateString()}
 										</p>
 									</div>
 								</div>
-								<div className="gap-5 flex justify-between items-center">
+								
+								<div className="flex flex-wrap gap-3 mt-6 pt-6 border-t-2 border-white/20">
 									{isChange ? (
 										<>
 											<button
 												onClick={(e) => handleUpdate(e)}
-												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+												className="relative overflow-hidden bg-gradient-to-r from-emerald-400/60 to-emerald-600/60 hover:from-emerald-500 hover:to-emerald-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												Сохранить
+												<span className="relative z-10">Сохранить</span>
+												<div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 											<button
 												onClick={() => {
 													setUserInfo(initialData);
 													setIsChange(false);
 												}}
-												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+												className="relative overflow-hidden bg-gradient-to-r from-gray-400/60 to-gray-600/60 hover:from-gray-500 hover:to-gray-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												Отмена
+												<span className="relative z-10">Отмена</span>
+												<div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 										</>
 									) : (
 										<>
 											<button
-												onClick={() =>
-													setIsChange(true)
-												}
-												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
+												onClick={() => setIsChange(true)}
+												className="relative overflow-hidden bg-gradient-to-r from-sky-400/60 to-sky-600/60 hover:from-sky-500 hover:to-sky-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												Редактировать
+												<span className="relative z-10">Редактировать</span>
+												<div className="absolute inset-0 bg-gradient-to-r from-sky-500 to-sky-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 											<button
-												className="border-[1px] rounded-[10px] p-3 hover:bg-white hover:text-black"
-												onClick={() =>
-													setShowDeleteConfirm(true)
-												}
+												className="relative overflow-hidden bg-gradient-to-r from-gray-400/60 to-gray-600/60 hover:from-gray-500 hover:to-gray-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
+												onClick={() => setShowDeleteConfirm(true)}
 											>
-												Удалить
+												<span className="relative z-10">Удалить</span>
+												<div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 										</>
 									)}
 								</div>
 							</div>
-							<div
-								className={`flex flex-col gap-5 h-fit max-h-[50%] overflow-y-auto ${selectedTheme.options.elementBackground} border-1 rounded-[10px] p-10 `}
-							>
-								<p className="text-2xl">Имя</p>
+
+							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
+								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Имя</h3>
 								{isChange ? (
 									<textarea
 										value={userInfo.username}
@@ -195,51 +186,45 @@ const ProfilePage = () => {
 												username: e.target.value,
 											})
 										}
-										className={`h-fit ${selectedTheme.options.background} rounded-[10px] p-5`}
+										className="w-full bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[80px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
 									/>
 								) : (
-									<p
-										className={`w-full overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
-									>
-										{userInfo.username}
-									</p>
+									<div className="bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm rounded-2xl p-4 min-h-[80px] border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+										<p className="text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{userInfo.username}</p>
+									</div>
 								)}
 							</div>
 						</div>
-						<div
-							className={`flex flex-col gap-5 h-[90%] overflow-y-auto ${
-								selectedTheme.options.elementBackground
-							} border-1 rounded-[10px] p-10 ${
-								userDevice === "mobile"
-									? "w-full"
-									: "min-w-fit w-[45%]"
-							}`}
-						>
-							<p className="text-2xl">Описание</p>
-							{isChange ? (
-								<textarea
-									onChange={(e) =>
-										setUserInfo({
-											...userInfo,
-											description: e.target.value,
-										})
-									}
-									value={userInfo.description}
-									className={`h-full ${selectedTheme.options.background} rounded-[10px] p-5`}
-								/>
-							) : (
-								<p
-									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5 h-full`}
-								>
-									{userInfo.description}
-								</p>
-							)}
+
+						<div className="lg:col-span-1">
+							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 h-full shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
+								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Описание</h3>
+								{isChange ? (
+									<textarea
+										onChange={(e) =>
+											setUserInfo({
+												...userInfo,
+												description: e.target.value,
+											})
+										}
+										value={userInfo.description}
+										className="w-full bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[200px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+									/>
+								) : (
+									<div className="bg-gradient-to-l from-violet-900 to-violet-800/30 backdrop-blur-sm rounded-2xl p-4 min-h-[200px] max-h-[400px] overflow-y-auto custom-scrollbar border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+										<p className="text-white whitespace-pre-wrap bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{userInfo.description}</p>
+									</div>
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
-			) : (
-				<></>
-			)}
+				) : (
+					<div className="flex justify-center items-center h-64">
+						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/90 border-r-2 border-white/30"></div>
+					</div>
+				)}
+			</div>
+
 			{showDeleteConfirm && (
 				<DeleteConfirm
 					setShowDeleteConfirm={setShowDeleteConfirm}
@@ -247,6 +232,49 @@ const ProfilePage = () => {
 					del={handleDelete}
 				/>
 			)}
+
+			<style jsx>{`
+				.custom-scrollbar::-webkit-scrollbar {
+					width: 8px;
+				}
+				.custom-scrollbar::-webkit-scrollbar-track {
+					background: #5F4B8B;
+					border-radius: 10px;
+					border: 1px solid rgba(255,255,255,0.2);
+				}
+				.custom-scrollbar::-webkit-scrollbar-thumb {
+					background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+					border-radius: 10px;
+					border: 1px solid rgba(255,255,255,0.3);
+				}
+				.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+					background: linear-gradient(to bottom, white, rgba(255,255,255,0.6));
+				}
+
+				/* Кастомные границы для карточек */
+				.custom-border-card {
+					position: relative;
+					background-clip: padding-box;
+				}
+
+				.custom-border-card::before {
+					content: '';
+					position: absolute;
+					top: -2px;
+					left: -2px;
+					right: -2px;
+					bottom: -2px;
+					background: linear-gradient(to left, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0));
+					border-radius: 24px;
+					z-index: -1;
+					opacity: 0.8;
+					transition: opacity 0.5s ease;
+				}
+
+				.custom-border-card:hover::before {
+					opacity: 1;
+				}
+			`}</style>
 		</div>
 	);
 };
