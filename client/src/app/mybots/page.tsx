@@ -12,6 +12,7 @@ import NewBotSettings from "@/components/myBotsPage/NewBotSettings";
 import Message from "@/components/Message";
 import useBotService from "@/api/bot_service";
 import Loading from "@/components/Loading";
+import Card from "@/components/Card";
 
 const newBot: IBot = {
 	id: 0,
@@ -133,25 +134,12 @@ const MyBotsPage = () => {
 						{myBots &&
 							myBots.length > 0 &&
 							myBots.map((bot) => (
-								<button
+								<Card
 									key={bot.id}
-									className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
-									onClick={() => setSelectedBot(bot)}
-								>
-									<div className="h-[50%] bg-black">
-										<Image
-											src={bot.avatar}
-											alt="bot-avatar"
-											width={30}
-											height={30}
-										/>
-									</div>
-									<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
-										<p>{bot.name}</p>
-										<p>by {bot.author}</p>
-										<p>{bot.description}</p>
-									</div>
-								</button>
+									entity={bot}
+									fun={setSelectedBot}
+									arg={bot}
+								/>
 							))}
 					</div>
 				)}

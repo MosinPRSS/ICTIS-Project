@@ -12,6 +12,7 @@ import NewPersonaSettings from "@/components/myPersonasPage/NewPersonaSettings";
 import Message from "@/components/Message";
 import usePersonaService from "@/api/persona_service";
 import Loading from "@/components/Loading";
+import Card from "@/components/Card";
 
 const MyPersonasPage = () => {
 	const { selectedTheme, message, userPersonas } = useSelector(
@@ -95,17 +96,12 @@ const MyPersonasPage = () => {
 						{MyPersonas &&
 							MyPersonas.length > 0 &&
 							MyPersonas.map((persona) => (
-								<button
+								<Card
+									entity={persona}
+									fun={setSelectedPersona}
+									arg={persona}
 									key={persona.id}
-									className={`text-left flex flex-col w-[15rem] h-[20rem] ${selectedTheme.options.middleground} p-2 border-[1px] border-white hover:scale-105 rounded-[5px]`}
-									onClick={() => setSelectedPersona(persona)}
-								>
-									<div className="w-full rounded-t-xl h-[50%] bg-black"></div>
-									<div className="flex flex-col gap-2 p-3 h-[50%] overflow-y-hidden">
-										<p>{persona.name}</p>
-										<p>{persona.description}</p>
-									</div>
-								</button>
+								/>
 							))}
 					</div>
 				)}

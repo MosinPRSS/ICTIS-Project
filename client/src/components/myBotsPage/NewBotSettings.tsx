@@ -112,7 +112,12 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 							onClick={() => setSelectedBot(null)}
 							className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white"
 						>
-							<closeIcon />
+							<Image
+								src={closeIcon}
+								alt="close-icon"
+								width={20}
+								height={20}
+							/>
 						</button>
 					</div>
 
@@ -140,14 +145,19 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 												)} */}
 											</div>
 											<button className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-												{/* <Upload className="w-8 h-8 text-white" /> */}
+												<Image
+													src={uploadIcon}
+													alt="upload-icon"
+													width={50}
+													height={50}
+												/>
 											</button>
 										</div>
 
 										{/* Upload Button */}
 										<button className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
 											{/* <Upload className="w-4 h-4" /> */}
-											Загрузить фото
+											Загрузить изображение
 										</button>
 									</div>
 								</div>
@@ -305,7 +315,7 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 									))}
 
 									{adding ? (
-										<div className="flex items-center gap-2">
+										<div className="flex items-center gap-3">
 											<input
 												type="text"
 												value={newTag}
@@ -328,9 +338,14 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 											</button>
 											<button
 												onClick={() => setAdding(false)}
-												className="px-3 py-1 bg-gray-400 rounded text-white"
+												className="px-3 py-[6px] bg-gray-400 rounded text-white"
 											>
-												{/* <closeIcon /> */}
+												<Image
+													src={closeIcon}
+													alt="close-icon"
+													width={20}
+													height={20}
+												/>
 											</button>
 										</div>
 									) : (
