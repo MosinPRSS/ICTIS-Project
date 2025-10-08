@@ -58,7 +58,7 @@ export default function useMessageService() {
     ) => {
         try {
             const res = await apiClient.patch(
-                "c/message/update",
+                `c/message/update/${pk}`,
                 {
                     "content": content
                 }
