@@ -149,10 +149,10 @@ class GetTopTags(generics.ListCreateAPIView):
             return Response({"error": "what"})
         finally: 
             try:
-                tags = Tag.objects.annotate(
-                    num_times=Count('taggit_taggeditem_items')
+                tags = UUIDTag.objects.annotate(
+                    num_times=Count('main_uuidtaggeditem_items')
                 ).filter(
-                    taggit_taggeditem_items__content_type__model='chatbot'
+                    main_uuidtaggeditem_items__content_type__model='chatbot'
                 ).order_by('-num_times')[:num]
                 serializer = TagSerializer(tags, many=True)
                 return Response(serializer.data)
