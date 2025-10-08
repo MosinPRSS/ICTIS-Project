@@ -97,7 +97,9 @@ export default function BotCards({ selectedTags, findBots }: IFindBot) {
 					/>
 				))}
 			{isLoading ? (
-				<Loading />
+				<div>
+					<Loading />
+				</div>
 			) : (
 				<div className="w-full h-[1px]" id="scroll" ref={scroll}></div>
 			)}

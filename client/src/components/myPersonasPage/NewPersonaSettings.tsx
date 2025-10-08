@@ -78,11 +78,10 @@ const NewPersonaSettings = ({
 						: "h-[90%] w-[90%]"
 				} relative`}
 			>
-				{/* Background Glow */}
-				<div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl blur-3xl"></div>
-
 				{/* Modal */}
-				<div className="w-full h-full relative bg-gradient-to-br from-purple-900/80 to-indigo-900/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl ">
+				<div
+					className={`w-full h-fit relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-white/10">
 						<div className="flex items-center gap-3">
@@ -105,7 +104,6 @@ const NewPersonaSettings = ({
 							/>
 						</button>
 					</div>
-
 					{/* Content */}
 					<div className="p-6 h-[90%] w-full">
 						<div className="grid lg:grid-cols-3 gap-6 h-full">
@@ -178,7 +176,7 @@ const NewPersonaSettings = ({
 												name: e.target.value,
 											});
 										}}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
 										placeholder="Введите имя бота"
 									/>
 								</div>
@@ -198,7 +196,7 @@ const NewPersonaSettings = ({
 											});
 										}}
 										rows={4}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
 										placeholder="Опишите вашу персону"
 									/>
 								</div>

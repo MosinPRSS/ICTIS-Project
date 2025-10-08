@@ -7,9 +7,8 @@ import collapseIcon from "./collapse-icon.svg";
 import questionIcon from "./question-icon.svg";
 import exitIcon from "./exit-icon.svg";
 import themeIcon from "./theme-icon.svg";
-import blackThemeIcon from "./black-theme-icon.svg";
-import greenThemeIcon from "./green-theme-icon.svg";
 import violetThemeIcon from "./violet-theme-icon.svg";
+import redThemeIcon from "./red-theme-icon.svg";
 import searchIcon from "./search-icon.svg";
 import addIcon from "./plus-icon.svg";
 import editIcon from "./edit-icon.svg";
@@ -29,6 +28,7 @@ import deleteIcon from "./delete-icon.svg";
 import okIcon from "./ok-icon.svg";
 import copyIcon from "./copy-icon.svg";
 export {
+	redThemeIcon,
 	copyIcon,
 	okIcon,
 	deleteIcon,
@@ -41,8 +41,6 @@ export {
 	questionIcon,
 	exitIcon,
 	themeIcon,
-	blackThemeIcon,
-	greenThemeIcon,
 	violetThemeIcon,
 	searchIcon,
 	addIcon,

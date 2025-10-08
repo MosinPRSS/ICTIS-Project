@@ -29,6 +29,8 @@ const BotSettings = ({
 	const [isShowDelete, setShowDelete] = useState(false);
 
 	useEffect(() => {
+		console.log(initialBot);
+
 		setBotInfo(initialBot);
 	}, [initialBot]);
 
@@ -117,11 +119,10 @@ const BotSettings = ({
 		<div className="absolute inset-0 min-h-screen backdrop-blur-3xl flex items-center justify-center">
 			{/* Modal Container */}
 			<div className="w-[90%] h-[90%] relative">
-				{/* Background Glow */}
-				<div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl blur-3xl"></div>
-
 				{/* Modal */}
-				<div className="w-full h-fit relative bg-gradient-to-br from-purple-900/80 to-indigo-900/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl">
+				<div
+					className={`w-full h-fit relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-white/10">
 						<div className="flex items-center gap-3">
@@ -160,8 +161,10 @@ const BotSettings = ({
 									<div className="space-y-4">
 										{/* Avatar Preview */}
 										<div className="relative group mx-auto w-40 h-40">
-											<div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-											<div className="relative w-full h-full bg-gradient-to-br from-purple-800 to-indigo-800 rounded-3xl flex items-center justify-center border-2 border-white/20">
+											<div className="absolute inset-0  rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+											<div
+												className={`relative w-full h-full ${selectedTheme.options.elementBackground} rounded-3xl flex items-center justify-center border-2 border-white/20`}
+											>
 												{botInfo.avatar ? (
 													<Image
 														width={100}
@@ -200,7 +203,9 @@ const BotSettings = ({
 												Публичный бот
 											</h3>
 											<p className="text-sm text-purple-300">
-												Доступен всем пользователям
+												{botInfo.is_public
+													? "Бот виден всем пользователям"
+													: "Ваш личный чат бот"}
 											</p>
 										</div>
 										<button
@@ -227,111 +232,42 @@ const BotSettings = ({
 										</button>
 									</div>
 								</div>
-
-								{/* Action Buttons */}
-								<div className="space-y-3">
-									{/* <button onClick={() => router.push(`/user/${bot.user.id}`)} className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10"}>
-										Чат
-									</button> */}
-									<button
-										onClick={(e) => updateBotFunc(e)}
-										className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-									>
-										{/* <Save className="w-5 h-5" /> */}
-										Сохранить
-									</button>
-
-									<button
-										onClick={() => setShowDelete(true)}
-										className="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-red-500/30"
-									>
-										{/* <Trash2 className="w-5 h-5" /> */}
-										Удалить
-									</button>
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+									<div className="flex items-center justify-between">
+										<div>
+											<h3 className="text-white font-medium mb-1">
+												Скрыть информацию о боте
+											</h3>
+											<p className="text-sm text-purple-300">
+												{botInfo.hide_info
+													? "Некоторые данные скрыты"
+													: "Все данные отображаются"}
+											</p>
+										</div>
+										<button
+											onClick={() => {
+												setBotInfo({
+													...botInfo,
+													hide_info:
+														!botInfo.hide_info,
+												});
+											}}
+											className={`relative w-14 h-8 rounded-full transition-colors ${
+												botInfo.hide_info
+													? "bg-gradient-to-r from-purple-600 to-pink-600"
+													: "bg-white/20"
+											}`}
+										>
+											<div
+												className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-lg transition-transform ${
+													botInfo.hide_info
+														? "translate-x-7"
+														: "translate-x-1"
+												}`}
+											></div>
+										</button>
+									</div>
 								</div>
-							</div>
-
-							{/* Right Column - Form Fields */}
-							<div className="lg:col-span-2 space-y-6 h-full">
-								{/* Name Field */}
-								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3">
-										Имя
-									</label>
-									<input
-										type="text"
-										value={botInfo.name}
-										onChange={(e) => {
-											changeBot({
-												...botInfo,
-												name: e.target.value,
-											});
-										}}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
-										placeholder="Введите имя бота"
-									/>
-								</div>
-
-								{/* Description Field */}
-								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
-										{/* <Globe className="w-4 h-4" /> */}
-										Описание
-									</label>
-									<textarea
-										value={botInfo.description}
-										onChange={(e) => {
-											changeBot({
-												...botInfo,
-												description: e.target.value,
-											});
-										}}
-										rows={4}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
-										placeholder="Опишите вашего бота"
-									/>
-								</div>
-
-								{/* Public Description Field */}
-								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
-										{/* <Globe className="w-4 h-4" /> */}
-										Публичное описание
-									</label>
-									<textarea
-										value={botInfo.publicDescription}
-										onChange={(e) => {
-											changeBot({
-												...botInfo,
-												publicDescription:
-													e.target.value,
-											});
-										}}
-										rows={4}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
-										placeholder="Публичное описание для других пользователей"
-									/>
-								</div>
-
-								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
-										{/* <Globe className="w-4 h-4" /> */}
-										Сценарий
-									</label>
-									<textarea
-										value={botInfo.scenario}
-										onChange={(e) => {
-											changeBot({
-												...botInfo,
-												scenario: e.target.value,
-											});
-										}}
-										rows={4}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
-										placeholder="Сценарий для общения"
-									/>
-								</div>
-
 								{/* Tags Field */}
 								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
 									{botInfo.tags.map((tag) => (
@@ -397,6 +333,128 @@ const BotSettings = ({
 											/>
 										</button>
 									)}
+								</div>
+
+								{/* Action Buttons */}
+								<div className="space-y-3">
+									{/* <button onClick={() => router.push(`/user/${bot.user.id}`)} className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10"}>
+										Чат
+									</button> */}
+									<button
+										onClick={(e) => updateBotFunc(e)}
+										className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+									>
+										{/* <Save className="w-5 h-5" /> */}
+										Сохранить
+									</button>
+
+									<button
+										onClick={() => setShowDelete(true)}
+										className="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-red-500/30"
+									>
+										{/* <Trash2 className="w-5 h-5" /> */}
+										Удалить
+									</button>
+								</div>
+							</div>
+
+							{/* Right Column - Form Fields */}
+							<div className="lg:col-span-2 space-y-6 h-full">
+								{/* Name Field */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3">
+										Имя
+									</label>
+									<input
+										type="text"
+										value={botInfo.name}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												name: e.target.value,
+											});
+										}}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Введите имя бота"
+									/>
+								</div>
+
+								{/* Description Field */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Описание
+									</label>
+									<textarea
+										value={botInfo.description}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												description: e.target.value,
+											});
+										}}
+										rows={4}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Опишите вашего бота"
+									/>
+								</div>
+
+								{/* Public Description Field */}
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Публичное описание
+									</label>
+									<textarea
+										value={botInfo.publicDescription}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												publicDescription:
+													e.target.value,
+											});
+										}}
+										rows={4}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Публичное описание для других пользователей"
+									/>
+								</div>
+
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Сценарий
+									</label>
+									<textarea
+										value={botInfo.scenario}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												scenario: e.target.value,
+											});
+										}}
+										rows={4}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Сценарий для общения"
+									/>
+								</div>
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Первое сообщение
+									</label>
+									<textarea
+										value={botInfo.first_message}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												first_message: e.target.value,
+											});
+										}}
+										rows={4}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Что бот напишет пользователю?"
+									/>
 								</div>
 							</div>
 						</div>

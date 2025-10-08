@@ -1,10 +1,10 @@
 "use client";
 import useUserService from "@/api/user_service";
+import Card from "@/components/Card";
 import Loading from "@/components/Loading";
-import { BotCard } from "@/components/mainPage/BotCards";
 import { useWindow } from "@/hooks/window";
 import { RootState } from "@reduxjs/toolkit/query";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -12,6 +12,7 @@ const UserPage = () => {
 	const { selectedTheme } = useSelector((state: RootState) => state);
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
+	const router = useRouter();
 
 	const [userInfo, setUserInfo] = useState(null);
 	const [isLoading, setLoading] = useState(false);
@@ -39,6 +40,10 @@ const UserPage = () => {
 			}
 		})();
 	}, []);
+
+	function redirect(id: string) {
+		router.push(`/bot/${id}`);
+	}
 
 	return (
 		<div
@@ -107,7 +112,12 @@ const UserPage = () => {
 						{userInfo.bots &&
 							userInfo.bots.length !== 0 &&
 							userInfo.bots.map((bot) => (
-								<BotCard bot={bot} key={bot.id} />
+								<Card
+									entity={bot}
+									key={bot.id}
+									fun={redirect}
+									arg={bot.id}
+								/>
 							))}
 					</div>
 				</div>

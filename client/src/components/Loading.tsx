@@ -1,17 +1,8 @@
-import { motion } from "motion/react";
 import React from "react";
 
 const Loading = () => {
 	return (
-		<motion.div
-			className="w-[50px] h-[50px] border-8 border-dotted border-white rounded-full fixed top-1/2 left-1/2"
-			animate={{ rotate: 360 }}
-			transition={{
-				duration: 2,
-				repeat: Infinity,
-				type: "spring",
-			}}
-		/>
+		<div className="animate-spin rounded-full h-12 w-12 border-b-2 fixed top-1/2 left-1/2 border-white/90 border-r-2"></div>
 	);
 };
 

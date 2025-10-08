@@ -289,7 +289,7 @@ const Chat = () => {
 						{showBotInfo && (
 							<BotInfo
 								setShowBotInfo={setShowBotInfo}
-								chatInfo={chatInfo}
+								chatInfo={chatInfo.chatbot}
 							/>
 						)}
 

@@ -98,11 +98,10 @@ const PersonaSettings = ({
 						: "h-[90%] w-[90%]"
 				} relative`}
 			>
-				{/* Background Glow */}
-				<div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl blur-3xl"></div>
-
 				{/* Modal */}
-				<div className="w-full h-full relative bg-gradient-to-br from-purple-900/80 to-indigo-900/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl ">
+				<div
+					className={`w-full h-fit relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
+				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-white/10">
 						<div className="flex items-center gap-3">
@@ -141,8 +140,9 @@ const PersonaSettings = ({
 									<div className="space-y-4">
 										{/* Avatar Preview */}
 										<div className="relative group mx-auto w-40 h-40">
-											<div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-											<div className="relative w-full h-full bg-gradient-to-br from-purple-800 to-indigo-800 rounded-3xl flex items-center justify-center border-2 border-white/20">
+											<div
+												className={`relative w-full h-full ${selectedTheme.options.elementBackground} rounded-3xl flex items-center justify-center border-2 border-white/20`}
+											>
 												{personaInfo.avatar ? (
 													<Image
 														width={100}
@@ -218,7 +218,7 @@ const PersonaSettings = ({
 												name: e.target.value,
 											});
 										}}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
 										placeholder="Введите имя персоны"
 									/>
 								</div>
@@ -238,7 +238,7 @@ const PersonaSettings = ({
 											});
 										}}
 										rows={4}
-										className="w-full bg-purple-950/50 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
 										placeholder="Опишите вашу персону"
 									/>
 								</div>

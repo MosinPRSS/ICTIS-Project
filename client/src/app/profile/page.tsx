@@ -97,8 +97,8 @@ const ProfilePage = () => {
 	}
 
 	return (
-		<div className="bg-gradient-to-r from-[#7F6AAD] to-[#5F4B8B] text-white/80 p-6 min-h-screen font-sans">
-			<div className="max-w-6xl mx-auto">
+		<div className="text-white/80 p-6 min-h-screen font-sans">
+			<div className="max-w-6xl pt-5 px-10 flex flex-col gap-10">
 				<div className="flex justify-between items-center mb-8">
 					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
 						Профиль
@@ -106,9 +106,11 @@ const ProfilePage = () => {
 				</div>
 
 				{userInfo ? (
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
 						<div className="lg:col-span-2 space-y-6">
-							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
+							<div
+								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
+							>
 								<div className="flex flex-col sm:flex-row items-start gap-6">
 									<div className="relative group">
 										<Image
@@ -128,11 +130,14 @@ const ProfilePage = () => {
 											{userInfo.email}
 										</p>
 										<p className="text-white/60 text-sm">
-											Создан: {new Date(userInfo.date_joined).toLocaleDateString()}
+											Создан:{" "}
+											{new Date(
+												userInfo.date_joined
+											).toLocaleDateString()}
 										</p>
 									</div>
 								</div>
-								
+
 								<div className="flex flex-wrap gap-3 mt-6 pt-6 border-t-2 border-white/20">
 									{isChange ? (
 										<>
@@ -140,7 +145,9 @@ const ProfilePage = () => {
 												onClick={(e) => handleUpdate(e)}
 												className="relative overflow-hidden bg-gradient-to-r from-emerald-400/60 to-emerald-600/60 hover:from-emerald-500 hover:to-emerald-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												<span className="relative z-10">Сохранить</span>
+												<span className="relative z-10">
+													Сохранить
+												</span>
 												<div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 											<button
@@ -150,24 +157,34 @@ const ProfilePage = () => {
 												}}
 												className="relative overflow-hidden bg-gradient-to-r from-gray-400/60 to-gray-600/60 hover:from-gray-500 hover:to-gray-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												<span className="relative z-10">Отмена</span>
+												<span className="relative z-10">
+													Отмена
+												</span>
 												<div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 										</>
 									) : (
 										<>
 											<button
-												onClick={() => setIsChange(true)}
+												onClick={() =>
+													setIsChange(true)
+												}
 												className="relative overflow-hidden bg-gradient-to-r from-sky-400/60 to-sky-600/60 hover:from-sky-500 hover:to-sky-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
 											>
-												<span className="relative z-10">Редактировать</span>
+												<span className="relative z-10">
+													Редактировать
+												</span>
 												<div className="absolute inset-0 bg-gradient-to-r from-sky-500 to-sky-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 											<button
 												className="relative overflow-hidden bg-gradient-to-r from-gray-400/60 to-gray-600/60 hover:from-gray-500 hover:to-gray-700 text-white px-6 py-3 rounded-2xl font-medium transition-all duration-500 transform hover:scale-105 active:scale-95 backdrop-blur-sm border-2 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] group"
-												onClick={() => setShowDeleteConfirm(true)}
+												onClick={() =>
+													setShowDeleteConfirm(true)
+												}
 											>
-												<span className="relative z-10">Удалить</span>
+												<span className="relative z-10">
+													Удалить
+												</span>
 												<div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right" />
 											</button>
 										</>
@@ -175,8 +192,12 @@ const ProfilePage = () => {
 								</div>
 							</div>
 
-							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
-								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Имя</h3>
+							<div
+								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
+							>
+								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+									Имя
+								</h3>
 								{isChange ? (
 									<textarea
 										value={userInfo.username}
@@ -186,19 +207,27 @@ const ProfilePage = () => {
 												username: e.target.value,
 											})
 										}
-										className="w-full bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[80px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+										className={`w-full ${selectedTheme.options.elementBackground} backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[80px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
 									/>
 								) : (
-									<div className="bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm rounded-2xl p-4 min-h-[80px] border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-										<p className="text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{userInfo.username}</p>
+									<div
+										className={`${selectedTheme.options.elementBackground} backdrop-blur-sm rounded-2xl p-4 min-h-[80px] border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
+									>
+										<p className="text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+											{userInfo.username}
+										</p>
 									</div>
 								)}
 							</div>
 						</div>
 
-						<div className="lg:col-span-1">
-							<div className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 h-full shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card">
-								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Описание</h3>
+						<div className="lg:col-span-1 w-full">
+							<div
+								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 h-full shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
+							>
+								<h3 className="text-xl font-semibold text-white mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text">
+									Описание
+								</h3>
 								{isChange ? (
 									<textarea
 										onChange={(e) =>
@@ -208,11 +237,15 @@ const ProfilePage = () => {
 											})
 										}
 										value={userInfo.description}
-										className="w-full bg-gradient-to-l from-violet-600/30 to-violet-800/30 backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[200px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+										className={`w-full h-[90%] ${selectedTheme.options.elementBackground} backdrop-blur-sm text-white rounded-2xl p-4 focus:outline-none transition-all duration-500 min-h-[200px] resize-none border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
 									/>
 								) : (
-									<div className="bg-gradient-to-l from-violet-900 to-violet-800/30 backdrop-blur-sm rounded-2xl p-4 min-h-[200px] max-h-[400px] overflow-y-auto custom-scrollbar border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-										<p className="text-white whitespace-pre-wrap bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{userInfo.description}</p>
+									<div
+										className={`${selectedTheme.options.elementBackground} backdrop-blur-sm rounded-2xl p-4 min-h-[200px] max-h-[400px] h-[90%] overflow-y-auto custom-scrollbar border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
+									>
+										<p className="text-white whitespace-pre-wrap bg-gradient-to-r from-white to-white/70 bg-clip-text">
+											{userInfo.description}
+										</p>
 									</div>
 								)}
 							</div>
@@ -238,17 +271,25 @@ const ProfilePage = () => {
 					width: 8px;
 				}
 				.custom-scrollbar::-webkit-scrollbar-track {
-					background: #5F4B8B;
+					background: #5f4b8b;
 					border-radius: 10px;
-					border: 1px solid rgba(255,255,255,0.2);
+					border: 1px solid rgba(255, 255, 255, 0.2);
 				}
 				.custom-scrollbar::-webkit-scrollbar-thumb {
-					background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+					background: linear-gradient(
+						to bottom,
+						rgba(255, 255, 255, 0.8),
+						rgba(255, 255, 255, 0.4)
+					);
 					border-radius: 10px;
-					border: 1px solid rgba(255,255,255,0.3);
+					border: 1px solid rgba(255, 255, 255, 0.3);
 				}
 				.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-					background: linear-gradient(to bottom, white, rgba(255,255,255,0.6));
+					background: linear-gradient(
+						to bottom,
+						white,
+						rgba(255, 255, 255, 0.6)
+					);
 				}
 
 				/* Кастомные границы для карточек */
@@ -258,13 +299,18 @@ const ProfilePage = () => {
 				}
 
 				.custom-border-card::before {
-					content: '';
+					content: "";
 					position: absolute;
 					top: -2px;
 					left: -2px;
 					right: -2px;
 					bottom: -2px;
-					background: linear-gradient(to left, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0));
+					background: linear-gradient(
+						to left,
+						rgba(255, 255, 255, 0.4),
+						rgba(255, 255, 255, 0.2),
+						rgba(255, 255, 255, 0)
+					);
 					border-radius: 24px;
 					z-index: -1;
 					opacity: 0.8;

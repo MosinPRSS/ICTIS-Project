@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { IsOpen } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,21 +17,47 @@ const ThemesList = ({ isOpen, setOpen }: IsOpen) => {
 	const dispatch = useDispatch();
 	const themesList = Object.values(themes.themes);
 
+	function switchThemes(theme) {
+		dispatch(setTheme({ theme: theme.name, options: theme.options }));
+
+		close();
+	}
+
 	useEffect(() => {
 		setTimeout(() => {
 			setThemesOpen(isOpen);
 		}, 50);
+
+		if (!isOpen) {
+			setThemesOpen(false);
+		} else {
+			document.addEventListener("click", touch);
+		}
 	}, [isOpen]);
 
-	function switchThemes(theme) {
-		dispatch(setTheme({ theme: theme.name, options: theme.options }));
+	function touch(event: MouseEvent) {
+		event.preventDefault();
+
+		if (
+			!listRef.current?.contains(event.target as Node) &&
+			listRef.current != event.target
+		) {
+			close();
+		}
+	}
+
+	function close() {
+		document.removeEventListener("click", touch);
 
 		setThemesOpen(!isThemesOpen);
 		setOpen(false);
 	}
 
+	const listRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<motion.div
+			ref={listRef}
 			id="themes-list"
 			className={`${
 				!isOpen && "hidden"

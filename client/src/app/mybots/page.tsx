@@ -68,8 +68,8 @@ const MyBotsPage = () => {
 	}, [user.user]);
 
 	return (
-		<div className="bg-gradient-to-r from-[#7F6AAD] to-[#5F4B8B] text-white/80 p-6 min-h-screen font-sans">
-			<div className="max-w-7xl mx-auto">
+		<div className={`text-white/80 p-10 min-h-screen font-sans`}>
+			<div className="max-w-7xl flex flex-col gap-10">
 				<div className="flex justify-between items-center mb-8">
 					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
 						Мои боты
@@ -77,13 +77,11 @@ const MyBotsPage = () => {
 				</div>
 
 				{isLoading ? (
-					<div className="flex justify-center items-center h-64">
-						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/90 border-r-2 border-white/30"></div>
-					</div>
+					<Loading />
 				) : (
 					<div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6">
 						<motion.button
-							className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] flex flex-col items-center justify-center gap-4"
+							className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] flex flex-col items-center justify-center gap-4`}
 							whileHover={{ scale: 1.02 }}
 							whileTap={{ scale: 0.98 }}
 							onClick={() => {
@@ -111,44 +109,12 @@ const MyBotsPage = () => {
 							myBots.length > 0 &&
 							myBots.map((bot) => (
 								<>
-								<motion.button
-									key={bot.id}
-									className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] text-left flex flex-col overflow-hidden"
-									whileHover={{ scale: 1.02 }}
-									whileTap={{ scale: 0.98 }}
-									onClick={() => setSelectedBot(bot)}
-								>
-									<div className="w-full h-[120px] rounded-2xl bg-gradient-to-br from-violet-600/30 to-violet-800/30 backdrop-blur-sm mb-4 flex items-center justify-center border-2 border-white/20">
-										<Image
-											src={bot.avatar}
-											alt={bot.name}
-											width={80}
-											height={80}
-											className="rounded-xl border-2 border-white/20"
-										/>
-									</div>
-									
-									<div className="flex flex-col gap-3 flex-1">
-										<h3 className="text-xl font-bold text-white break-words bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent line-clamp-2">
-											{bot.name}
-										</h3>
-										<div className="flex items-center gap-2 text-white/60 text-sm">
-											<span>by</span>
-											<span className="text-white/80">{bot.author}</span>
-										</div>
-										<div className="bg-gradient-to-br from-violet-600/30 to-violet-800/30 backdrop-blur-sm rounded-2xl p-3 flex-1 border-2 border-white/20">
-											<p className="text-white/80 text-sm line-clamp-3">
-												{bot.description || "Описание отсутствует"}
-											</p>
-										</div>
-									</div>
-								</motion.button>
-								<Card
-									key={bot.id}
-									entity={bot}
-									fun={setSelectedBot}
-									arg={bot}
-								/>
+									<Card
+										key={bot.id}
+										entity={bot}
+										fun={setSelectedBot}
+										arg={bot}
+									/>
 								</>
 							))}
 					</div>
@@ -174,45 +140,6 @@ const MyBotsPage = () => {
 			) : null}
 
 			{message.isOpen && <Message />}
-
-			<style jsx>{`
-				.custom-border-card {
-					position: relative;
-					background-clip: padding-box;
-				}
-
-				.custom-border-card::before {
-					content: '';
-					position: absolute;
-					top: -2px;
-					left: -2px;
-					right: -2px;
-					bottom: -2px;
-					background: linear-gradient(to left, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0));
-					border-radius: 24px;
-					z-index: -1;
-					opacity: 0.8;
-					transition: opacity 0.5s ease;
-				}
-
-				.custom-border-card:hover::before {
-					opacity: 1;
-				}
-
-				.line-clamp-2 {
-					display: -webkit-box;
-					-webkit-line-clamp: 2;
-					-webkit-box-orient: vertical;
-					overflow: hidden;
-				}
-
-				.line-clamp-3 {
-					display: -webkit-box;
-					-webkit-line-clamp: 3;
-					-webkit-box-orient: vertical;
-					overflow: hidden;
-				}
-			`}</style>
 		</div>
 	);
 };

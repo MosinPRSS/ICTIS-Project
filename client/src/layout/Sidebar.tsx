@@ -146,7 +146,7 @@ const Sidebar = () => {
 				<div>
 					<button
 						onClick={(e) => checkDevice(e, "/")}
-						className={`overflow-x-hidden w-full ${selectedTheme.options.background} text-white rounded-[10px] p-[10px] flex items-center space-x-1`}
+						className={`overflow-x-hidden w-full justify-center text-white rounded-[10px] p-[10px] flex items-center space-x-1`}
 					>
 						<Image
 							src={Logo}
@@ -252,7 +252,7 @@ const Sidebar = () => {
 						</button>
 					</Link>
 					<div
-						className={`${selectedTheme.options.background} text-white rounded-[10px] p-[10px] flex items-center justify-between space-x-1 overflow-x-hidden`}
+						className={`text-white rounded-[10px] p-[10px] flex items-center justify-between space-x-1 overflow-x-hidden`}
 					>
 						{user.user ? (
 							<>

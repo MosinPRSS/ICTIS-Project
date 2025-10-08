@@ -1,18 +1,35 @@
 import { cancelIcon } from "@/assets/images/images";
+import { showAuth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const BotInfo = ({ setShowBotInfo, chatInfo }) => {
-	const { selectedTheme } = useSelector((state: RootState) => state);
+	const { selectedTheme, user } = useSelector((state: RootState) => state);
+	const dispatch = useDispatch();
+	const router = useRouter();
+
+	function redirectToAuthor() {
+		if (!user.user) {
+			dispatch(showAuth(true));
+			return;
+		}
+
+		const userID = localStorage.getItem("userID");
+		if (userID === chatInfo.user.id) {
+			router.push("/profile");
+		} else {
+			router.push(`/user/${chatInfo.user.id}`);
+		}
+	}
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 			<div
 				className={`${selectedTheme.options.background} rounded-2xl p-6 w-[80vw] border border-white/10 max-h-[80vh] text-white overflow-y-auto`}
 			>
-				<div className="flex items-center justify-between mb-5">
-					<h3 className="text-lg font-semibold">Информация о боте</h3>
+				<div className="flex items-center justify-end mb-5">
 					<button
 						onClick={() => setShowBotInfo(false)}
 						className="p-1 rounded-full hover:bg-white/10 transition-colors"
@@ -20,8 +37,8 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 						<Image
 							src={cancelIcon}
 							alt="cancel-icon"
-							width={20}
-							height={20}
+							width={30}
+							height={30}
 						/>
 					</button>
 				</div>
@@ -32,16 +49,19 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 							<Image
 								width={100}
 								height={100}
-								src={chatInfo.chatbot.avatar}
-								alt={chatInfo.chatbot.name}
+								src={chatInfo.avatar}
+								alt={chatInfo.name}
 								className="w-full h-full object-cover"
 							/>
 						</div>
 						<h3 className="text-2xl font-bold mb-1">
-							{chatInfo.chatbot.name}
+							{chatInfo.name}
 						</h3>
-						<button className="hover:underline cursor-pointer flex items-center justify-center gap-1 mx-auto">
-							<span>от {chatInfo.chatbot.author}</span>
+						<button
+							onClick={redirectToAuthor}
+							className="hover:underline cursor-pointer flex items-center justify-center gap-1 mx-auto"
+						>
+							<span>от {chatInfo.user.username}</span>
 						</button>
 					</div>
 
@@ -50,7 +70,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 							Описание
 						</h4>
 						<p className="text-gray-300 leading-relaxed">
-							{chatInfo.chatbot.description}
+							{chatInfo.description}
 						</p>
 					</div>
 
@@ -59,7 +79,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 							Теги
 						</h4>
 						<div className="flex flex-wrap gap-2">
-							{chatInfo.chatbot.tags.map((tag, index) => (
+							{chatInfo.tags.map((tag, index) => (
 								<span
 									key={index}
 									className={`px-3 py-1 rounded-full ${selectedTheme.options.middleground} text-sm border`}

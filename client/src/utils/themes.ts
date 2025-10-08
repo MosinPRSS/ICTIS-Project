@@ -1,8 +1,4 @@
-import {
-	blackThemeIcon,
-	violetThemeIcon,
-	greenThemeIcon,
-} from "@/assets/images/images";
+import { redThemeIcon, violetThemeIcon } from "@/assets/images/images";
 
 export const themes = {
 	themes: {
@@ -10,33 +6,28 @@ export const themes = {
 			name: "Violet",
 			src: violetThemeIcon,
 			options: {
-				background: "bg-violet-950",
-				middleground: "bg-violet-900",
+				background: "bg-gradient-to-r from-[#7F6AAD] to-[#5F4B8B]",
+				middleground: "bg-gradient-to-r from-[#7F6AAD] to-[#816e9f]",
 				text: "text-white",
 				border: "border-white",
-				elementBackground: "bg-violet-900/50",
+				elementBackground:
+					"bg-gradient-to-r from-[#7F6AAD] to-[#ac94b4]",
+				elementOpacity: "bg-white/10",
+				focusBorder: "focus:border-violet-500",
 			},
 		},
 		green: {
-			name: "Green",
-			src: greenThemeIcon,
+			name: "Red",
+			src: redThemeIcon,
 			options: {
-				background: "bg-green-950",
-				middleground: "bg-green-900",
+				background: "bg-gradient-to-r from-[#b01633] to-[#7a0a1a]",
+				middleground: "bg-gradient-to-r from-[#7b0210] to-[#7a0a1a]",
 				text: "text-white",
 				border: "border-white",
-				elementBackground: "bg-green-900/50",
-			},
-		},
-		black: {
-			name: "Black",
-			src: blackThemeIcon,
-			options: {
-				background: "bg-gray-950",
-				middleground: "bg-gray-900",
-				text: "text-white",
-				border: "border-white",
-				elementBackground: "bg-gray-900/50",
+				elementBackground:
+					"bg-gradient-to-r from-[#b01633] to-[#7b0210]",
+				elementOpacity: "bg-white/10",
+				focusBorder: "focus:border-red-500",
 			},
 		},
 	},
