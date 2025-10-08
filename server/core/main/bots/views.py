@@ -20,7 +20,7 @@ class CreateBot(generics.CreateAPIView):
         serializer.save(belongs_to=self.request.user)
 
 class UpdateBot(generics.UpdateAPIView):
-    serializer_class = BotUpdateSerializer
+    serializer_class = PublicBotSerializer
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
@@ -124,7 +124,7 @@ class SearchBots(generics.ListCreateAPIView):
                 |
                 Q(description__icontains=query))
         except AttributeError as e:
-            return f"Nothing found: {e}"
+            raise e({"error": e})
 
 class DeleteBot(generics.DestroyAPIView):
     serializer_class = BotSerializer
@@ -177,5 +177,67 @@ class SearchByTags(generics.ListCreateAPIView):
                 q_objects |= Q(tags__name=tag)
             return queryset.filter(q_objects).distinct()
         return Chatbot.objects.none()
+    
+class SearchV2(generics.ListAPIView):
+    serializer_class = PublicBotSerializer
+    permission_classes = [AllowAny]
+    pagination_class = StandardResultsPagination
 
+    def get_queryset(self):
+        queryset = Chatbot.objects.filter(is_public=True).annotate(
+            session_count=Count("aisession", distinct=True)
+        )
+
+        # sort_by: 0=алфавит, 1=рейтинг, 2=сессии, 3=время
+        # method: 0=возрастание, 1=убывание
+        sort_by = self.request.query_params.get("sort_by", "0")
+        method = self.request.query_params.get("method", "0")
+        tags = self.request.query_params.get("tags", None)
+        query = self.request.query_params.get("query", None)
+
+        try: sort_by = int(sort_by)
+        except ValueError: sort_by = 0
+
+        try: method = int(method)
+        except ValueError: method = 0
+
+        order_prefix = "-" if method == 1 else ""
         
+        if query:
+            try:
+                queryset = queryset.filter(
+                Q(name__icontains=query) 
+                | 
+                Q(public_description__icontains=query)
+                |
+                Q(description__icontains=query)
+                )
+            except AssertionError as e:
+                raise e({"error": e})
+
+        if tags:
+            tags_query = tags.split(",")
+            q_objects = Q()
+            for tag in tags_query:
+                q_objects |= Q(tags__name=tag)
+            queryset = queryset.filter(q_objects).distinct()
+
+        if sort_by == 0:
+            return queryset.order_by(f"{order_prefix}name")
+        elif sort_by == 1:
+            return queryset.order_by(f"{order_prefix}rate")
+        elif sort_by == 2:
+            return queryset.order_by(f"{order_prefix}session_count")
+        else:
+            return queryset.order_by("name")
+        
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+

@@ -7,8 +7,11 @@ from main.bots.serializers import PublicBotSerializer
 from ..models import *
 from rest_framework import serializers
 from main.ai_modules.collector import PromptTools as pt
-import asyncio
+import asyncio, random
 from asgiref.sync import sync_to_async
+
+def generate_random_num(len=8):
+    return ''.join(random.choices('0123456789', k=len))
    
 class SessionSerializer(serializers.ModelSerializer):
     last_message = serializers.CharField(read_only=True)
@@ -20,6 +23,7 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user_id",
+            "chatname",
             "chatbot",
             "chatbot_info",       
             "persona",
@@ -31,6 +35,7 @@ class SessionSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         extra_kwargs = {
+            "chatname": {"default": f"Чат ({generate_random_num(8)})", "required": False},
             "chatbot": {"required": True},
             "persona": {"required": True},
             "tokens": {"default": 1000},
@@ -180,6 +185,7 @@ class ShowSessionsSerializer(serializers.ModelSerializer):
             "id",
             "user_id",
             "last_message",
+            "chatname",
             "chatbot",
             "persona",
             "tokens",

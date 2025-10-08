@@ -110,7 +110,7 @@ const MyBotsPage = () => {
 						{myBots &&
 							myBots.length > 0 &&
 							myBots.map((bot) => (
-<<<<<<< HEAD
+								<>
 								<motion.button
 									key={bot.id}
 									className="bg-gradient-to-l from-[#7F6AAD] to-[#7F6AAD] backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-500 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card min-h-[300px] text-left flex flex-col overflow-hidden"
@@ -143,14 +143,13 @@ const MyBotsPage = () => {
 										</div>
 									</div>
 								</motion.button>
-=======
 								<Card
 									key={bot.id}
 									entity={bot}
 									fun={setSelectedBot}
 									arg={bot}
 								/>
->>>>>>> 6225e14f4361412a6f758df9430bf2648f4912d1
+								</>
 							))}
 					</div>
 				)}

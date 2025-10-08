@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
+from taggit.managers import TaggableManager
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -20,3 +21,11 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True')
 
         return self.create_user(email, password, **extra_fields)
+    
+
+
+class UUIDTaggableManager(TaggableManager):
+    def __init__(self, *args, **kwargs):
+        from .models import UUIDTaggedItem
+        kwargs['through'] = 'main.UUIDTaggedItem'
+        super().__init__(*args, **kwargs)

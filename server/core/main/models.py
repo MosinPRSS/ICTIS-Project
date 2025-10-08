@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-from .managers import UserManager
+from main.managers import UUIDTaggableManager, UserManager
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from typing import *
 from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase, TagBase, GenericUUIDTaggedItemBase
 import uuid
 from main.ai_modules.tokenizer import Tokenization
 
-# class PublicDescription(models.Model)
-#   belongs_to = bot | user
-#   for users and bots
 
 class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -51,6 +51,25 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_superuser
 
+class UUIDTag(TagBase):
+    class Meta:
+        app_label = "main"
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase):
+    tag = models.ForeignKey(
+        UUIDTag,
+        related_name="%(app_label)s_%(class)s_items",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        app_label = "main"
+        verbose_name = "Tagged Item"
+        verbose_name_plural = "Tagged Items"
+
 
 class Chatbot(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -71,7 +90,10 @@ class Chatbot(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tags = TaggableManager(blank=True)
+    tags = UUIDTaggableManager(through=UUIDTaggedItem, blank=True)
+    
+    def get_tags_display(self):
+        return self.tags.values_list('name', flat=True)
     
 class Favorite(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -89,6 +111,7 @@ class Persona(models.Model):
 
 class AiSession(models.Model):
     belongs_to = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    chatname = models.CharField(default="Чат")
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     chatbot = models.ForeignKey(to=Chatbot, on_delete=models.CASCADE)
     persona = models.ForeignKey(to=Persona, on_delete=models.SET_NULL, null=True)

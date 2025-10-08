@@ -19,8 +19,8 @@ const Card = ({ entity, fun, arg }) => {
 			<div className="relative h-[60%] bg-gradient-to-br from-gray-900 via-purple-900/30 to-black flex items-center justify-center overflow-hidden">
 				{/* Animated background blob */}
 				<div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-pink-500/20 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-
-				<Image
+				{/* ЗДЕСЬ */}
+				<Image 
 					src={entity.avatar}
 					alt="entity-avatar"
 					width={100}

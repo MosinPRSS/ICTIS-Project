@@ -116,7 +116,7 @@ export default function useUserService() {
 			localStorage.removeItem("username");
 			localStorage.removeItem("avatarUrl");
 
-			return res.status; // возвращает 200 ОК
+			return res.status; // возвращает 204 ОК
 		} catch (error: any) {
 			throw new Error("U_ERROR_DELETE");
 		}

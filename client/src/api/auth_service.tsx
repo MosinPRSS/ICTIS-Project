@@ -40,7 +40,7 @@ export function useAuth() {
 				"password": password,
 			});
 
-			if (res.status === 200) {
+			if (res.status === 201) {
 				// localStorage.setItem(ACCESS_TOKEN, res.data.access);
 				// localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 				// localStorage.setItem("userID", res.data.id);                    жду бэк

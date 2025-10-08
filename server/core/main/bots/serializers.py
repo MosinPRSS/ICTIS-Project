@@ -6,7 +6,7 @@ from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 from taggit.models import Tag
 
-class BotSerializer(serializers.ModelSerializer, TaggitSerializer):
+class BotSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
         model = Chatbot
@@ -38,12 +38,16 @@ class BotSerializer(serializers.ModelSerializer, TaggitSerializer):
         }
 
     def create(self, validated_data):
+        tags = validated_data.pop("tags", [])
         validated_data["belongs_to"] = self.context["request"].user
         instance = super().create(validated_data)
+        if tags:
+            instance.tags.set(tags)
         return instance
 
         
 class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
+    # do not use.
     tags = TagListSerializerField()
     class Meta:
         model = Chatbot
@@ -52,7 +56,7 @@ class BotUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
             field: {'required': False} for field in fields
         }
 
-class PublicBotSerializer(serializers.ModelSerializer, TaggitSerializer):
+class PublicBotSerializer(TaggitSerializer, serializers.ModelSerializer):
     user = ListUsersSerializer(source='belongs_to', read_only=True)
     session_count = serializers.IntegerField(read_only=True)
     tags = TagListSerializerField()
