@@ -100,7 +100,7 @@ const MyBotsPage = () => {
 								</div>
 								<div className="absolute inset-0 bg-white/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 							</div>
-							<span className="text-xl font-semibold text-white bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+							<span className="text-xl font-semibold text-white bg-gradient-to-r from-white to-white/70 bg-clip-text">
 								Добавить бота
 							</span>
 						</motion.button>

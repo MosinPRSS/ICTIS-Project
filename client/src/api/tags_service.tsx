@@ -19,8 +19,8 @@ export default function useTagsService() {
 		try {
 			const res = await apiClient.get(`b/tags/${amount}`, {
 				headers: {
-					Authorization: "" // спасение
-				}
+					Authorization: "", // спасение
+				},
 			});
 			if (res.status === 200) {
 				return res.data;

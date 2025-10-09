@@ -1,18 +1,27 @@
 import useTagsService from "@/api/tags_service";
 import { IFindBot } from "@/interfaces/interfaces";
+import { openMessage } from "@/store/slices/messageSlice";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
-	const tagsFunc = useTagsService();
+	const { getPopularTags } = useTagsService();
+	const dispatch = useDispatch();
 	const [tagsList, setTags] = useState<string[]>(["tag"]);
 
 	useEffect(() => {
 		(async function getTags() {
-			const response = await tagsFunc.getPopularTags(10);
+			try {
+				const response = await getPopularTags(10);
 
-			if (!response) return;
-
-			setTags(response);
+				if (!response) {
+					throw new Error("Failed to get tags");
+				}
+				setTags(response);
+			} catch (error) {
+				dispatch(openMessage("Произошла ошибка при получении тегов"));
+				console.log(error);
+			}
 		})();
 	}, []);
 	function addTag(tag: string) {

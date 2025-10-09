@@ -1,36 +1,109 @@
 "use client";
-
-import { searchIcon } from "@/assets/images/images";
-import BotCards from "@/components/mainPage/BotCards";
+import useSearchService from "@/api/search_service";
+import {
+	new_botIcon,
+	ratingIcon,
+	searchIcon,
+	trendingIcon,
+} from "@/assets/images/images";
+import Card from "@/components/Card";
+import Loading from "@/components/Loading";
 import Tags from "@/components/mainPage/Tags";
 import { useWindow } from "@/hooks/window";
+import { IBot } from "@/interfaces/entries";
 import { RootState } from "@/store/store";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { use, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function Home() {
 	const windowWidth = useWindow();
+	const { searchBots } = useSearchService();
 	const [userDevice, setUserDevice] = useState(windowWidth);
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
-	const [selectedBots, setSelectedBots] = useState<string | null>(null);
+	const [selectedCategory, setSelectedCategory] = useState(0);
 	const input = useRef<HTMLInputElement>(null);
 	const { user } = useSelector((state: RootState) => state);
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
+	const [next, setNext] = useState("b/search");
+	const [bots, setBots] = useState<IBot[]>([]);
+	const [reverse, setReverse] = useState(1);
+	const [searchInput, setSearchInput] = useState("");
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (input.current) {
-			findBots(input.current.value);
+	async function getBots() {
+		try {
+			if (!next) {
+				return;
+			}
+			setIsLoading(true);
+
+			const data = await searchBots(
+				next,
+				searchInput,
+				undefined,
+				undefined,
+				selectedCategory,
+				reverse,
+				selectedTags
+			);
+			console.log(data);
+
+			setNext(data.next);
+			setBots(bots.concat(data.results));
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsLoading(false);
 		}
-	};
+	}
 
-	function findBots(input: string) {
-		setSelectedBots(input === "" ? null : input);
+	useEffect(() => {
+		console.log(selectedCategory, selectedTags, reverse, searchInput);
+
+		setSearchInput("");
+		setBots([]);
+		getBots();
+	}, [selectedCategory, selectedTags, reverse, searchInput]);
+
+	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		setSearchInput(input.current?.value ?? "");
 	}
 
 	useEffect(() => {
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
+
+	function redirect(id: string) {
+		router.push(`/bot/${id}`);
+	}
+
+	const scroll = useRef<HTMLDivElement>(null);
+	const observer = useRef(null);
+
+	useEffect(() => {
+		if (!scroll.current) return;
+
+		if (observer.current) {
+			observer.current.disconnect();
+		}
+
+		if (next) {
+			observer.current = new IntersectionObserver((entries) => {
+				if (entries[0].isIntersecting) {
+					getBots();
+				}
+			});
+			observer.current.observe(scroll.current);
+		}
+		return () => {
+			if (observer.current) {
+				observer.current.disconnect();
+			}
+		};
+	}, [scroll.current, next]);
 
 	return (
 		<div className="flex flex-col gap-5 p-10">
@@ -65,11 +138,65 @@ export default function Home() {
 				selectedTags={selectedTags}
 				setSelectedTags={setSelectedTags}
 			/>
-			<div className="flex gap-10 items-center flex-wrap mt-20">
-				<BotCards
-					selectedTags={selectedTags}
-					findBots={input.current?.value}
-				/>
+			<div className="flex gap-3 text-white">
+				<button
+					onClick={() => setSelectedCategory(2)}
+					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+				>
+					<Image
+						src={trendingIcon}
+						alt="trending-icon"
+						width={20}
+						height={20}
+					/>
+					<p>Популярные</p>
+				</button>
+				<button
+					onClick={() => setSelectedCategory(1)}
+					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+				>
+					<Image
+						src={ratingIcon}
+						alt="rating-icon"
+						width={20}
+						height={20}
+					/>
+					<p>Лучшие</p>
+				</button>
+				<button
+					onClick={() => setSelectedCategory(3)}
+					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+				>
+					<Image
+						src={new_botIcon}
+						alt="new_bot-icon"
+						width={20}
+						height={20}
+					/>
+					<p>Новинки</p>
+				</button>
+			</div>
+			<div className="flex gap-10 items-center flex-wrap mt-10">
+				{bots &&
+					bots.map((bot) => (
+						<Card
+							key={bot.id}
+							entity={bot}
+							fun={redirect}
+							arg={bot.id}
+						/>
+					))}
+				{isLoading ? (
+					<div>
+						<Loading />
+					</div>
+				) : (
+					<div
+						className="w-full h-[1px]"
+						id="scroll"
+						ref={scroll}
+					></div>
+				)}
 			</div>
 		</div>
 	);
