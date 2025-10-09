@@ -102,7 +102,7 @@ class GenerateAnswerSerializer(serializers.ModelSerializer):
         token_count = await tokenizer.adeepseek_tokens(user_input)
 
         system_prompt = Templates().SYSTEM_PROMPT
-        api = OllamaAPI(model_name="qwen3:8b")
+        api = OllamaAPI(model_name="gpt-oss:20b")
 
         response_data = await api.send_message(
             system_prompt=system_prompt,

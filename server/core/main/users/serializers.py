@@ -16,14 +16,12 @@ class UserSerializer(serializers.ModelSerializer):
             "date_joined",
             "avatar", 
             "description", 
-            "view_nsfw"
             ]
         extra_kwargs = {
             "password": {"write_only": True, "required": True},
             "username": {"required": True},
             "description": {"required": False},
             "email": {"write_only": True, "required": True},
-            "view_nsfw": {"required": False}
         }
 
     def create(self, validated_data):

@@ -1,0 +1,541 @@
+[
+{
+  "model": "main.user",
+  "pk": "1a6b6ef7-3a41-47a9-9de6-800883100524",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$zNDaTIzz26b13ZNpvat3vw$6uzJSfdb38I5Kx6xKqm5HekTEhQdMffcuH28VMbR/Hw=",
+    "last_login": null,
+    "email": "test2@test.com",
+    "username": "TEST_USER2",
+    "date_joined": "2025-10-09T07:17:20.716Z",
+    "is_active": true,
+    "is_staff": false,
+    "is_superuser": false,
+    "avatar": "Default_Avatar.svg",
+    "description": ""
+  }
+},
+{
+  "model": "main.user",
+  "pk": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$yov4PYYrNpDElDfqlpJ4Ws$xSBexPPranYVSaw/lWkyt7AEMPXQoNl1I6FyR9f3eoE=",
+    "last_login": null,
+    "email": "test_user@test.com",
+    "username": "TEST_USER",
+    "date_joined": "2025-10-09T06:39:12.825Z",
+    "is_active": true,
+    "is_staff": false,
+    "is_superuser": false,
+    "avatar": "Default_Avatar.svg",
+    "description": ""
+  }
+},
+{
+  "model": "main.user",
+  "pk": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$oZaRLcR7KK7MktzWihrDwf$sTPf37/FgHJPPjzVBVIX0f0tmeak6ke+PBUE5Y0BVo8=",
+    "last_login": null,
+    "email": "forrandomspam111@gmail.com",
+    "username": "mosinprss",
+    "date_joined": "2025-10-07T13:43:10.604Z",
+    "is_active": true,
+    "is_staff": false,
+    "is_superuser": false,
+    "avatar": "Default_Avatar.svg",
+    "description": ""
+  }
+},
+{
+  "model": "main.uuidtag",
+  "pk": 1,
+  "fields": {
+    "name": "hello",
+    "slug": "hello"
+  }
+},
+{
+  "model": "main.uuidtag",
+  "pk": 2,
+  "fields": {
+    "name": "world",
+    "slug": "world"
+  }
+},
+{
+  "model": "main.uuidtag",
+  "pk": 3,
+  "fields": {
+    "name": "ассистент",
+    "slug": "ассистент"
+  }
+},
+{
+  "model": "main.uuidtag",
+  "pk": 4,
+  "fields": {
+    "name": "помощник",
+    "slug": "помощник"
+  }
+},
+{
+  "model": "main.uuidtag",
+  "pk": 5,
+  "fields": {
+    "name": "крутой",
+    "slug": "крутой"
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 1,
+  "fields": {
+    "content_type": 7,
+    "object_id": "74f28791-b985-4ce7-a85a-d174d7e7311a",
+    "tag": 1
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 2,
+  "fields": {
+    "content_type": 7,
+    "object_id": "74f28791-b985-4ce7-a85a-d174d7e7311a",
+    "tag": 2
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 3,
+  "fields": {
+    "content_type": 7,
+    "object_id": "1e4e17f4-e086-4de0-8586-6ea38fc5b3d5",
+    "tag": 3
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 4,
+  "fields": {
+    "content_type": 7,
+    "object_id": "1e4e17f4-e086-4de0-8586-6ea38fc5b3d5",
+    "tag": 4
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 5,
+  "fields": {
+    "content_type": 7,
+    "object_id": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+    "tag": 3
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 6,
+  "fields": {
+    "content_type": 7,
+    "object_id": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+    "tag": 4
+  }
+},
+{
+  "model": "main.uuidtaggeditem",
+  "pk": 7,
+  "fields": {
+    "content_type": 7,
+    "object_id": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+    "tag": 5
+  }
+},
+{
+  "model": "main.chatbot",
+  "pk": "1e4e17f4-e086-4de0-8586-6ea38fc5b3d5",
+  "fields": {
+    "belongs_to": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+    "name": "Test Bot",
+    "chatname": "Человек",
+    "avatar": "img/bot/Screenshot_20251009_095552.png",
+    "description": "Он отличный ассистент, поможет и поддержит в разговоре",
+    "scenario": "[Сценария нет - вы свободны в этом плане]",
+    "first_message": "Привет, {{user}}, я {{char}} - расскажи мне что-нибудь!",
+    "rate": 0,
+    "is_public": true,
+    "hide_info": false,
+    "public_description": "Напиши мне!",
+    "created_at": "2025-10-09T06:53:28.496Z",
+    "updated_at": "2025-10-09T06:58:35.287Z"
+  }
+},
+{
+  "model": "main.chatbot",
+  "pk": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+  "fields": {
+    "belongs_to": "1a6b6ef7-3a41-47a9-9de6-800883100524",
+    "name": "test_bot2 (покруче!)",
+    "chatname": "крутой человек",
+    "avatar": "Default_Avatar.svg",
+    "description": "Классно и дружелюбно разговаривает, поддержит в любой момент",
+    "scenario": "[Сценария нет - вы свободны в этом плане]",
+    "first_message": "Привет, {{user}}, я {{char}} - расскажи мне что-нибудь!",
+    "rate": 0,
+    "is_public": true,
+    "hide_info": true,
+    "public_description": "Напиши мне! (я покруче предыдущего)",
+    "created_at": "2025-10-09T07:26:39.519Z",
+    "updated_at": "2025-10-09T07:26:39.519Z"
+  }
+},
+{
+  "model": "main.chatbot",
+  "pk": "74f28791-b985-4ce7-a85a-d174d7e7311a",
+  "fields": {
+    "belongs_to": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "name": "test1",
+    "chatname": "test",
+    "avatar": "Default_Avatar.svg",
+    "description": "lol",
+    "scenario": "",
+    "first_message": "hello, {{user}}, i am {{char}}",
+    "rate": 0,
+    "is_public": true,
+    "hide_info": false,
+    "public_description": "",
+    "created_at": "2025-10-08T10:53:49.371Z",
+    "updated_at": "2025-10-08T10:53:49.371Z"
+  }
+},
+{
+  "model": "main.persona",
+  "pk": "8f4c3b0d-3927-462e-a832-32a7ef679901",
+  "fields": {
+    "belongs_to": "1a6b6ef7-3a41-47a9-9de6-800883100524",
+    "name": "тестовый человек",
+    "avatar": "img/personas/_.jpeg",
+    "description": "просто любит общаться"
+  }
+},
+{
+  "model": "main.persona",
+  "pk": "9bfdce5e-bfd1-4a89-9687-2f8aea3b597c",
+  "fields": {
+    "belongs_to": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+    "name": "Обычный человек",
+    "avatar": "Default_Avatar.svg",
+    "description": "Действительно, самый обыкновенный."
+  }
+},
+{
+  "model": "main.persona",
+  "pk": "bae73104-af88-4ae1-95cb-9fbd1f423121",
+  "fields": {
+    "belongs_to": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "name": "test_persona",
+    "avatar": "Default_Avatar.svg",
+    "description": "lol"
+  }
+},
+{
+  "model": "main.persona",
+  "pk": "d03663b0-be6a-4abd-a941-83d6593c8f38",
+  "fields": {
+    "belongs_to": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "name": "тестовый человек",
+    "avatar": "Default_Avatar.svg",
+    "description": "Действительно, самый обыкновенный."
+  }
+},
+{
+  "model": "main.aisession",
+  "pk": "01fb60ae-29a5-41a3-87d4-ae2dbf79a83f",
+  "fields": {
+    "belongs_to": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "chatname": "Чат (44062634)",
+    "chatbot": "74f28791-b985-4ce7-a85a-d174d7e7311a",
+    "persona": "bae73104-af88-4ae1-95cb-9fbd1f423121",
+    "created_at": "2025-10-08T11:07:30.838Z",
+    "updated_at": "2025-10-08T11:07:30.838Z",
+    "temperature": 0.7,
+    "tokens": 1000
+  }
+},
+{
+  "model": "main.aisession",
+  "pk": "1e16ab40-aee0-42ee-97fc-932271e6343c",
+  "fields": {
+    "belongs_to": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "chatname": "Чат (62219291)",
+    "chatbot": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+    "persona": "d03663b0-be6a-4abd-a941-83d6593c8f38",
+    "created_at": "2025-10-09T08:09:00.625Z",
+    "updated_at": "2025-10-09T08:09:00.625Z",
+    "temperature": 0.7,
+    "tokens": 1000
+  }
+},
+{
+  "model": "main.aisession",
+  "pk": "98ca6184-3359-4ece-9774-2940de34f172",
+  "fields": {
+    "belongs_to": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+    "chatname": "Чат (62219291)",
+    "chatbot": "3970cfc8-1cee-4335-8342-80d7c5afc17d",
+    "persona": "9bfdce5e-bfd1-4a89-9687-2f8aea3b597c",
+    "created_at": "2025-10-09T08:16:13.202Z",
+    "updated_at": "2025-10-09T08:16:13.202Z",
+    "temperature": 0.7,
+    "tokens": 1000
+  }
+},
+{
+  "model": "main.message",
+  "pk": 6,
+  "fields": {
+    "session": "01fb60ae-29a5-41a3-87d4-ae2dbf79a83f",
+    "content": "hello, test_persona, i am test1",
+    "role": "assistant",
+    "timestamp": "2025-10-08T11:07:31.854Z",
+    "eval_count": 12
+  }
+},
+{
+  "model": "main.message",
+  "pk": 7,
+  "fields": {
+    "session": "01fb60ae-29a5-41a3-87d4-ae2dbf79a83f",
+    "content": "привет! как твои дела?",
+    "role": "user",
+    "timestamp": "2025-10-08T11:07:57.019Z",
+    "eval_count": 10
+  }
+},
+{
+  "model": "main.message",
+  "pk": 8,
+  "fields": {
+    "session": "01fb60ae-29a5-41a3-87d4-ae2dbf79a83f",
+    "content": "привет. дела как обычно — не очень, но не хуже. ты что, пришёл проверить, не умер ли я в очередной раз? или просто хочешь пообщаться?",
+    "role": "assistant",
+    "timestamp": "2025-10-08T11:07:57.026Z",
+    "eval_count": 46
+  }
+},
+{
+  "model": "main.message",
+  "pk": 9,
+  "fields": {
+    "session": "1e16ab40-aee0-42ee-97fc-932271e6343c",
+    "content": "Привет, тестовый человек, я test_bot2 (покруче!) - расскажи мне что-нибудь!",
+    "role": "assistant",
+    "timestamp": "2025-10-09T08:09:01.644Z",
+    "eval_count": 30
+  }
+},
+{
+  "model": "main.message",
+  "pk": 10,
+  "fields": {
+    "session": "98ca6184-3359-4ece-9774-2940de34f172",
+    "content": "Привет, Обычный человек, я test_bot2 (покруче!) - расскажи мне что-нибудь!",
+    "role": "assistant",
+    "timestamp": "2025-10-09T08:16:23.936Z",
+    "eval_count": 30
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 1,
+  "fields": {
+    "user": null,
+    "jti": "604b374d02ae407ab2105ebca2ce7eea",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjUxOCwiaWF0IjoxNzU5ODQ0NTE4LCJqdGkiOiI2MDRiMzc0ZDAyYWU0MDdhYjIxMDVlYmNhMmNlN2VlYSJ9.kDZvoakpkb9YNc_D1pVCZs27TM8DBs7nFIJJMqjc10Y",
+    "created_at": "2025-10-07T13:41:58.913Z",
+    "expires_at": "2025-11-06T13:41:58Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 2,
+  "fields": {
+    "user": null,
+    "jti": "bc4f5fe9d889464da7afafc351ac59b1",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjUxOCwiaWF0IjoxNzU5ODQ0NTE4LCJqdGkiOiJiYzRmNWZlOWQ4ODk0NjRkYTdhZmFmYzM1MWFjNTliMSJ9.L-9UdzHQAyAy4X0fOTnYJBs9p45W4f01T6Kv80y2AdI",
+    "created_at": "2025-10-07T13:41:58.926Z",
+    "expires_at": "2025-11-06T13:41:58Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 3,
+  "fields": {
+    "user": null,
+    "jti": "6d15be29f020450ea6e8b8c7fef42da3",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjUxOCwiaWF0IjoxNzU5ODQ0NTE4LCJqdGkiOiI2ZDE1YmUyOWYwMjA0NTBlYTZlOGI4YzdmZWY0MmRhMyJ9.y_BVKLUwfBDmFkkWu0bIemZhTl-DMYeMWeuTnqBJbVk",
+    "created_at": "2025-10-07T13:41:58.927Z",
+    "expires_at": "2025-11-06T13:41:58Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 4,
+  "fields": {
+    "user": null,
+    "jti": "aeabe30d9de84e94a6f8fc1c214f24fe",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjUxOCwiaWF0IjoxNzU5ODQ0NTE4LCJqdGkiOiJhZWFiZTMwZDlkZTg0ZTk0YTZmOGZjMWMyMTRmMjRmZSJ9.TZT0Qju9gkG1IkrZ_cOSpTz4Iu93rs0zX4NL_86fQwQ",
+    "created_at": "2025-10-07T13:41:58.928Z",
+    "expires_at": "2025-11-06T13:41:58Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 5,
+  "fields": {
+    "user": null,
+    "jti": "dc3f03171d834d0486666ee09536bef3",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjUyMCwiaWF0IjoxNzU5ODQ0NTIwLCJqdGkiOiJkYzNmMDMxNzFkODM0ZDA0ODY2NjZlZTA5NTM2YmVmMyJ9.O5qZQI6fqzLw2CssvrqGr6guf2vtFD0kO9KcHEi7rTQ",
+    "created_at": "2025-10-07T13:42:00.201Z",
+    "expires_at": "2025-11-06T13:42:00Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 6,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "14ec95be767d435caed5340102af9228",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNjYxOCwiaWF0IjoxNzU5ODQ0NjE4LCJqdGkiOiIxNGVjOTViZTc2N2Q0MzVjYWVkNTM0MDEwMmFmOTIyOCIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.Mf_gvG82WT9NUtJW_bD7s_TgP6istV361je-h392HnI",
+    "created_at": "2025-10-07T13:43:38.571Z",
+    "expires_at": "2025-11-06T13:43:38Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 7,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "428c53f851ad4e318d2a235fef409b5f",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQzNzc1MywiaWF0IjoxNzU5ODQ1NzUzLCJqdGkiOiI0MjhjNTNmODUxYWQ0ZTMxOGQyYTIzNWZlZjQwOWI1ZiIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.7fbWsecC8FIi8cL4RuTYCisHi-KgLof7X3gk9xqnTlk",
+    "created_at": "2025-10-07T14:02:33.549Z",
+    "expires_at": "2025-11-06T14:02:33Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 8,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "f9edaea4c851409f9aa585701311c701",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQ0NjA0MCwiaWF0IjoxNzU5ODU0MDQwLCJqdGkiOiJmOWVkYWVhNGM4NTE0MDlmOWFhNTg1NzAxMzExYzcwMSIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.-LCWKa4MgSGA6AwnIxCPFY_pEyf4sNwgXKhqsTqITOg",
+    "created_at": "2025-10-07T16:20:40.632Z",
+    "expires_at": "2025-11-06T16:20:40Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 9,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "2a45bf14c81a405581b9bd0e02d4ca35",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjQ5NDE0NiwiaWF0IjoxNzU5OTAyMTQ2LCJqdGkiOiIyYTQ1YmYxNGM4MWE0MDU1ODFiOWJkMGUwMmQ0Y2EzNSIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.AMgS1fRuodE41zoXBp7PednjKH055uM7r2nPmlGmjJc",
+    "created_at": "2025-10-08T05:42:26.661Z",
+    "expires_at": "2025-11-07T05:42:26Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 10,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "0a0ac8815a9a4c9a8f1b0c1be6a87864",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjUxMjc2OCwiaWF0IjoxNzU5OTIwNzY4LCJqdGkiOiIwYTBhYzg4MTVhOWE0YzlhOGYxYjBjMWJlNmE4Nzg2NCIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.MHathgyRQj33T3BsrZ_GYiWDSMnYKfDiK1_fB725wvw",
+    "created_at": "2025-10-08T10:52:48.861Z",
+    "expires_at": "2025-11-07T10:52:48Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 11,
+  "fields": {
+    "user": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+    "jti": "e85822e7f92b4b67bdfa13a8196aa3bb",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjU4Mzk5OSwiaWF0IjoxNzU5OTkxOTk5LCJqdGkiOiJlODU4MjJlN2Y5MmI0YjY3YmRmYTEzYTgxOTZhYTNiYiIsInVzZXJfaWQiOiJiNzM2MmYzZi00M2E2LTQ5ZWItOTAxNi1hMWEwNjNhZjA0OTIifQ.5essomIc033BfdGX5eMN29loSWbTNm95P2YoVW4bbOI",
+    "created_at": "2025-10-09T06:39:59.288Z",
+    "expires_at": "2025-11-08T06:39:59Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 12,
+  "fields": {
+    "user": "1a6b6ef7-3a41-47a9-9de6-800883100524",
+    "jti": "6f1780d80fa742abbb547749f6b5e7df",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjU4NjUxNiwiaWF0IjoxNzU5OTk0NTE2LCJqdGkiOiI2ZjE3ODBkODBmYTc0MmFiYmI1NDc3NDlmNmI1ZTdkZiIsInVzZXJfaWQiOiIxYTZiNmVmNy0zYTQxLTQ3YTktOWRlNi04MDA4ODMxMDA1MjQifQ.g2t3-jD4rpkvUja0fKf0nOwZHsTucxkKCHtHfj3EKYY",
+    "created_at": "2025-10-09T07:21:56.218Z",
+    "expires_at": "2025-11-08T07:21:56Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 13,
+  "fields": {
+    "user": "e360d343-88e7-46f3-9f0a-ccce0584a584",
+    "jti": "6243c13ab7084296993f217f61455bde",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjU4OTEzNSwiaWF0IjoxNzU5OTk3MTM1LCJqdGkiOiI2MjQzYzEzYWI3MDg0Mjk2OTkzZjIxN2Y2MTQ1NWJkZSIsInVzZXJfaWQiOiJlMzYwZDM0My04OGU3LTQ2ZjMtOWYwYS1jY2NlMDU4NGE1ODQifQ.X5waek49yB-5wIJHZ1OulE6NUU9mSJ2vm_XR3O4VQNM",
+    "created_at": "2025-10-09T08:05:35.757Z",
+    "expires_at": "2025-11-08T08:05:35Z"
+  }
+},
+{
+  "model": "token_blacklist.outstandingtoken",
+  "pk": 14,
+  "fields": {
+    "user": "b7362f3f-43a6-49eb-9016-a1a063af0492",
+    "jti": "7752490bd52e47ac8f51f3012d89ed1b",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjU4OTM4MCwiaWF0IjoxNzU5OTk3MzgwLCJqdGkiOiI3NzUyNDkwYmQ1MmU0N2FjOGY1MWYzMDEyZDg5ZWQxYiIsInVzZXJfaWQiOiJiNzM2MmYzZi00M2E2LTQ5ZWItOTAxNi1hMWEwNjNhZjA0OTIifQ.eHxfgsZWC2-6cJZEXf2QLGvWf74UNqPUYg57pcG_x20",
+    "created_at": "2025-10-09T08:09:40.657Z",
+    "expires_at": "2025-11-08T08:09:40Z"
+  }
+},
+{
+  "model": "token_blacklist.blacklistedtoken",
+  "pk": 1,
+  "fields": {
+    "token": 1,
+    "blacklisted_at": "2025-10-07T13:41:58.931Z"
+  }
+},
+{
+  "model": "token_blacklist.blacklistedtoken",
+  "pk": 2,
+  "fields": {
+    "token": 2,
+    "blacklisted_at": "2025-10-07T13:41:58.938Z"
+  }
+},
+{
+  "model": "token_blacklist.blacklistedtoken",
+  "pk": 3,
+  "fields": {
+    "token": 3,
+    "blacklisted_at": "2025-10-07T13:41:58.940Z"
+  }
+},
+{
+  "model": "token_blacklist.blacklistedtoken",
+  "pk": 4,
+  "fields": {
+    "token": 4,
+    "blacklisted_at": "2025-10-07T13:41:58.940Z"
+  }
+},
+{
+  "model": "token_blacklist.blacklistedtoken",
+  "pk": 5,
+  "fields": {
+    "token": 5,
+    "blacklisted_at": "2025-10-07T13:42:00.217Z"
+  }
+}
+]

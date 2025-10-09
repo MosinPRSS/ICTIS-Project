@@ -89,6 +89,8 @@ class ListPublicBotsV2(generics.ListCreateAPIView):
             return queryset.order_by(f"{order_prefix}rate")
         elif sort_by == 2:
             return queryset.order_by(f"{order_prefix}session_count")
+        elif sort_by == 3:
+            return queryset.order_by(f"{order_prefix}created_at")
         else:
             return queryset.order_by("name")
         
@@ -228,6 +230,8 @@ class SearchV2(generics.ListAPIView):
             return queryset.order_by(f"{order_prefix}rate")
         elif sort_by == 2:
             return queryset.order_by(f"{order_prefix}session_count")
+        elif sort_by == 3:
+            return queryset.order_by(f"{order_prefix}created_at")
         else:
             return queryset.order_by("name")
         

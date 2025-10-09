@@ -22,8 +22,6 @@ class User(AbstractBaseUser):
     avatar = models.ImageField(upload_to='img/user/', default="Default_Avatar.svg")
     description = models.TextField()
 
-    view_nsfw = models.BooleanField(default=False) # TODO: SOON
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
