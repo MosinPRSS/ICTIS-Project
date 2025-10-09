@@ -71,16 +71,10 @@ const NewPersonaSettings = ({
 	return (
 		<div className="absolute inset-0 min-h-screen h-fit backdrop-blur-3xl flex items-center justify-center">
 			{/* Modal Container */}
-			<div
-				className={`${
-					userDevice === "mobile"
-						? "h-fit w-[90%]"
-						: "h-[90%] w-[90%]"
-				} relative`}
-			>
+			<div className={`relative`}>
 				{/* Modal */}
 				<div
-					className={`w-full h-fit relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
+					className={`w-full h-full relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
 				>
 					{/* Header */}
 					<div className="flex items-center justify-between p-6 border-b border-white/10">

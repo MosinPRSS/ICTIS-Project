@@ -1,11 +1,13 @@
 "use client";
 import useUserService from "@/api/user_service";
+import { questionIcon } from "@/assets/images/images";
 import DeleteConfirm from "@/components/DeleteConfirm";
 import { useWindow, useWindowWidth } from "@/hooks/window";
 import { IUser } from "@/interfaces/entries";
 import { openMessage } from "@/store/slices/messageSlice";
 import { logout } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
+import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -114,7 +116,12 @@ const ProfilePage = () => {
 								<div className="flex flex-col sm:flex-row items-start gap-6">
 									<div className="relative group">
 										<Image
-											src={userInfo.avatar}
+											src={
+												userInfo.avatar ===
+												DEFAULT_IMAGE_SRC
+													? questionIcon
+													: userInfo.avatar
+											}
 											alt="avatar"
 											width={120}
 											height={120}

@@ -8,6 +8,7 @@ import Loading from "@/components/Loading";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch } from "react-redux";
 import {
+	botIcon,
 	infoIcon,
 	leftIcon,
 	sendIcon,
@@ -21,6 +22,7 @@ import BotInfo from "@/components/chatPage/BotInfo";
 import DeleteConfirm from "@/components/chatPage/DeleteConfirm";
 import Message from "@/components/chatPage/Message";
 import { motion } from "motion/react";
+import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 
 const Chat = () => {
 	const [showBotInfo, setShowBotInfo] = useState(false);
@@ -103,7 +105,7 @@ const Chat = () => {
 			setMessages((prev) =>
 				prev.map((message) =>
 					message.id === tempMessage.id
-						? { ...message, status: "sent" }
+						? { ...message, status: "send" }
 						: message
 				)
 			);
@@ -132,124 +134,133 @@ const Chat = () => {
 			) : (
 				chatInfo && (
 					<div className={`flex flex-col h-full w-full relative`}>
-						<div className="bg-black/20 backdrop-blur-xl border-b border-white/10 p-4">
-							<div
-								className={`flex items-center justify-between`}
-							>
-								<div className="flex items-center gap-4">
-									<button
-										onClick={() => router.back()}
-										className="p-2 rounded-lg mr-7 bg-white/10 hover:bg-white/20 transition-colors mr-2"
-									>
+						<div className="w-[60rem] min-w-[320px] mx-auto flex flex-col justify-between h-full">
+							<div className="bg-black/20 backdrop-blur-xl border-b border-white/10 py-4 px-[5rem] rounded-b-full">
+								<div
+									className={`flex items-center justify-between`}
+								>
+									<div className="flex items-center gap-4">
+										<button
+											onClick={() => router.back()}
+											className="p-2 rounded-lg mr-7 bg-white/10 hover:bg-white/20 transition-colors mr-2"
+										>
+											<Image
+												src={leftIcon}
+												alt="left-icon"
+												width={20}
+												height={20}
+											/>
+										</button>
 										<Image
-											src={leftIcon}
-											alt="left-icon"
-											width={20}
-											height={20}
+											src={
+												chatInfo.chatbot.avatar ===
+												DEFAULT_IMAGE_SRC
+													? botIcon
+													: chatInfo.chatbot.avatar
+											}
+											alt={chatInfo.chatbot.name}
+											className="w-10 h-10 rounded-full object-cover"
+											width={40}
+											height={40}
 										/>
-									</button>
-									<Image
-										src={chatInfo.chatbot.avatar}
-										alt={chatInfo.chatbot.name}
-										className="w-10 h-10 rounded-full object-cover"
-										width={40}
-										height={40}
-									/>
-									<div className="">
-										<h2 className="font-semibold text-white truncate w-fit">
-											{chatInfo.chatbot.name}
-										</h2>
-										<p className="text-sm text-purple-300 truncate w-fit">
-											{chatInfo.chatbot.name}
-										</p>
+										<div className="">
+											<h2 className="font-semibold text-white truncate w-fit">
+												{chatInfo.chatbot.name}
+											</h2>
+											<p className="text-sm text-purple-300 truncate w-fit">
+												{chatInfo.chatname}
+											</p>
+										</div>
+									</div>
+
+									<div
+										className={`flex w-auto items-center gap-2
+										}`}
+									>
+										<button
+											onClick={() =>
+												setShowBotOptions(
+													!showBotOptions
+												)
+											}
+											className="p-2 rounded-lg bg-white/10 cursor-pointer hover:bg-white/20 transition-colors"
+										>
+											<Image
+												src={settingsIcon}
+												alt="options-icon"
+												width={20}
+												height={20}
+											/>
+										</button>
+										<button
+											onClick={() =>
+												setShowBotInfo(!showBotInfo)
+											}
+											className="p-2 rounded-lg cursor-pointer bg-white/10 hover:bg-white/20 transition-colors"
+										>
+											<Image
+												src={infoIcon}
+												alt="info-icon"
+												width={20}
+												height={20}
+											/>
+										</button>
 									</div>
 								</div>
+							</div>
 
-								<div
-									className={`flex w-auto items-center gap-2
-									}`}
-								>
-									<button
-										onClick={() =>
-											setShowBotOptions(!showBotOptions)
+							<div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+								{messages.map((message) => (
+									<Message
+										message={message}
+										key={message.id}
+										userDevice={userDevice}
+										setMessages={setMessages}
+									/>
+								))}
+							</div>
+
+							<div className="bg-black/20 backdrop-blur-xl border-t border-white/10 py-4 px-[5rem] rounded-t-full">
+								<div className="flex items-center gap-3">
+									<input
+										ref={inputRef}
+										type="text"
+										placeholder="Напишите сообщение..."
+										value={messageInput}
+										onChange={(e) =>
+											setMessageInput(e.target.value)
 										}
-										className="p-2 rounded-lg bg-white/10 cursor-pointer hover:bg-white/20 transition-colors"
-									>
-										<Image
-											src={settingsIcon}
-											alt="options-icon"
-											width={20}
-											height={20}
-										/>
-									</button>
-									<button
-										onClick={() =>
-											setShowBotInfo(!showBotInfo)
+										onKeyPress={(e) =>
+											e.key === "Enter" && send(e)
 										}
-										className="p-2 rounded-lg cursor-pointer bg-white/10 hover:bg-white/20 transition-colors"
+										className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+									/>
+									<button
+										onClick={(e) => send(e)}
+										disabled={!messageInput.trim()}
+										className="p-3 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+										aria-label="Отправить сообщение"
 									>
-										<Image
-											src={infoIcon}
-											alt="info-icon"
-											width={20}
-											height={20}
-										/>
+										{isMessageSending ? (
+											<motion.div
+												className="w-[20px] h-[20px] border-8 border-dotted border-white rounded-full top-1/2 left-1/2"
+												animate={{ rotate: 360 }}
+												transition={{
+													duration: 2,
+													repeat: Infinity,
+													type: "spring",
+												}}
+											/>
+										) : (
+											<Image
+												src={sendIcon}
+												alt="send-icon"
+												width={20}
+												height={20}
+											/>
+										)}
 									</button>
 								</div>
-							</div>
-						</div>
-
-						<div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
-							{messages.map((message) => (
-								<Message
-									message={message}
-									key={message.id}
-									userDevice={userDevice}
-									setMessages={setMessages}
-								/>
-							))}
-						</div>
-
-						<div className="bg-black/20 backdrop-blur-xl border-t border-white/10 p-4">
-							<div className="flex items-center gap-3">
-								<input
-									ref={inputRef}
-									type="text"
-									placeholder="Напишите сообщение..."
-									value={messageInput}
-									onChange={(e) =>
-										setMessageInput(e.target.value)
-									}
-									onKeyPress={(e) =>
-										e.key === "Enter" && send(e)
-									}
-									className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-								/>
-								<button
-									onClick={(e) => send(e)}
-									disabled={!messageInput.trim()}
-									className="p-3 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-									aria-label="Отправить сообщение"
-								>
-									{isMessageSending ? (
-										<motion.div
-											className="w-[20px] h-[20px] border-8 border-dotted border-white rounded-full top-1/2 left-1/2"
-											animate={{ rotate: 360 }}
-											transition={{
-												duration: 2,
-												repeat: Infinity,
-												type: "spring",
-											}}
-										/>
-									) : (
-										<Image
-											src={sendIcon}
-											alt="send-icon"
-											width={20}
-											height={20}
-										/>
-									)}
-								</button>
 							</div>
 						</div>
 						{showBotOptions && (

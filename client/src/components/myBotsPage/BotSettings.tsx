@@ -106,17 +106,8 @@ const BotSettings = ({
 		}
 	}
 
-	function cancelEdit() {
-		setBotInfo(initialBot);
-		setIsChange(false);
-	}
-
-	useEffect(() => {
-		console.log(botInfo);
-	}, [botInfo]);
-
 	return (
-		<div className="absolute inset-0 min-h-screen backdrop-blur-3xl flex items-center justify-center">
+		<div className="absolute inset-0 min-h-screen p-10 backdrop-blur-3xl flex items-center justify-center">
 			{/* Modal Container */}
 			<div className="w-[90%] h-[90%] relative">
 				{/* Modal */}
@@ -269,11 +260,11 @@ const BotSettings = ({
 									</div>
 								</div>
 								{/* Tags Field */}
-								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all flex gap-3 flex-wrap">
 									{botInfo.tags.map((tag) => (
 										<div
 											key={tag}
-											className={`${selectedTheme.options.background} px-2 border p-1 rounded-[10px] flex items-center gap-3`}
+											className={`${selectedTheme.options.background} w-fit px-2 border p-1 rounded-[10px] flex items-center gap-3`}
 										>
 											<p>{tag}</p>
 											<button

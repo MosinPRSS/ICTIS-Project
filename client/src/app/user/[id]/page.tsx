@@ -1,12 +1,15 @@
 "use client";
 import useUserService from "@/api/user_service";
+import { personIcon } from "@/assets/images/images";
 import Card from "@/components/Card";
 import Loading from "@/components/Loading";
 import { useWindow } from "@/hooks/window";
+import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Image from "next/image";
 
 const UserPage = () => {
 	const { selectedTheme } = useSelector((state: RootState) => state);
@@ -68,8 +71,20 @@ const UserPage = () => {
 							className={`flex gap-5 items-center ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
 						>
 							<div
-								className={`${selectedTheme.options.border} border-[1px] rounded-full bg-black min-w-40 min-h-40`}
-							></div>
+								className={`${selectedTheme.options.border} border-[1px] rounded-[10px] bg-black min-w-40 min-h-40`}
+							>
+								<Image
+									src={
+										userInfo.user.avatar ===
+										DEFAULT_IMAGE_SRC
+											? personIcon
+											: userInfo.user.avatar
+									}
+									alt="avatar"
+									width={100}
+									height={100}
+								/>
+							</div>
 							<div>
 								<p>{userInfo.user.username}</p>
 								<p>{userInfo.user.email}</p>
@@ -80,16 +95,6 @@ const UserPage = () => {
 									).toLocaleDateString()}
 								</p>
 							</div>
-						</div>
-						<div
-							className={`flex flex-col gap-3 h-fit overflow-y-auto ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
-						>
-							<p>Имя</p>
-							<p
-								className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
-							>
-								{userInfo.user.username}
-							</p>
 						</div>
 						<div
 							className={`flex flex-col gap-3 h-fit overflow-y-auto ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}

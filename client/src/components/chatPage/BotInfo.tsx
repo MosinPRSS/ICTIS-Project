@@ -1,6 +1,7 @@
-import { cancelIcon } from "@/assets/images/images";
+import { botIcon, cancelIcon } from "@/assets/images/images";
 import { showAuth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
+import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -27,7 +28,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 			<div
-				className={`${selectedTheme.options.background} rounded-2xl p-6 w-[80vw] border border-white/10 max-h-[80vh] text-white overflow-y-auto`}
+				className={`${selectedTheme.options.background} rounded-2xl p-6 w-[60vw] border border-white/10 max-h-[80vh] text-white overflow-y-auto`}
 			>
 				<div className="flex items-center justify-end mb-5">
 					<button
@@ -45,13 +46,17 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 
 				<div className="space-y-6">
 					<div className="text-center">
-						<div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-white">
+						<div className="w-24 h-24 flex justify-center items-center rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-white">
 							<Image
-								width={100}
-								height={100}
-								src={chatInfo.avatar}
+								src={
+									chatInfo.avatar === DEFAULT_IMAGE_SRC
+										? botIcon
+										: chatInfo.avatar
+								}
 								alt={chatInfo.name}
-								className="w-full h-full object-cover"
+								className="w-10 h-10 rounded-full object-cover"
+								width={40}
+								height={40}
 							/>
 						</div>
 						<h3 className="text-2xl font-bold mb-1">

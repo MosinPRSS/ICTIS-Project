@@ -4,6 +4,7 @@ import {
 	new_botIcon,
 	ratingIcon,
 	searchIcon,
+	swapIcon,
 	trendingIcon,
 } from "@/assets/images/images";
 import Card from "@/components/Card";
@@ -37,6 +38,7 @@ export default function Home() {
 			if (!next) {
 				return;
 			}
+
 			setIsLoading(true);
 
 			const data = await searchBots(
@@ -48,7 +50,6 @@ export default function Home() {
 				reverse,
 				selectedTags
 			);
-			console.log(data);
 
 			setNext(data.next);
 			setBots(bots.concat(data.results));
@@ -60,8 +61,7 @@ export default function Home() {
 	}
 
 	useEffect(() => {
-		console.log(selectedCategory, selectedTags, reverse, searchInput);
-
+		setNext("b/search");
 		setSearchInput("");
 		setBots([]);
 		getBots();
@@ -174,6 +174,19 @@ export default function Home() {
 						height={20}
 					/>
 					<p>Новинки</p>
+				</button>
+				<button
+					className={`border-1 border-white rounded-[7px] py-[5px] px-[7px] hover:scale-105 transition duration-[400ms] ${
+						reverse && "rotate-180"
+					}`}
+					onClick={() => setReverse(Number(!reverse))}
+				>
+					<Image
+						src={swapIcon}
+						alt="swap-icon"
+						width={30}
+						height={30}
+					/>
 				</button>
 			</div>
 			<div className="flex gap-10 items-center flex-wrap mt-10">

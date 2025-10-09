@@ -27,7 +27,9 @@ import errorIcon from "./error-icon.svg";
 import deleteIcon from "./delete-icon.svg";
 import okIcon from "./ok-icon.svg";
 import copyIcon from "./copy-icon.svg";
+import swapIcon from "./swap-icon.svg";
 export {
+	swapIcon,
 	redThemeIcon,
 	copyIcon,
 	okIcon,

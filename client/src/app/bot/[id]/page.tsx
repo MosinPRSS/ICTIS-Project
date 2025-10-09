@@ -53,8 +53,6 @@ const BotPage = () => {
 				setIsLoading(true);
 				const response = await readBot(params.id);
 
-				console.log(response);
-
 				if (!response) {
 					throw new Error("Failed to get bot");
 				}
@@ -94,7 +92,7 @@ const BotPage = () => {
 								className={`flex gap-5 p-10 rounded-[10px] ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} border-1`}
 							>
 								<Image
-									src={bot.image}
+									src={bot.avatar}
 									alt="bot"
 									width={200}
 									height={200}

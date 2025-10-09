@@ -1,5 +1,5 @@
 import useTagsService from "@/api/tags_service";
-import { IFindBot } from "@/interfaces/interfaces";
+import { IFindBot, ITag } from "@/interfaces/interfaces";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
 	const { getPopularTags } = useTagsService();
 	const dispatch = useDispatch();
-	const [tagsList, setTags] = useState<string[]>(["tag"]);
+	const [tagsList, setTags] = useState<ITag[]>([]);
 
 	useEffect(() => {
 		(async function getTags() {
@@ -24,13 +24,17 @@ const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
 			}
 		})();
 	}, []);
-	function addTag(tag: string) {
+	function addTag(tag: ITag) {
 		setSelectedTags([...selectedTags, tag]);
-		setTags(tagsList.filter((t) => t !== tag));
+		setTags(
+			tagsList
+				.filter((t) => t.name !== tag.name)
+				.sort((a: ITag, b: ITag) => b.name.localeCompare(a.name))
+		);
 	}
 
-	function removeTag(tag: string) {
-		setSelectedTags(selectedTags.filter((t: string) => t !== tag));
+	function removeTag(tag: ITag) {
+		setSelectedTags(selectedTags.filter((t: ITag) => t.name !== tag.name));
 		setTags([...tagsList, tag].sort());
 	}
 
@@ -40,23 +44,23 @@ const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
 				Теги
 			</button>
 			{selectedTags &&
-				selectedTags.map((tag: string) => (
+				selectedTags.map((tag: ITag) => (
 					<button
-						key={tag}
+						key={tag.name}
 						className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] p-2 h-fit"
 						onClick={() => removeTag(tag)}
 					>
-						{tag}
+						{tag.name}
 					</button>
 				))}
 			<div className="min-w-[1px] h-[50px] bg-white flex-wrap" />
 			{tagsList.map((tag) => (
 				<button
-					key={tag}
+					key={tag.name}
 					className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] p-2 h-fit"
 					onClick={() => addTag(tag)}
 				>
-					{tag}
+					{tag.name}
 				</button>
 			))}
 		</div>

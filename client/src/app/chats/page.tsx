@@ -1,8 +1,10 @@
 "use client";
 import useSessionService from "@/api/session_service";
+import { botIcon, questionIcon } from "@/assets/images/images";
 import Loading from "@/components/Loading";
 import { initChats } from "@/store/slices/chatsSlice";
 import { RootState } from "@/store/store";
+import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -23,6 +25,7 @@ const ChatInterface: React.FC = () => {
 			try {
 				setIsLoading(true);
 				const response = await readSessions();
+				console.log(response);
 
 				if (!response) {
 					throw new Error("Failed to get chats");
@@ -63,7 +66,7 @@ const ChatInterface: React.FC = () => {
 			<div className="relative mb-6">
 				<input
 					type="text"
-					placeholder="Поиск ботов..."
+					placeholder="Поиск"
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
 					className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
@@ -84,18 +87,23 @@ const ChatInterface: React.FC = () => {
 								>
 									<div className="relative">
 										<Image
-											src={chat.chatbot.avatar}
+											src={
+												chat.chatbot.avatar !==
+												DEFAULT_IMAGE_SRC
+													? chat.chatbot.avatar
+													: questionIcon
+											}
 											alt={chat.chatbot.name}
 											className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-400/30"
-											width={48}
-											height={48}
+											width={40}
+											height={40}
 										/>
 									</div>
 
 									<div className="flex-1 min-w-0">
 										<div className="flex items-center justify-between mb-1">
 											<h3 className="font-semibold text-white truncate">
-												{chat.chatbot.chatname}
+												{chat.chatbot.name}
 											</h3>
 										</div>
 

@@ -14,3 +14,8 @@ export interface IsOpen {
 	isOpen: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface ITag {
+	name: string;
+	num_times: number;
+}

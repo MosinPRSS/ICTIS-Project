@@ -5,13 +5,15 @@ import {
 	okIcon,
 	closeIcon,
 	copyIcon,
+	deleteIcon,
 } from "@/assets/images/images";
 import React from "react";
 import Image from "next/image";
 import { IMessage } from "@/interfaces/chat";
 import useMessageService from "@/api/message_service";
 import { openMessage } from "@/store/slices/messageSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const Message = ({
 	message,
@@ -22,6 +24,7 @@ const Message = ({
 	userDevice: string;
 	setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
 }) => {
+	const { selectedTheme } = useSelector((state: RootState) => state);
 	const { deleteMessage, updateMessage } = useMessageService();
 	const [isEditing, setIsEditing] = React.useState(false);
 	const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
@@ -52,17 +55,23 @@ const Message = ({
 		}
 	}
 
-	async function handleDelete(e, messageID) {
+	async function handleDelete(e, message) {
 		e.preventDefault();
 		try {
-			const response = await deleteMessage(messageID);
+			if (message.status === "send") {
+				const response = await deleteMessage(message.id);
 
-			if (response !== 204) {
-				throw new Error("Failed to delete message");
+				if (response !== 204) {
+					throw new Error("Failed to delete message");
+				}
 			}
 
 			setMessages((prev) =>
-				prev.filter((message) => message.id !== messageID)
+				prev.filter(
+					(mes) =>
+						mes.id !== message.id &&
+						mes.timestamp <= message.timestamp
+				)
 			);
 		} catch (error) {
 			dispatch(openMessage("Произошла ошибка при удалении сообщения"));
@@ -96,7 +105,7 @@ const Message = ({
 				} break-words px-4 py-3 rounded-2xl ${
 					message.role !== "user"
 						? "bg-white/10 text-white"
-						: "bg-purple-600 text-white"
+						: `${selectedTheme.options.elementBackground} text-white`
 				}`}
 			>
 				{message.role === "user" && isEditing ? (
@@ -165,7 +174,7 @@ const Message = ({
 							className={`absolute bottom-[-1.8rem] right-2 flex gap-2 p-[2px] rounded-[5px] ${
 								message.role !== "user"
 									? "bg-white/10 text-white"
-									: "bg-purple-600/70 text-white"
+									: `${selectedTheme.options.elementOpacity} text-white`
 							}`}
 						>
 							<button
@@ -193,7 +202,7 @@ const Message = ({
 											height={20}
 										/>
 									</button>
-									{/*<button
+									<button
 										className="p-[3px] hover:bg-gray-400 rounded-[5px]"
 										onClick={() =>
 											setShowDeleteConfirm(true)
@@ -205,7 +214,7 @@ const Message = ({
 											width={20}
 											height={20}
 										/>
-									</button>*/}
+									</button>
 								</>
 							)}
 						</div>
@@ -226,7 +235,7 @@ const Message = ({
 									Отмена
 								</button>
 								<button
-									onClick={(e) => handleDelete(e, message.id)}
+									onClick={(e) => handleDelete(e, message)}
 									className="flex-1 cursor-pointer px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium"
 								>
 									Удалить
