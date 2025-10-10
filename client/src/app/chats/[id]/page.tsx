@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import useSessionService from "@/api/session_service";
 import Loading from "@/components/Loading";
 import { openMessage } from "@/store/slices/messageSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	botIcon,
 	infoIcon,
@@ -23,6 +23,7 @@ import DeleteConfirm from "@/components/chatPage/DeleteConfirm";
 import Message from "@/components/chatPage/Message";
 import { motion } from "motion/react";
 import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
+import { RootState } from "@/store/store";
 
 const Chat = () => {
 	const [showBotInfo, setShowBotInfo] = useState(false);
@@ -44,6 +45,7 @@ const Chat = () => {
 
 	const router = useRouter();
 	const params = useParams();
+	const { selectedTheme } = useSelector((state: RootState) => state);
 
 	const [chatInfo, setChatInfo] = useState(null);
 
@@ -238,7 +240,7 @@ const Chat = () => {
 									<button
 										onClick={(e) => send(e)}
 										disabled={!messageInput.trim()}
-										className="p-3 rounded-xl cursor-pointer bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+										className={`p-3 hover:scale-110 transition duration-[1s] rounded-xl cursor-pointer ${selectedTheme.options.middleground} disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
 										aria-label="Отправить сообщение"
 									>
 										{isMessageSending ? (
@@ -255,8 +257,8 @@ const Chat = () => {
 											<Image
 												src={sendIcon}
 												alt="send-icon"
-												width={20}
-												height={20}
+												width={30}
+												height={30}
 											/>
 										)}
 									</button>

@@ -8,6 +8,7 @@ import { useWindow } from "@/hooks/window";
 import usePersonaService from "@/api/persona_service";
 import { openMessage } from "@/store/slices/messageSlice";
 import DeleteConfirm from "../DeleteConfirm";
+import AvatarChange from "../AvatarChange";
 
 const PersonaSettings = ({
 	initialPersona,
@@ -31,10 +32,6 @@ const PersonaSettings = ({
 		setPersonaInfo(updatedBot);
 	}
 
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-	}
-
 	useEffect(() => {
 		setUserDevice(windowWidth);
 	}, [windowWidth]);
@@ -48,7 +45,7 @@ const PersonaSettings = ({
 				id: new Date(),
 			});
 
-			const response = await updatePersona(personaInfo, user.user.id);
+			const response = await updatePersona(personaInfo, personaInfo.id);
 
 			if (!response) {
 				throw new Error("Failed to update persona");
@@ -81,11 +78,6 @@ const PersonaSettings = ({
 		} finally {
 			setSelectedPersona(null);
 		}
-	}
-
-	function cancelEdit() {
-		setPersonaInfo(initialPersona);
-		setIsChange(false);
 	}
 
 	return (
@@ -134,36 +126,11 @@ const PersonaSettings = ({
 									<div className="space-y-4">
 										{/* Avatar Preview */}
 										<div className="relative group mx-auto w-40 h-40">
-											<div
-												className={`relative w-full h-full ${selectedTheme.options.elementBackground} rounded-3xl flex items-center justify-center border-2 border-white/20`}
-											>
-												{personaInfo.avatar ? (
-													<Image
-														width={100}
-														height={100}
-														src={personaInfo.avatar}
-														alt="Avatar"
-														className="w-full h-full object-cover rounded-3xl"
-													/>
-												) : (
-													<></> // <ImageIcon className="w-16 h-16 text-white/50" />
-												)}
-											</div>
-											<button className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-												<Image
-													src={uploadIcon}
-													alt="upload-icon"
-													width={50}
-													height={50}
-												/>
-											</button>
+											<AvatarChange
+												Info={personaInfo}
+												setInfo={changePersona}
+											/>
 										</div>
-
-										{/* Upload Button */}
-										<button className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
-											{/* <Upload className="w-4 h-4" /> */}
-											Загрузить изображение
-										</button>
 									</div>
 								</div>
 

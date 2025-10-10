@@ -76,13 +76,13 @@ const GenerationSettings = ({
 					<div className="space-y-4">
 						<div>
 							<label className="block text-sm font-medium mb-2">
-								Температура
+								Температура ({temperature})
 							</label>
 							<input
 								type="range"
 								min="0"
 								max="1"
-								step="0.1"
+								step="0.01"
 								value={temperature}
 								onInput={(e) =>
 									setTemperature(
@@ -99,13 +99,13 @@ const GenerationSettings = ({
 
 						<div>
 							<label className="block text-sm font-medium mb-2">
-								Максимальная длина
+								Максимальная длина ({tokens} токенов)
 							</label>
 							<input
 								type="range"
 								min="50"
 								max="1000"
-								step="50"
+								step="1"
 								value={tokens}
 								onInput={(e) =>
 									setTokens(Number(e.currentTarget.value))

@@ -1,16 +1,23 @@
 import { botIcon, cancelIcon } from "@/assets/images/images";
+import { useWindow } from "@/hooks/window";
 import { showAuth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
 import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const BotInfo = ({ setShowBotInfo, chatInfo }) => {
+	const windowWidth = useWindow();
+	const [userDevice, setUserDevice] = useState(windowWidth);
 	const { selectedTheme, user } = useSelector((state: RootState) => state);
 	const dispatch = useDispatch();
 	const router = useRouter();
+
+	useEffect(() => {
+		setUserDevice(windowWidth);
+	}, [windowWidth]);
 
 	function redirectToAuthor() {
 		if (!user.user) {
@@ -26,60 +33,64 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 		}
 	}
 	return (
-		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 w-full">
 			<div
-				className={`${selectedTheme.options.background} rounded-2xl p-6 w-[60vw] border border-white/10 max-h-[80vh] text-white overflow-y-auto`}
+				className={`w-[60vw] max-h-[80vh] text-white overflow-y-auto flex ld:flex-col md:flex-row ${
+					userDevice === "mobile" && "flex-col"
+				} gap-5`}
 			>
-				<div className="flex items-center justify-end mb-5">
-					<button
-						onClick={() => setShowBotInfo(false)}
-						className="p-1 rounded-full hover:bg-white/10 transition-colors"
+				<div
+					className={`space-y-6 ${
+						userDevice === "mobile" ? "w-full" : "w-[50%]"
+					}`}
+				>
+					<div
+						className={`flex flex-col justify-between items-center ${selectedTheme.options.background}  rounded-2xl p-6 border border-white/10`}
 					>
-						<Image
-							src={cancelIcon}
-							alt="cancel-icon"
-							width={30}
-							height={30}
-						/>
-					</button>
-				</div>
-
-				<div className="space-y-6">
-					<div className="text-center">
-						<div className="w-24 h-24 flex justify-center items-center rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-white">
-							<Image
-								src={
-									chatInfo.avatar === DEFAULT_IMAGE_SRC
-										? botIcon
-										: chatInfo.avatar
-								}
-								alt={chatInfo.name}
-								className="w-10 h-10 rounded-full object-cover"
-								width={40}
-								height={40}
-							/>
+						<div className="w-full flex">
+							<button
+								onClick={() => setShowBotInfo(false)}
+								className="p-1 mb-5 rounded-full hover:bg-white/10 transition-colors self-end"
+							>
+								<Image
+									src={cancelIcon}
+									alt="cancel-icon"
+									width={30}
+									height={30}
+								/>
+							</button>
 						</div>
-						<h3 className="text-2xl font-bold mb-1">
-							{chatInfo.name}
-						</h3>
-						<button
-							onClick={redirectToAuthor}
-							className="hover:underline cursor-pointer flex items-center justify-center gap-1 mx-auto"
-						>
-							<span>от {chatInfo.user.username}</span>
-						</button>
+						<div className="flex gap-5 items-center">
+							<div className="w-24 h-24 flex justify-center items-center rounded-full mb-4 overflow-hidden ring-4 ring-white">
+								<Image
+									src={
+										chatInfo.avatar === DEFAULT_IMAGE_SRC
+											? botIcon
+											: chatInfo.avatar
+									}
+									alt={chatInfo.name}
+									className="w-full h-full rounded-full object-cover"
+									width={40}
+									height={40}
+								/>
+							</div>
+							<div className="text-end">
+								<h3 className="text-2xl font-bold mb-1">
+									{chatInfo.name}
+								</h3>
+								<button
+									onClick={redirectToAuthor}
+									className="hover:underline cursor-pointer flex items-center justify-center gap-1 mx-auto"
+								>
+									<span>от {chatInfo.user.username}</span>
+								</button>
+							</div>
+						</div>
 					</div>
 
-					<div>
-						<h4 className="text-sm font-semibold mb-2 uppercase tracking-wide">
-							Описание
-						</h4>
-						<p className="text-gray-300 leading-relaxed">
-							{chatInfo.description}
-						</p>
-					</div>
-
-					<div>
+					<div
+						className={`text-center ${selectedTheme.options.background} rounded-2xl p-6 border border-white/10`}
+					>
 						<h4 className="text-sm font-semibold mb-3 uppercase tracking-wide">
 							Теги
 						</h4>
@@ -94,6 +105,18 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 							))}
 						</div>
 					</div>
+				</div>
+				<div
+					className={`${selectedTheme.options.background} ${
+						userDevice === "mobile" ? "w-full" : "w-[50%]"
+					} rounded-2xl p-6 border border-white/10`}
+				>
+					<h4 className="text-sm font-semibold mb-2 uppercase tracking-wide">
+						Описание
+					</h4>
+					<p className="text-gray-300 leading-relaxed">
+						{chatInfo.description}
+					</p>
 				</div>
 			</div>
 		</div>

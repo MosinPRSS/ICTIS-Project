@@ -36,15 +36,6 @@ const ChatList = ({
 				</div>
 
 				<div className="flex justify-between items-center flex-col space-y-4 h-full">
-					{/* <button
-											onClick={() =>
-												createNewChat(chatInfo.id)
-											}
-											className="w-full flex items-center gap-3 p-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition-colors text-white font-medium"
-										>
-											Создать новый чат
-										</button> */}
-
 					{chatsLoading ? (
 						<Loading />
 					) : botChats ? (
@@ -66,7 +57,15 @@ const ChatList = ({
 									</button>
 								))}
 							</div>
-							<div className="w-full pt-4 border-t border-white/10">
+							<div className="w-full pt-4 border-t border-white/10 flex flex-col gap-5">
+								<button
+									//onClick={() =>
+									//createNewChat(chatInfo.id)
+									//}
+									className={`w-full flex justify-center items-center gap-3 p-3 rounded-xl hover:bg-white ${selectedTheme.options.elementBackground} transition-colors text-white font-medium`}
+								>
+									Создать новый чат
+								</button>
 								<button
 									onClick={() => {
 										setShowDeleteConfirm(true);

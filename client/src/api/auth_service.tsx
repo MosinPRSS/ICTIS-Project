@@ -5,8 +5,8 @@ export function useAuth() {
 	const login = async (email: string, password: string) => {
 		try {
 			const res = await apiClient.post("a/api-token", {
-				"email": email,
-				"password": password				
+				email: email,
+				password: password,
 			});
 
 			if (res.status === 200) {
@@ -35,9 +35,9 @@ export function useAuth() {
 	) => {
 		try {
 			const res = await apiClient.post("u/create", {
-				"username": username,
-				"email": email,
-				"password": password,
+				username: username,
+				email: email,
+				password: password,
 			});
 
 			if (res.status === 201) {

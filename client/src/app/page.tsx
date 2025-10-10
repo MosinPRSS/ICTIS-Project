@@ -15,13 +15,13 @@ import { IBot } from "@/interfaces/entries";
 import { RootState } from "@/store/store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function Home() {
 	const windowWidth = useWindow();
-	const { searchBots } = useSearchService();
 	const [userDevice, setUserDevice] = useState(windowWidth);
+	const { searchBots } = useSearchService();
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState(0);
 	const input = useRef<HTMLInputElement>(null);

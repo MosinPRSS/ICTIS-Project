@@ -56,11 +56,13 @@ const Auth = () => {
 
 			const username = localStorage.getItem("username");
 			const userID = localStorage.getItem("userID");
+			const avatarUrl = localStorage.getItem("avatarUrl");
 
 			dispatch(
 				auth({
 					id: userID,
 					name: username,
+					avatar: avatarUrl,
 				}),
 				showAuth(false)
 			);
@@ -96,13 +98,13 @@ const Auth = () => {
 
 			const username = localStorage.getItem("username");
 			const userID = localStorage.getItem("userID");
-
-			console.log(username, userID);
+			const avatarUrl = localStorage.getItem("avatarUrl");
 
 			dispatch(
 				auth({
 					id: userID,
 					name: username,
+					avatarUrl: avatarUrl,
 				}),
 				showAuth(false)
 			);

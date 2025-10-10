@@ -4,7 +4,7 @@ import { personIcon } from "@/assets/images/images";
 import Card from "@/components/Card";
 import Loading from "@/components/Loading";
 import { useWindow } from "@/hooks/window";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
+import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ const UserPage = () => {
 			setLoading(true);
 			try {
 				const response = await readUser(userId.id);
+				console.log(response);
 
 				if (!response) {
 					throw new Error("Failed to get user data");
@@ -57,19 +58,21 @@ const UserPage = () => {
 			) : userInfo ? (
 				<div
 					className={`${
-						userDevice === "mobile" && "flex-col"
-					} flex justify-between items-center h-full w-full gap-10 grow p-10 pb-0`}
+						userDevice === "mobile" ? "flex-col" : "justify-between"
+					} flex h-full w-full gap-10 grow p-10 pb-0`}
 				>
 					<div
 						className={`${
 							userDevice === "mobile"
-								? "w-full min-h-fit h-fit"
-								: "w-[50%] h-full overflow-y-auto"
-						} flex flex-col gap-10`}
+								? "w-full"
+								: "w-[50%] overflow-y-auto"
+						} flex flex-col h-fit gap-10 overflow-y-auto ${
+							selectedTheme.options.elementBackground
+						} p-10 border-1 ${
+							selectedTheme.options.border
+						} rounded-[10px]`}
 					>
-						<div
-							className={`flex gap-5 items-center ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
-						>
+						<div className={`flex gap-5 items-center`}>
 							<div
 								className={`${selectedTheme.options.border} border-[1px] rounded-[10px] bg-black min-w-40 min-h-40`}
 							>
@@ -78,7 +81,7 @@ const UserPage = () => {
 										userInfo.user.avatar ===
 										DEFAULT_IMAGE_SRC
 											? personIcon
-											: userInfo.user.avatar
+											: ROOT_URL + userInfo.user.avatar
 									}
 									alt="avatar"
 									width={100}
@@ -96,16 +99,15 @@ const UserPage = () => {
 								</p>
 							</div>
 						</div>
-						<div
-							className={`flex flex-col gap-3 h-fit overflow-y-auto ${selectedTheme.options.elementBackground} p-10 border-1 ${selectedTheme.options.border} rounded-[10px]`}
-						>
-							<p>Описание</p>
-							<p
-								className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
-							>
-								{userInfo.description}
-							</p>
-						</div>
+						{userInfo.description && (
+							<div>
+								<p
+									className={`overflow-y-auto ${selectedTheme.options.background} rounded-[10px] p-5`}
+								>
+									{userInfo.description}
+								</p>
+							</div>
+						)}
 					</div>
 					<div
 						className={`flex justify-end flex-wrap gap-3 ${

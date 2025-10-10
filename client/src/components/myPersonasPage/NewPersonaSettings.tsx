@@ -8,6 +8,7 @@ import { useWindow } from "@/hooks/window";
 import usePersonaService from "@/api/persona_service";
 import { useDispatch } from "react-redux";
 import { openMessage } from "@/store/slices/messageSlice";
+import AvatarChange from "../AvatarChange";
 
 const newPersona: IPersona = {
 	id: 0,
@@ -113,23 +114,11 @@ const NewPersonaSettings = ({
 									<div className="space-y-4">
 										{/* Avatar Preview */}
 										<div className="relative group mx-auto w-40 h-40">
-											<div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-											<div className="relative w-full h-full bg-gradient-to-br from-purple-800 to-indigo-800 rounded-3xl flex items-center justify-center border-2 border-white/20"></div>
-											<button className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-												<Image
-													src={uploadIcon}
-													alt="upload-icon"
-													width={50}
-													height={50}
-												/>
-											</button>
+											<AvatarChange
+												Info={personaInfo}
+												setInfo={changePersona}
+											/>
 										</div>
-
-										{/* Upload Button */}
-										<button className="w-full bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
-											{/* <Upload className="w-4 h-4" /> */}
-											Загрузить изображение
-										</button>
 									</div>
 								</div>
 

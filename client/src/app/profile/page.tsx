@@ -1,13 +1,15 @@
 "use client";
 import useUserService from "@/api/user_service";
-import { questionIcon } from "@/assets/images/images";
+import { questionIcon, uploadIcon } from "@/assets/images/images";
+import AvatarChange from "@/components/AvatarChange";
 import DeleteConfirm from "@/components/DeleteConfirm";
-import { useWindow, useWindowWidth } from "@/hooks/window";
+import useAvatarChange from "@/hooks/avatar";
+import { useWindow } from "@/hooks/window";
 import { IUser } from "@/interfaces/entries";
 import { openMessage } from "@/store/slices/messageSlice";
 import { logout } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
+import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,7 +18,6 @@ import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
 	const window = useWindow();
-	const windowWidth = useWindowWidth();
 	const [userDevice, setUserDevice] = useState(window);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -67,6 +68,7 @@ const ProfilePage = () => {
 		e.preventDefault();
 		try {
 			const response = await updateUser(userInfo);
+			console.log(response);
 
 			if (!response) {
 				throw new Error("Failed to update user");
@@ -83,7 +85,7 @@ const ProfilePage = () => {
 	async function handleDelete() {
 		try {
 			const response = await deleteUser();
-			console.log(response);
+
 			if (!response) {
 				throw new Error("Failed to delete user");
 			}
@@ -98,35 +100,46 @@ const ProfilePage = () => {
 		}
 	}
 
+	useEffect(() => {
+		console.log(userInfo);
+	}, [userInfo]);
 	return (
-		<div className="text-white/80 p-6 min-h-screen font-sans">
-			<div className="max-w-6xl pt-5 px-10 flex flex-col gap-10">
-				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+		<div className="text-white/80 p-6 h-screen w-full font-sans">
+			<div className="max-w-6xl pt-5 px-10 flex flex-col gap-10 h-full w-full mx-auto">
+				<div className="flex justify-between items-center mb-8 w-full">
+					<h1 className="text-3xl font-bold text-white/60 bg-gradient-to-r from-white to-white/70 bg-clip-text">
 						Профиль
 					</h1>
 				</div>
 
 				{userInfo ? (
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+					<div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_3fr] md:grid-cols-1 gap-6 w-full h-full">
 						<div className="lg:col-span-2 space-y-6">
 							<div
 								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
 							>
 								<div className="flex flex-col sm:flex-row items-start gap-6">
-									<div className="relative group">
-										<Image
-											src={
-												userInfo.avatar ===
-												DEFAULT_IMAGE_SRC
-													? questionIcon
-													: userInfo.avatar
-											}
-											alt="avatar"
-											width={120}
-											height={120}
-											className="rounded-2xl border-3 border-white/30 bg-white/10 transition-all duration-500"
-										/>
+									<div className="relative group w-[120px] h-[120px]">
+										{isChange ? (
+											<AvatarChange
+												Info={userInfo}
+												setInfo={setUserInfo}
+											/>
+										) : (
+											<Image
+												src={
+													userInfo.avatar ===
+													DEFAULT_IMAGE_SRC
+														? questionIcon
+														: ROOT_URL +
+														  userInfo.avatar
+												}
+												alt="avatar"
+												width={120}
+												height={120}
+												className="rounded-2xl w-full h-full border-3 border-white/30 bg-white/10 transition-all duration-500"
+											/>
+										)}
 										<div className="absolute inset-0 bg-white/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 									</div>
 									<div className="flex-1 space-y-3">
@@ -228,7 +241,7 @@ const ProfilePage = () => {
 							</div>
 						</div>
 
-						<div className="lg:col-span-1 w-full">
+						<div className="lg:col-span-1 w-full grow">
 							<div
 								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 h-full shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
 							>
@@ -248,7 +261,7 @@ const ProfilePage = () => {
 									/>
 								) : (
 									<div
-										className={`${selectedTheme.options.elementBackground} backdrop-blur-sm rounded-2xl p-4 min-h-[200px] max-h-[400px] h-[90%] overflow-y-auto custom-scrollbar border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
+										className={`${selectedTheme.options.elementBackground} backdrop-blur-sm rounded-2xl p-4 h-[95%] overflow-y-auto custom-scrollbar border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
 									>
 										<p className="text-white whitespace-pre-wrap bg-gradient-to-r from-white to-white/70 bg-clip-text">
 											{userInfo.description}

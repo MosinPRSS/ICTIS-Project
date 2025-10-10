@@ -41,9 +41,9 @@ const BotOptions = ({
 		}
 	};
 	return (
-		<div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+		<div className="absolute bg-black/50 inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 			<div
-				className={`text-white rounded-2xl p-5 w-full max-w-md border border-white/10`}
+				className={`text-white ${selectedTheme.options.background} rounded-2xl p-5 w-full max-w-md border border-white/10`}
 			>
 				<div className="flex items-center justify-between mb-5">
 					<h3 className="text-lg font-semibold">Настройки</h3>

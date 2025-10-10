@@ -6,6 +6,7 @@ import {
 	collapseIcon,
 	questionIcon,
 	exitIcon,
+	personIcon,
 } from "../assets/images/images";
 import { motion } from "motion/react";
 import ThemesList from "./ThemesList";
@@ -23,6 +24,7 @@ import { useRouter } from "next/navigation";
 import useBotService from "@/api/bot_service";
 import usePersonaService from "@/api/persona_service";
 import useUserService from "@/api/user_service";
+import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 
 const Sidebar = () => {
 	const windowWidth = useWindow();
@@ -32,35 +34,25 @@ const Sidebar = () => {
 	const [isCollapsed, setCollapse] = useState(true);
 	const [openThemes, setOpenThemes] = useState(false);
 
-	const { readUser } = useUserService();
-	const { listBot } = useBotService();
-	const { listPersonas } = usePersonaService();
+	useEffect(() => {
+		const userID = localStorage.getItem("userID");
+		const username = localStorage.getItem("username");
+		const avatarUrl = localStorage.getItem("avatarUrl");
 
-	// useEffect(() => {
-	// 	(async function getUserData() {
-	// 		const user = localStorage.getItem("userID");
+		const data = {
+			name: username,
+			id: userID,
+			avatarUrl: avatarUrl,
+		};
 
-	// 		if (!user) {
-	// 			return;
-	// 		}
+		if (userID && username && avatarUrl) {
+			dispatch(auth(data));
+		}
+	}, []);
 
-	// 		const userResponse = await readUser(user);
-	// 		const botsResponse = await listBot("b/list/user");
-	// 		const personasResponse = await listPersonas();
-
-	// 		if (!botsResponse || !personasResponse || !userResponse) {
-	// 			return;
-	// 		}
-
-	// 		dispatch(
-	// 			initUserBots(botsResponse),
-	// 			initUserPersonas(personasResponse),
-	// 			auth(userResponse)
-	// 		);
-
-	// 		return;
-	// 	})();
-	// }, []);
+	useEffect(() => {
+		console.log(user);
+	}, [user]);
 
 	function collapse() {
 		setCollapse((isCollapsed) => !isCollapsed);
@@ -98,20 +90,6 @@ const Sidebar = () => {
 		}
 		router.push(href);
 	}
-
-	useEffect(() => {
-		const username = localStorage.getItem("username");
-		const userID = localStorage.getItem("userID");
-
-		if (!username || !userID) return;
-
-		dispatch(
-			auth({
-				name: username,
-				id: userID,
-			})
-		);
-	}, []);
 
 	return (
 		<>
@@ -261,7 +239,21 @@ const Sidebar = () => {
 										onClick={(e) => redirect(e, "/profile")}
 										className="max-w-[100%] hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs"
 									>
-										<div className="h-[2.5rem] w-[2.5rem] border-[1px] rounded-[6px] border-white"></div>
+										{user.user.avatarUrl && (
+											<Image
+												src={
+													user.user.avatarUrl ===
+													DEFAULT_IMAGE_SRC
+														? personIcon
+														: ROOT_URL +
+														  user.user.avatarUrl
+												}
+												alt="avatar"
+												width={50}
+												height={50}
+												className="rounded-[5px]"
+											/>
+										)}
 										<p
 											className={`whitespace-nowrap overflow-x-hidden`}
 										>
