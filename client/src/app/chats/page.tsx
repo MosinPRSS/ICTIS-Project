@@ -15,9 +15,24 @@ const ChatInterface: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { readSessions } = useSessionService();
 	const { chats } = useSelector((state: RootState) => state.chats);
+	const [filteredChats, setFilteredChats] = useState(chats);
 
 	const dispatch = useDispatch();
 	const router = useRouter();
+
+	useEffect(() => {
+		if (searchQuery === "") {
+			setFilteredChats(chats);
+			return;
+		}
+		setFilteredChats(
+			chats.filter((chat) =>
+				chat.chatbot.name
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase())
+			)
+		);
+	}, [searchQuery]);
 
 	useEffect(() => {
 		(async function getBots() {
@@ -31,6 +46,7 @@ const ChatInterface: React.FC = () => {
 				}
 
 				dispatch(initChats(response));
+				setFilteredChats(response);
 			} catch (error) {
 				dispatch(initChats(null));
 				console.log(error);
@@ -39,18 +55,6 @@ const ChatInterface: React.FC = () => {
 			}
 		})();
 	}, []);
-
-	const filteredChats =
-		chats &&
-		chats.filter(
-			(chat) =>
-				chat.chatbot.name
-					.toLowerCase()
-					.includes(searchQuery.toLowerCase()) ||
-				chat.description
-					.toLowerCase()
-					.includes(searchQuery.toLowerCase())
-		);
 
 	const redirect = async (e: MouseEvent, chat) => {
 		e.preventDefault();

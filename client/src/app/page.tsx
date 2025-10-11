@@ -57,8 +57,6 @@ export default function Home() {
 				selectedTags
 			);
 
-			console.log(data);
-
 			setNext(data.next);
 			setBots(bots.concat(data.results));
 		} catch (error) {
