@@ -47,7 +47,7 @@ const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
 				selectedTags.map((tag: ITag) => (
 					<button
 						key={tag.name}
-						className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] p-2 h-fit"
+						className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] py-2 px-3 h-fit"
 						onClick={() => removeTag(tag)}
 					>
 						{tag.name}
@@ -57,7 +57,7 @@ const Tags = ({ selectedTags, setSelectedTags }: IFindBot) => {
 			{tagsList.map((tag) => (
 				<button
 					key={tag.name}
-					className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] p-2 h-fit"
+					className="border-[1px] text-white hover:bg-white hover:text-black border-white rounded-[5px] py-2 px-3 h-fit"
 					onClick={() => addTag(tag)}
 				>
 					{tag.name}

@@ -2,29 +2,27 @@
 import { useEffect, useState } from "react";
 import {
 	Logo,
-	donutIcon,
 	collapseIcon,
-	questionIcon,
-	exitIcon,
-	personIcon,
+	ExitIcon,
+	QuestionIcon,
+	ThemesIcon,
+	BotIcon,
+	PersonaIcon,
+	ChatIcon,
 } from "../assets/images/images";
 import { motion } from "motion/react";
 import ThemesList from "./ThemesList";
 import Image from "next/image";
 import { useWindow } from "@/hooks/window";
-import { navButtons } from "@/components/sidebar/navButtons";
 import Auth from "@/components/sidebar/Auth";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useDispatch } from "react-redux";
 import { auth, logout, showAuth } from "@/store/slices/userSlice";
 import { logoutApi } from "@/api/token_service";
 import { useRouter } from "next/navigation";
-import useBotService from "@/api/bot_service";
-import usePersonaService from "@/api/persona_service";
-import useUserService from "@/api/user_service";
 import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
+import { setTheme } from "@/store/slices/themeSlice";
 
 const Sidebar = () => {
 	const windowWidth = useWindow();
@@ -38,6 +36,7 @@ const Sidebar = () => {
 		const userID = localStorage.getItem("userID");
 		const username = localStorage.getItem("username");
 		const avatarUrl = localStorage.getItem("avatarUrl");
+		const theme = localStorage.getItem("theme");
 
 		const data = {
 			name: username,
@@ -46,13 +45,9 @@ const Sidebar = () => {
 		};
 
 		if (userID && username && avatarUrl) {
-			dispatch(auth(data));
+			dispatch(auth(data), setTheme(JSON.parse(theme)));
 		}
 	}, []);
-
-	useEffect(() => {
-		console.log(user);
-	}, [user]);
 
 	function collapse() {
 		setCollapse((isCollapsed) => !isCollapsed);
@@ -124,41 +119,54 @@ const Sidebar = () => {
 				<div>
 					<button
 						onClick={(e) => checkDevice(e, "/")}
-						className={`overflow-x-hidden w-full justify-center text-white rounded-[10px] p-[10px] flex items-center space-x-1`}
+						className={`overflow-x-hidden w-full relative group text-white rounded-[10px] p-[10px] flex items-center space-x-1`}
 					>
 						<Image
 							src={Logo}
 							alt="ari-logo"
 							width={30}
 							height={30}
+							className="group-hover:scale-110 z-10 group-hover:rotate-[180deg] transition-all duration-350 ease-in-out"
 						/>
 
 						<h1
-							className={`text-3xl font-extrabold mt-0.5 whitespace-nowrap`}
+							className={`text-3xl z-10 font-extrabold mt-0.5 whitespace-nowrap transition-all group-hover:text-black duration-350 ease-in-out`}
 							id="logo"
 						>
 							ARI-ai
 						</h1>
+						<div className="absolute z-0 inset-0 bg-white rounded-b-xl transition-all duration-350 ease-in-out h-0 w-full group-hover:h-full"></div>
 					</button>
 
 					<div className={`flex flex-col p-1 pt-5 space-y-1`}>
-						{navButtons.map((button) => (
-							<button
-								key={button.name}
-								onClick={(e) => redirect(e, button.href)}
-								className={`w-full hover:bg-white hover:text-black flex items-center text-white transition duration-10 p-3 space-x-1 rounded-xs`}
-							>
-								<Image
-									src={button.icon}
-									alt={`${button.name}-icon`}
-									width={30}
-									height={30}
-								/>
-								<p className={`whitespace-nowrap`}>
-									{button.desc}
-								</p>
-							</button>
-						))}
+						<button
+							onClick={(e) => redirect(e, "/mybots")}
+							className={`w-full group relative hover:text-black duration-350 ease-in-out flex items-center text-white transition p-3 space-x-2 rounded-xs`}
+						>
+							<BotIcon />
+							<p className={`whitespace-nowrap z-1`}>
+								Редактор ботов
+							</p>
+							<div className="absolute z-0 rounded-r-[10px] inset-0 w-0 bg-white transition-all duration-350 ease-in-out group-hover:w-full" />
+						</button>
+						<button
+							onClick={(e) => redirect(e, "/mypersonas")}
+							className={`w-full group relative hover:text-black duration-350 ease-in-out flex items-center text-white transition p-3 space-x-2 rounded-xs`}
+						>
+							<PersonaIcon />
+							<p className={`whitespace-nowrap z-1`}>
+								Редактор персон
+							</p>
+							<div className="absolute z-0 rounded-r-[10px] inset-0 w-0 bg-white transition-all duration-350 ease-in-out group-hover:w-full" />
+						</button>
+						<button
+							onClick={(e) => redirect(e, "/chats")}
+							className={`w-full group relative hover:text-black duration-350 ease-in-out flex items-center text-white transition p-3 space-x-2 rounded-xs`}
+						>
+							<ChatIcon />
+							<p className={`whitespace-nowrap z-1`}>Чаты</p>
+							<div className="absolute z-0 rounded-r-[10px] inset-0 w-0 bg-white transition-all duration-350 ease-in-out group-hover:w-full" />
+						</button>
 					</div>
 				</div>
 
@@ -205,36 +213,28 @@ const Sidebar = () => {
 						onClick={() =>
 							setOpenThemes((openThemes) => !openThemes)
 						}
-						className="w-full hover:bg-white hover:text-black flex text-white space-x-1 rounded-xs p-3"
+						className={`w-full group relative hover:text-black duration-350 ease-in-out flex items-center text-white transition p-3 space-x-2 rounded-xs`}
 					>
-						<Image
-							src={donutIcon}
-							alt="donut-icon"
-							width={20}
-							height={20}
-							style={{ minWidth: 30 + "px" }}
-						/>
-						<p className={`whitespace-nowrap`}>Темы</p>
+						<ThemesIcon />
+						<p className={`whitespace-nowrap z-1`}>Темы</p>
+						<div className="absolute z-0 rounded-r-[10px] inset-0 w-0 bg-white transition-all duration-350 ease-in-out group-hover:w-full" />
 					</button>
 					<ThemesList isOpen={openThemes} setOpen={setOpenThemes} />
-					<Link href="/help">
-						<button className="w-full hover:bg-white hover:text-black flex text-white space-x-1 rounded-xs p-3">
-							<Image
-								src={questionIcon}
-								alt="question-icon"
-								width={20}
-								height={20}
-								style={{ minWidth: 30 + "px" }}
-							/>
-							<p className={`whitespace-nowrap`}>Нужна помощь?</p>
-						</button>
-					</Link>
+					<button
+						onClick={(e) => redirect(e, "/profile")}
+						className={`w-full group relative hover:text-black duration-350 ease-in-out flex items-center text-white transition p-3 space-x-2 rounded-xs`}
+					>
+						<QuestionIcon />
+						<p className={`whitespace-nowrap z-1`}>Нужна помощь?</p>
+						<div className="absolute z-0 rounded-r-[10px] inset-0 w-0 bg-white transition-all duration-350 ease-in-out group-hover:w-full" />
+					</button>
+
 					<div
 						className={`text-white rounded-[10px] p-[10px] flex items-center justify-between space-x-1 overflow-x-hidden`}
 					>
 						{user.user ? (
 							<>
-								<div className="max-w-[85%] hover:bg-amber-50">
+								<div className="max-w-[85%] hover:bg-amber-50 rounded-[5px]">
 									<button
 										onClick={(e) => redirect(e, "/profile")}
 										className="max-w-[100%] hover:bg-white hover:text-black flex grow items-center space-x-2 pr-2 rounded-xs"
@@ -242,9 +242,17 @@ const Sidebar = () => {
 										{user.user.avatarUrl && (
 											<Image
 												src={
+													!user.user.avatarUrl ||
 													user.user.avatarUrl ===
-													DEFAULT_IMAGE_SRC
+														DEFAULT_IMAGE_SRC
 														? personIcon
+														: user.user.avatarUrl.startsWith(
+																"http://"
+														  ) ||
+														  user.user.avatarUrl.startsWith(
+																"https://"
+														  )
+														? user.user.avatarUrl
 														: ROOT_URL +
 														  user.user.avatarUrl
 												}
@@ -262,30 +270,20 @@ const Sidebar = () => {
 									</button>
 								</div>
 								<button
-									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
+									className="hover:bg-white group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={(e) => logOut(e)}
 								>
-									<Image
-										src={exitIcon}
-										alt="exit-icon"
-										width={20}
-										height={20}
-									/>
+									<ExitIcon />
 								</button>
 							</>
 						) : (
 							<>
 								<p className="whitespace-nowrap">Гость</p>
 								<button
-									className="hover:bg-white hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
+									className="hover:bg-white group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={() => dispatch(showAuth(true))}
 								>
-									<Image
-										src={exitIcon}
-										alt="exit-icon"
-										width={20}
-										height={20}
-									/>
+									<ExitIcon />
 								</button>
 							</>
 						)}

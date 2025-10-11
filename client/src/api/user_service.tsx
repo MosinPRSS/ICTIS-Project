@@ -98,6 +98,9 @@ export default function useUserService() {
 				},
 			});
 
+			localStorage.setItem("username", res.data.username);
+			localStorage.setItem("avatarUrl", res.data.avatar);
+
 			return res.data;
 		} catch (error) {
 			throw new Error("U_ERROR_UPDATE");

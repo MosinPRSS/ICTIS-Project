@@ -10,6 +10,7 @@ import { useParams, useRouter } from "next/navigation";
 import CreateSession from "@/components/botPage/CreateSession";
 import { showAuth } from "@/store/slices/userSlice";
 import Image from "next/image";
+import { LeftIcon, RightIcon } from "@/assets/images/images";
 
 const BotPage = () => {
 	const windowWidth = useWindow();
@@ -78,25 +79,50 @@ const BotPage = () => {
 				<div
 					className={`p-10 ${selectedTheme.options.text} absolute left-0 top-0 w-full min-h-full h-fit overflow-y-scroll backdrop-blur-3xl `}
 				>
-					<div className="flex justify-between">
+					<div
+						className={`flex ${
+							userDevice === "mobile"
+								? "justify-center gap-10"
+								: "justify-between"
+						}`}
+					>
 						<button
-							className={`mb-10 rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
+							className={`hover:bg-white relative group cursor-pointer hover:translate-x-[60%] transition duration-350 hover:left-[10rem]hover:bg-white hover:text-black mb-10 rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
 							onClick={() => router.back()}
 						>
-							Назад
+							<div
+								className={`rotate-[45deg] p-1 border-3 border-white absolute transition duration-350 opacity-0 left-0 top-[10%] group-hover:opacity-100 group-hover:translate-x-[-130%]`}
+							>
+								<LeftIcon />
+							</div>
+							<p>Назад</p>
 						</button>
+
 						<button
-							className={`mb-10 rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
+							className={`hover:bg-white relative group cursor-pointer hover:translate-x-[-60%] transition duration-350 hover:left-[10rem]hover:bg-white hover:text-black mb-10 rounded-[10px] border-1 px-5 py-3 ${selectedTheme.options.border}`}
 							onClick={() => checkAuth()}
 						>
-							Чат
+							<p>Чат</p>
+							<div
+								className={`rotate-[45deg] p-1 border-3 border-white absolute transition duration-350 opacity-0 right-0 top-[10%] group-hover:opacity-100 group-hover:translate-x-[130%]`}
+							>
+								<RightIcon />
+							</div>
 						</button>
 					</div>
 					<div
-						className={`w-full min-h-full flex justify-between gap-10 relative`}
+						className={`w-full min-h-full flex ${
+							userDevice === "mobile"
+								? "flex-col"
+								: "justify-between"
+						} gap-10 relative`}
 					>
 						<div
-							className={`flex gap-5 p-10 h-fit w-[50%] flex-col rounded-[10px] ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} border-1`}
+							className={`flex gap-5 p-10 h-fit ${
+								userDevice === "mobile" ? "w-full" : "w-[50%]"
+							} flex-col rounded-[10px] ${
+								selectedTheme.options.elementBackground
+							} ${selectedTheme.options.border} border-1`}
 						>
 							<div>
 								<h1 className="text-5xl mb-3">{bot.name}</h1>
@@ -140,7 +166,13 @@ const BotPage = () => {
 						{!bot.hide_info ? (
 							(bot.scenario || bot.first_message) && (
 								<div
-									className={`flex gap-5 p-5 h-fit w-[50%] flex-col rounded-[10px] ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} border-1`}
+									className={`flex gap-5 p-5 h-fit ${
+										userDevice === "mobile"
+											? "w-full"
+											: "w-[50%]"
+									} flex-col rounded-[10px] ${
+										selectedTheme.options.elementBackground
+									} ${selectedTheme.options.border} border-1`}
 								>
 									{bot.scenario && (
 										<div className="space-y-3">
@@ -165,138 +197,6 @@ const BotPage = () => {
 							</div>
 						)}
 					</div>
-					{/* <div
-						className={`w-full min-h-full px-5 flex flex-col gap-10 relative`}
-					>
-						<div className="flex flex-wrap items-center justify-between gap-10">
-							<div
-								className={`flex gap-5 p-10 h-fit rounded-[10px] ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} border-1`}
-							>
-								<Image
-									src={bot.avatar}
-									alt="bot"
-									width={200}
-									height={200}
-									className="border-1 border-amber-50 rounded-[10px] h-fit"
-								/>
-								<div className="flex flex-col gap-15 justify-between h-full">
-									<div>
-										<h1 className="text-5xl mb-3">
-											{bot.name}
-										</h1>
-										<p>
-											@
-											<button
-												onClick={() =>
-													redirectToAuthor()
-												}
-												className="underline hover:text-amber-600"
-											>
-												{bot.user.username}
-											</button>
-										</p>
-									</div>
-									
-								</div>
-							</div>
-							<div className="flex gap-10 w-fit">
-								<div
-									className={`flex flex-col gap-3 w-fit ${selectedTheme.options.elementBackground} p-5 rounded-[10px] ${selectedTheme.options.border} border-1`}
-								>
-									{bot.tags &&
-										bot.tags.map((tag) => (
-											<span
-												key={tag}
-												className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-2`}
-											>
-												{tag}
-											</span>
-										))}
-								</div>
-							</div>
-						</div>
-
-						<div
-							className={`w-full flex flex-wrap justify-between items-center gap-10`}
-						>
-							{bot.description && (
-								<div
-									className={`flex flex-col gap-3 min-w-[315px] ${
-										userDevice === "mobile"
-											? "w-full"
-											: "w-[45%]"
-									} ${
-										selectedTheme.options.elementBackground
-									} p-5 rounded-[10px] ${
-										selectedTheme.options.border
-									} border-1`}
-								>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.description}
-									</p>
-								</div>
-							)}
-							{bot.public_description && (
-								<div
-									className={`flex flex-col gap-3 min-w-[315px] ${
-										userDevice === "mobile"
-											? "w-full"
-											: "w-[45%]"
-									} ${
-										selectedTheme.options.elementBackground
-									} p-5 rounded-[10px] ${
-										selectedTheme.options.border
-									} border-1`}
-								>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.public_description}
-									</p>
-								</div>
-							)}
-							{bot.scenario && (
-								<div
-									className={`flex flex-col gap-3 min-w-[315px] ${
-										userDevice === "mobile"
-											? "w-full"
-											: "w-[45%]"
-									} ${
-										selectedTheme.options.elementBackground
-									} p-5 rounded-[10px] ${
-										selectedTheme.options.border
-									} border-1`}
-								>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.scenario}
-									</p>
-								</div>
-							)}
-							{bot.first_message && (
-								<div
-									className={`flex flex-col gap-3 min-w-[315px] ${
-										userDevice === "mobile"
-											? "w-full"
-											: "w-[45%]"
-									} ${
-										selectedTheme.options.elementBackground
-									} p-5 rounded-[10px] ${
-										selectedTheme.options.border
-									} border-1`}
-								>
-									<p
-										className={`${selectedTheme.options.text} ${selectedTheme.options.elementBackground} rounded-[10px] p-3`}
-									>
-										{bot.first_message}
-									</p>
-								</div>
-							)}
-						</div>
-					</div> */}
 					{isCreatingSession && (
 						<CreateSession
 							setIsCreatingSession={setIsCreatingSession}

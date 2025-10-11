@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAuth } from "@/api/auth_service";
 import { useValidate } from "@/hooks/validate";
 import usePersonaService from "@/api/persona_service";
+import { motion } from "motion/react";
 
 const Auth = () => {
 	const [regOrLog, setROL] = useState<"reg" | "log">("log");
@@ -127,7 +128,12 @@ const Auth = () => {
 	}
 
 	return (
-		<div className="flex justify-center items-center fixed left-0 top-0 w-full h-full backdrop-blur-3xl z-999">
+		<motion.div
+			initial={{ opacity: 0, y: 50 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, y: 50 }}
+			className="flex justify-center items-center fixed left-0 top-0 w-full h-full backdrop-blur-3xl z-999"
+		>
 			<div
 				className={`flex relative flex-col items-center gap-5 bg-white p-10 rounded-[10px] text-black min-w-[25vw] w-fit max-w-[95vw]`}
 			>
@@ -177,7 +183,7 @@ const Auth = () => {
 					/>
 				)}
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

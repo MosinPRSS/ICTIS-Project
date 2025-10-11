@@ -8,6 +8,8 @@ export const themeSlice = createSlice({
 	initialState,
 	reducers: {
 		setTheme: (state, { payload }) => {
+			console.log(payload);
+
 			state.name = payload.name;
 			state.options = payload.options;
 

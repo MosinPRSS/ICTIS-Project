@@ -47,7 +47,7 @@ export function useAuth() {
 				// localStorage.setItem("username", res.data.username);
 				// localStorage.setItem("avatarUrl", res.data.avatar);
 
-				return res.status;
+				return "Успешно";
 			} else {
 				// Обрабатываем HTTP ошибки
 				switch (res.status) {

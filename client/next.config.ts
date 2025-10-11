@@ -11,6 +11,10 @@ module.exports = {
 				port: "8000",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "via.placeholder.com",
+			},
 		],
 	},
 };

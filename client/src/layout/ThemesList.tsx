@@ -18,6 +18,7 @@ const ThemesList = ({ isOpen, setOpen }: IsOpen) => {
 	const themesList = Object.values(themes.themes);
 
 	function switchThemes(theme) {
+		localStorage.setItem("theme", JSON.stringify(theme));
 		dispatch(setTheme({ theme: theme.name, options: theme.options }));
 
 		close();
@@ -80,24 +81,27 @@ const ThemesList = ({ isOpen, setOpen }: IsOpen) => {
 		>
 			{isThemesOpen && (
 				<>
-					{themesList.map((theme: Theme) => (
-						<button
-							key={theme.name}
-							className={`flex gap-10 rounded-[10px] p-2 hover:border-2 hover:border-black min-w-fit} ${
-								theme.name === selectedTheme.theme &&
-								"border-2 border-black bg-violet-100"
-							}`}
-							onClick={() => switchThemes(theme)}
-						>
-							<Image
-								src={theme.src}
-								alt={`${theme.name}-theme-icon`}
-								width={25}
-								height={25}
-							/>
-							<p>{theme.name}</p>
-						</button>
-					))}
+					{themesList.map((theme: Theme) => {
+						console.log(theme, selectedTheme);
+						return (
+							<button
+								key={theme.name}
+								className={`flex gap-10 rounded-[10px] p-2 hover:border-2 min-w-fit ${
+									theme.name === selectedTheme.name &&
+									"border-2 border-black bg-violet-100"
+								}`}
+								onClick={() => switchThemes(theme)}
+							>
+								<Image
+									src={theme.src}
+									alt={`${theme.name}-theme-icon`}
+									width={25}
+									height={25}
+								/>
+								<p>{theme.name}</p>
+							</button>
+						);
+					})}
 				</>
 			)}
 		</motion.div>

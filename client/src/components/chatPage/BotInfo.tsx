@@ -1,8 +1,9 @@
-import { botIcon, cancelIcon } from "@/assets/images/images";
+import { cancelIcon, questionIcon } from "@/assets/images/images";
 import { useWindow } from "@/hooks/window";
 import { showAuth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
 import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -40,11 +41,15 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 				} gap-5`}
 			>
 				<div
-					className={`space-y-6 ${
+					className={`space-y-6 overflow-visible ${
 						userDevice === "mobile" ? "w-full" : "w-[50%]"
 					}`}
 				>
-					<div
+					<motion.div
+						initial={{ opacity: 0, y: -100 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: 100 }}
+						transition={{ duration: 0.4 }}
 						className={`flex flex-col justify-between items-center ${selectedTheme.options.background}  rounded-2xl p-6 border border-white/10`}
 					>
 						<div className="w-full flex">
@@ -65,7 +70,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 								<Image
 									src={
 										chatInfo.avatar === DEFAULT_IMAGE_SRC
-											? botIcon
+											? questionIcon
 											: chatInfo.avatar
 									}
 									alt={chatInfo.name}
@@ -86,9 +91,13 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 								</button>
 							</div>
 						</div>
-					</div>
+					</motion.div>
 
-					<div
+					<motion.div
+						initial={{ opacity: 0, x: -100 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: -100 }}
+						transition={{ duration: 0.4 }}
 						className={`text-center ${selectedTheme.options.background} rounded-2xl p-6 border border-white/10`}
 					>
 						<h4 className="text-sm font-semibold mb-3 uppercase tracking-wide">
@@ -104,9 +113,13 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 								</span>
 							))}
 						</div>
-					</div>
+					</motion.div>
 				</div>
-				<div
+				<motion.div
+					initial={{ opacity: 1, x: 100 }}
+					animate={{ opacity: 1, x: 0 }}
+					exit={{ opacity: 1, x: 100 }}
+					transition={{ duration: 0.4 }}
 					className={`${selectedTheme.options.background} ${
 						userDevice === "mobile" ? "w-full" : "w-[50%]"
 					} rounded-2xl p-6 border border-white/10`}
@@ -117,7 +130,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 					<p className="text-gray-300 leading-relaxed">
 						{chatInfo.description}
 					</p>
-				</div>
+				</motion.div>
 			</div>
 		</div>
 	);

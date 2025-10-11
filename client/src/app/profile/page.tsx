@@ -35,7 +35,6 @@ const ProfilePage = () => {
 		if (!user.user?.id) return;
 		try {
 			const response = await readUser(user.user.id);
-			console.log(response);
 
 			if (!response) {
 				throw new Error("Failed to get user data");
@@ -114,12 +113,12 @@ const ProfilePage = () => {
 
 				{userInfo ? (
 					<div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_3fr] md:grid-cols-1 gap-6 w-full h-full">
-						<div className="lg:col-span-2 space-y-6">
+						<div className="lg:col-span-2 space-y-6 min-w-fit">
 							<div
 								className={`${selectedTheme.options.middleground} backdrop-blur-sm rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-100 border-2 border-white/30 hover:border-4 hover:border-white group custom-border-card`}
 							>
 								<div className="flex flex-col sm:flex-row items-start gap-6">
-									<div className="relative group w-[120px] h-[120px]">
+									<div className="relative group min-w-[120px] min-h-[120px] w-[120px] h-[120px]">
 										{isChange ? (
 											<AvatarChange
 												Info={userInfo}
@@ -131,6 +130,10 @@ const ProfilePage = () => {
 													userInfo.avatar ===
 													DEFAULT_IMAGE_SRC
 														? questionIcon
+														: userInfo.avatar.startsWith(
+																"http"
+														  )
+														? userInfo.avatar
 														: ROOT_URL +
 														  userInfo.avatar
 												}
@@ -285,62 +288,6 @@ const ProfilePage = () => {
 					del={handleDelete}
 				/>
 			)}
-
-			<style jsx>{`
-				.custom-scrollbar::-webkit-scrollbar {
-					width: 8px;
-				}
-				.custom-scrollbar::-webkit-scrollbar-track {
-					background: #5f4b8b;
-					border-radius: 10px;
-					border: 1px solid rgba(255, 255, 255, 0.2);
-				}
-				.custom-scrollbar::-webkit-scrollbar-thumb {
-					background: linear-gradient(
-						to bottom,
-						rgba(255, 255, 255, 0.8),
-						rgba(255, 255, 255, 0.4)
-					);
-					border-radius: 10px;
-					border: 1px solid rgba(255, 255, 255, 0.3);
-				}
-				.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-					background: linear-gradient(
-						to bottom,
-						white,
-						rgba(255, 255, 255, 0.6)
-					);
-				}
-
-				/* Кастомные границы для карточек */
-				.custom-border-card {
-					position: relative;
-					background-clip: padding-box;
-				}
-
-				.custom-border-card::before {
-					content: "";
-					position: absolute;
-					top: -2px;
-					left: -2px;
-					right: -2px;
-					bottom: -2px;
-					background: linear-gradient(
-						to left,
-						rgba(255, 255, 255, 0.4),
-						rgba(255, 255, 255, 0.2),
-						rgba(255, 255, 255, 0)
-					);
-					border-radius: 24px;
-					z-index: -1;
-					opacity: 0.8;
-					transition: opacity 0.5s ease;
-				}
-
-				.custom-border-card:hover::before {
-					opacity: 1;
-				}
-			`}</style>
 		</div>
 	);
 };

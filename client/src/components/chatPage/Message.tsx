@@ -14,6 +14,7 @@ import useMessageService from "@/api/message_service";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { motion } from "motion/react";
 
 const Message = ({
 	message,
@@ -93,7 +94,11 @@ const Message = ({
 	}
 
 	return (
-		<div
+		<motion.div
+			initial={{ opacity: 0, y: 100 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, y: 100 }}
+			transition={{ duration: 0.4, type: "spring" }}
 			key={message.id}
 			className={`flex ${
 				message.role !== "user" ? "justify-start" : "justify-end mb-15"
@@ -101,7 +106,7 @@ const Message = ({
 		>
 			<div
 				className={`relative ${
-					userDevice === "mobile" ? "w-[50%]" : "w-[45%]"
+					userDevice === "mobile" ? "w-[90%]" : "w-[45%]"
 				} break-words px-4 py-3 rounded-2xl ${
 					message.role !== "user"
 						? "bg-white/10 text-white"
@@ -245,7 +250,7 @@ const Message = ({
 					</div>
 				)}
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

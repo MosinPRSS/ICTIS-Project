@@ -1,11 +1,11 @@
 "use client";
 import useSearchService from "@/api/search_service";
 import {
-	new_botIcon,
-	ratingIcon,
-	searchIcon,
-	swapIcon,
-	trendingIcon,
+	PlusIcon,
+	StarIcon,
+	SearchIcon,
+	SwapIcon,
+	PopularIcon,
 } from "@/assets/images/images";
 import Card from "@/components/Card";
 import Loading from "@/components/Loading";
@@ -13,7 +13,6 @@ import Tags from "@/components/mainPage/Tags";
 import { useWindow } from "@/hooks/window";
 import { IBot } from "@/interfaces/entries";
 import { RootState } from "@/store/store";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +20,7 @@ import { useSelector } from "react-redux";
 export default function Home() {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
+	const { selectedTheme } = useSelector((state: RootState) => state);
 	const { searchBots } = useSearchService();
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState(0);
@@ -126,10 +126,10 @@ export default function Home() {
 					<input
 						ref={input}
 						type="text"
-						className="rounded-[5px] border-[1px] border-white p-2 text-white bg-transparent outline-none"
+						className={`focus:bg-white/10 transition duration-350 rounded-[5px] border-[1px] border-white p-2 text-white bg-transparent outline-none`}
 					/>
-					<button className="border-[1px] border-white rounded-[5px] p-2 w-[42px] h-[42px] ml-3">
-						<Image src={searchIcon} alt="search-icon" />
+					<button className="border-[1px] group hover:bg-white transition duration-350 border-white rounded-[5px] p-2 w-[42px] h-[42px] ml-3">
+						<SearchIcon />
 					</button>
 				</form>
 			</div>
@@ -140,52 +140,39 @@ export default function Home() {
 			<div className="flex gap-3 text-white">
 				<button
 					onClick={() => setSelectedCategory(2)}
-					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+					className={`flex group gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 hover:bg-white hover:text-black transition duration-350`}
 				>
-					<Image
-						src={trendingIcon}
-						alt="trending-icon"
-						width={20}
-						height={20}
-					/>
+					<div className="group-hover:scale-200 transition duration-350">
+						<PopularIcon />
+					</div>
 					<p>Популярные</p>
 				</button>
 				<button
 					onClick={() => setSelectedCategory(1)}
-					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+					className={`flex group gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 hover:bg-white hover:text-black transition duration-350`}
 				>
-					<Image
-						src={ratingIcon}
-						alt="rating-icon"
-						width={20}
-						height={20}
-					/>
+					<div className="group-hover:scale-200 transition duration-350">
+						<StarIcon />
+					</div>
 					<p>Лучшие</p>
 				</button>
 				<button
 					onClick={() => setSelectedCategory(3)}
-					className={`flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 transition duration-100`}
+					className={`group flex gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 hover:bg-white hover:text-black transition duration-350`}
 				>
-					<Image
-						src={new_botIcon}
-						alt="new_bot-icon"
-						width={20}
-						height={20}
-					/>
+					<div className="group-hover:scale-200 group-hover:rotate-180 transition duration-350">
+						<PlusIcon />
+					</div>
 					<p>Новинки</p>
 				</button>
+
 				<button
-					className={`border-1 border-white rounded-[7px] py-[5px] px-[7px] hover:scale-105 transition duration-[400ms] ${
+					className={`border-1 group border-white rounded-[7px] py-[5px] px-[7px] hover:scale-105 hover:bg-white transition duration-350 ${
 						reverse && "rotate-180"
 					}`}
 					onClick={() => setReverse(Number(!reverse))}
 				>
-					<Image
-						src={swapIcon}
-						alt="swap-icon"
-						width={30}
-						height={30}
-					/>
+					<SwapIcon />
 				</button>
 			</div>
 			<div className="flex gap-10 items-center flex-wrap mt-10">

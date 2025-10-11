@@ -91,7 +91,7 @@ const CreateSession = ({ setIsCreatingSession, botID }) => {
 					<p className="text-2xl">Выберите персону</p>
 					<button
 						onClick={() => setIsCreatingSession(false)}
-						className="hover:border-2 rounded-[5px]"
+						className="rounded-[5px]"
 					>
 						<Image
 							src={closeIcon}

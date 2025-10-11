@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useWindow } from "@/hooks/window";
 import { useParams, useRouter } from "next/navigation";
@@ -8,9 +8,9 @@ import Loading from "@/components/Loading";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	botIcon,
 	infoIcon,
 	leftIcon,
+	questionIcon,
 	sendIcon,
 	settingsIcon,
 } from "@/assets/images/images";
@@ -79,10 +79,12 @@ const Chat = () => {
 	}, []);
 
 	const inputRef = useRef<HTMLInputElement>(null);
+	const sendRef = useRef<HTMLButtonElement>(null);
 
 	const send = async (e: MouseEvent | KeyboardEvent) => {
 		e.preventDefault();
 		inputRef.current.disabled = true;
+		sendRef.current.disabled = true;
 		setIsMessageSending(true);
 		if (!messageInput.trim() || !chatInfo) return;
 
@@ -124,6 +126,7 @@ const Chat = () => {
 			dispatch(openMessage("Произошла ошибка при отправке сообщения"));
 			console.log(error);
 		} finally {
+			sendRef.current.disabled = false;
 			inputRef.current.disabled = false;
 			setIsMessageSending(false);
 		}
@@ -136,15 +139,27 @@ const Chat = () => {
 			) : (
 				chatInfo && (
 					<div className={`flex flex-col h-full w-full relative`}>
-						<div className="w-[60rem] min-w-[320px] mx-auto flex flex-col justify-between h-full">
-							<div className="bg-black/20 backdrop-blur-xl border-b border-white/10 py-4 px-[5rem] rounded-b-full">
+						<div
+							className={`${
+								userDevice === "mobile"
+									? "w-full"
+									: "min-w-[515px] w-[60%]"
+							} mx-auto flex flex-col justify-between h-full`}
+						>
+							<div
+								className={`bg-black/20 backdrop-blur-xl border-b border-white/10 py-4 ${
+									userDevice === "mobile"
+										? "px-[5px]"
+										: "px-[5rem] rounded-b-full"
+								}`}
+							>
 								<div
 									className={`flex items-center justify-between`}
 								>
 									<div className="flex items-center gap-4">
 										<button
 											onClick={() => router.back()}
-											className="p-2 rounded-lg mr-7 bg-white/10 hover:bg-white/20 transition-colors mr-2"
+											className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors mr-2"
 										>
 											<Image
 												src={leftIcon}
@@ -157,7 +172,7 @@ const Chat = () => {
 											src={
 												chatInfo.chatbot.avatar ===
 												DEFAULT_IMAGE_SRC
-													? botIcon
+													? questionIcon
 													: chatInfo.chatbot.avatar
 											}
 											alt={chatInfo.chatbot.name}
@@ -211,7 +226,13 @@ const Chat = () => {
 								</div>
 							</div>
 
-							<div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+							<div
+								className={`flex-1 overflow-y-auto p-4 md:p-6 ${
+									userDevice === "mobile"
+										? "space-y-10"
+										: "space-y-4"
+								}`}
+							>
 								{messages.map((message) => (
 									<Message
 										message={message}
@@ -222,7 +243,13 @@ const Chat = () => {
 								))}
 							</div>
 
-							<div className="bg-black/20 backdrop-blur-xl border-t border-white/10 py-4 px-[5rem] rounded-t-full">
+							<div
+								className={`bg-black/20 backdrop-blur-xl border-t border-white/10 py-4 ${
+									userDevice === "mobile"
+										? "px-[5px]"
+										: "px-[5rem] rounded-t-full"
+								}`}
+							>
 								<div className="flex items-center gap-3">
 									<input
 										ref={inputRef}
@@ -239,7 +266,7 @@ const Chat = () => {
 									/>
 									<button
 										onClick={(e) => send(e)}
-										disabled={!messageInput.trim()}
+										ref={sendRef}
 										className={`p-3 hover:scale-110 transition duration-[1s] rounded-xl cursor-pointer ${selectedTheme.options.middleground} disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
 										aria-label="Отправить сообщение"
 									>
