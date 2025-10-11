@@ -40,7 +40,7 @@ class UserDetailView(generics.RetrieveAPIView):
         else:
             bots = Chatbot.objects.filter(belongs_to=user, is_public=True)
 
-        user_data = ListUsersSerializer(user).data
+        user_data = ListUsersSerializer(user, context={'request': request}).data
         bot_data = PublicBotSerializer(bots, many=True, context={'request': request}).data
 
         return Response({
@@ -91,7 +91,7 @@ class DeleteUser(generics.DestroyAPIView):
         return self.request.user
 
 class UpdateUser(generics.UpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):

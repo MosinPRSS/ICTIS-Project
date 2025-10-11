@@ -1,5 +1,4 @@
 services:
-
   db:
     restart: always
     image: postgres
@@ -9,23 +8,40 @@ services:
       - POSTGRES_PASSWORD=21master28admin06
       - POSTGRES_DB=arisen_database
       - POSTGRES_PORT=5432
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/ # не трогать - для линукса
 
   pgadmin:
-      image: dpage/pgadmin4
-      container_name: pg-dashboard
-      depends_on:
-        - db
-      ports:
-        - "5050:80"
-      environment:
-        PGADMIN_DEFAULT_EMAIL: test@test.com
-        PGADMIN_DEFAULT_PASSWORD: 1234
-      restart: always
+    image: dpage/pgadmin4
+    container_name: pg-dashboard
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: 1234
+    restart: always
+
+  # server:
+  #  build: ./server
+  #  ports:
+  #    - "8000:8000"
+  #  depends_on:
+  #    db:
+  #      condition: service_healthy
+  #  volumes:
+  #    - media_volume:/app/media
 
 volumes:
-  postgres_data: 
+  postgres_data:
+  media_volume: 
 

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -32,6 +33,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         refresh = RefreshToken.for_user(user)
 
+        # топ 1 причин переписывать весь бэк - везде костыли
+
         return {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
@@ -39,7 +42,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
                 'id': user.id,
                 'email': user.email,
                 'username': user.username,
-                'avatar': user.avatar_url,
+                'avatar': settings.BASE_URL + user.avatar.url,
                 'description': user.description
             }
         }

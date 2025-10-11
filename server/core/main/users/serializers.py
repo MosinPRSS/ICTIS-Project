@@ -7,6 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
+    avatar = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = [
@@ -33,19 +34,45 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+    def get_avatar(self, obj):
+        request = self.context.get('request')
+        if obj.avatar and request:
+            return request.build_absolute_uri(obj.avatar.url)
+        return None
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
+    class Meta:
+        model = User
+        fields = ["email", "username", "password", "avatar", "description"]
+        extra_kwargs = {
+            "password": {"write_only": True, "required": False},
+            "username": {"required": True},
+            "description": {"required": False},
+            "email": {"required": True},
+        }
+
     def update(self, instance, validated_data):
         if "password" in validated_data:
             instance.set_password(validated_data.pop("password"))
+
+        if "avatar" in validated_data:
+            new_avatar = validated_data["avatar"]
+            old_avatar = instance.avatar
+
+            if old_avatar and old_avatar.name != "Default_Avatar.svg":
+                if old_avatar.storage.exists(old_avatar.name):
+                    old_avatar.delete(save=False)
+
         
-        # замена файла аватарки, чтобы на сервере не забивалось место под них
-        new_avatar = validated_data.get('avatar', None)
-        if new_avatar and instance.avatar:
-            if instance.avatar.name != new_avatar.name and instance.avatar.storage.exists(instance.avatar.name):
-                instance.avatar.delete(save=False)
         return super().update(instance, validated_data)
-    
 
 class ListUsersSerializer(serializers.ModelSerializer):
+    avatar = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = [
@@ -55,6 +82,12 @@ class ListUsersSerializer(serializers.ModelSerializer):
             "avatar", 
             "description", 
         ]
+    
+    def get_avatar(self, obj):
+        request = self.context.get('request')
+        if obj.avatar and request:
+            return request.build_absolute_uri(obj.avatar.url)
+        return None
 
 
 
