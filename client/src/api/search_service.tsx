@@ -13,12 +13,12 @@ export default function useSearchService() {
 		method?: number,
 		tags?: string[]
 	) => {
-		const params = new Map();
-		if (query !== undefined) params.set("query", query);
-		if (page !== undefined) params.set("page", page);
-		if (pageSize !== undefined) params.set("page_size", pageSize);
-		if (sortBy !== undefined) params.set("sort_by", sortBy);
-		if (method !== undefined) params.set("method", method);
+		let params = {};
+		if (query !== undefined) params.query = query;
+		if (page !== undefined) params.page = page;
+		if (pageSize !== undefined) params.page_size = pageSize;
+		if (sortBy !== undefined) params.sort_by = sortBy;
+		if (method !== undefined) params.method = method;
 
 		if (tags !== undefined) {
 			let tagsList = [];
@@ -26,7 +26,7 @@ export default function useSearchService() {
 				tagsList.push(tags[i].name);
 			}
 
-			params.set("tags", tagsList.toString());
+			params.tags = tagsList.toString();
 		}
 
 		try {
@@ -36,6 +36,7 @@ export default function useSearchService() {
 					Authorization: "",
 				},
 			});
+			console.log(params)
 			return res.data;
 		} catch (error: any) {
 			throw new Error("SEARCH_ERROR");

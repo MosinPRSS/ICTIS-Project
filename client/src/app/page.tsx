@@ -62,7 +62,6 @@ export default function Home() {
 
 	useEffect(() => {
 		setNext("b/search");
-		setSearchInput("");
 		setBots([]);
 		getBots();
 	}, [selectedCategory, selectedTags, reverse, searchInput]);
