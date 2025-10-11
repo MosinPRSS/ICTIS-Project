@@ -22,7 +22,6 @@ import BotInfo from "@/components/chatPage/BotInfo";
 import DeleteConfirm from "@/components/chatPage/DeleteConfirm";
 import Message from "@/components/chatPage/Message";
 import { motion } from "motion/react";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import { RootState } from "@/store/store";
 
 const Chat = () => {
@@ -149,7 +148,7 @@ const Chat = () => {
 							<div
 								className={`bg-black/20 backdrop-blur-xl border-b border-white/10 py-4 ${
 									userDevice === "mobile"
-										? "px-[5px]"
+										? "px-[10px]"
 										: "px-[5rem] rounded-b-full"
 								}`}
 							>
@@ -169,29 +168,23 @@ const Chat = () => {
 											/>
 										</button>
 										<Image
-											src={
-												chatInfo.chatbot.avatar ===
-												DEFAULT_IMAGE_SRC
-													? questionIcon
-													: chatInfo.chatbot.avatar
-											}
+											src={chatInfo.chatbot.avatar}
 											alt={chatInfo.chatbot.name}
 											className="w-10 h-10 rounded-full object-cover"
 											width={40}
 											height={40}
 										/>
-										<div className="">
+										<div>
 											<h2 className="font-semibold text-white truncate w-fit">
 												{chatInfo.chatbot.name}
 											</h2>
-											<p className="text-sm text-purple-300 truncate w-fit">
-												{chatInfo.chatname}
-											</p>
 										</div>
 									</div>
 
 									<div
-										className={`flex w-auto items-center gap-2
+										className={`flex w-auto items-center gap-2 ${
+											userDevice === "mobile" &&
+											"fixed left-1/2 top-[200%]"
 										}`}
 									>
 										<button

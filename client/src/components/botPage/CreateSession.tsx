@@ -83,9 +83,9 @@ const CreateSession = ({ setIsCreatingSession, botID }) => {
 	}, []);
 
 	return (
-		<div className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl z-50 flex items-center justify-center">
+		<div className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl z-50 flex justify-center">
 			<div
-				className={`flex min-w-[18rem] w-[30vw] flex-col items-center gap-5 p-5 border-[1px] rounded-2xl ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} ${selectedTheme.options.text}`}
+				className={`mt-10 flex min-w-[18rem] w-[30vw] h-fit flex-col items-center gap-5 p-5 border-[1px] rounded-2xl ${selectedTheme.options.elementBackground} ${selectedTheme.options.border} ${selectedTheme.options.text}`}
 			>
 				<div className="flex items-center justify-between w-full mb-10">
 					<p className="text-2xl">Выберите персону</p>

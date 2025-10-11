@@ -20,11 +20,9 @@ import { useSelector } from "react-redux";
 export default function Home() {
 	const windowWidth = useWindow();
 	const [userDevice, setUserDevice] = useState(windowWidth);
-	const { selectedTheme } = useSelector((state: RootState) => state);
 	const { searchBots } = useSearchService();
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState(0);
-	const input = useRef<HTMLInputElement>(null);
 	const { user } = useSelector((state: RootState) => state);
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +39,14 @@ export default function Home() {
 
 			setIsLoading(true);
 
+			console.log(
+				next,
+				searchInput,
+				selectedCategory,
+				selectedTags,
+				reverse
+			);
+
 			const data = await searchBots(
 				next,
 				searchInput,
@@ -50,6 +56,8 @@ export default function Home() {
 				reverse,
 				selectedTags
 			);
+
+			console.log(data);
 
 			setNext(data.next);
 			setBots(bots.concat(data.results));
@@ -64,11 +72,14 @@ export default function Home() {
 		setNext("b/search");
 		setBots([]);
 		getBots();
-	}, [selectedCategory, selectedTags, reverse, searchInput]);
+	}, [selectedCategory, selectedTags, reverse]);
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		setSearchInput(input.current?.value ?? "");
+
+		setNext("b/search");
+		setBots([]);
+		getBots();
 	}
 
 	useEffect(() => {
@@ -124,7 +135,8 @@ export default function Home() {
 					onSubmit={(event) => handleSubmit(event)}
 				>
 					<input
-						ref={input}
+						value={searchInput}
+						onChange={(event) => setSearchInput(event.target.value)}
 						type="text"
 						className={`focus:bg-white/10 transition duration-350 rounded-[5px] border-[1px] border-white p-2 text-white bg-transparent outline-none`}
 					/>
@@ -137,7 +149,7 @@ export default function Home() {
 				selectedTags={selectedTags}
 				setSelectedTags={setSelectedTags}
 			/>
-			<div className="flex gap-3 text-white">
+			<div className="flex gap-3 text-white flex-wrap">
 				<button
 					onClick={() => setSelectedCategory(2)}
 					className={`flex group gap-3 min-w-fit py-2 px-3 border-1 border-white rounded-[7px] hover:scale-105 hover:bg-white hover:text-black transition duration-350`}

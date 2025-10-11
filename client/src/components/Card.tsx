@@ -1,6 +1,5 @@
 import { questionIcon } from "@/assets/images/images";
 import { RootState } from "@/store/store";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -23,11 +22,7 @@ const Card = ({ entity, fun, arg }) => {
 				<div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-pink-500/20 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
 				{/* ЗДЕСЬ */}
 				<Image
-					src={
-						entity.avatar == DEFAULT_IMAGE_SRC
-							? questionIcon
-							: entity.avatar
-					}
+					src={entity.avatar}
 					alt="entity-avatar"
 					width={140}
 					height={140}

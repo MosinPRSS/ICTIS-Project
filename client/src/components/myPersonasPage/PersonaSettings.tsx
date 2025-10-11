@@ -81,9 +81,13 @@ const PersonaSettings = ({
 	}
 
 	return (
-		<div className="absolute inset-0 min-h-screen h-fit backdrop-blur-3xl flex items-center justify-center">
+		<div
+			className={`absolute inset-0 ${
+				userDevice === "mobile" ? "p-3" : "p-10"
+			} backdrop-blur-3xl flex items-center justify-center`}
+		>
 			{/* Modal Container */}
-			<div className={`relative`}>
+			<div className={`relative h-full`}>
 				{/* Modal */}
 				<div
 					className={`w-full h-fit relative ${selectedTheme.options.middleground} backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl`}
@@ -94,7 +98,7 @@ const PersonaSettings = ({
 							{/* <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
 								<Edit3 className="w-6 h-6 text-white" />
 							</div> */}
-							<h1 className="text-2xl font-bold text-white">
+							<h1 className="text-xl font-bold text-white">
 								{personaInfo.name}
 							</h1>
 						</div>

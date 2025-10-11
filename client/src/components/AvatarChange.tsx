@@ -1,7 +1,6 @@
 import { uploadIcon } from "@/assets/images/images";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { ROOT_URL } from "@/types/defaultImageSrc";
 import { openMessage } from "@/store/slices/messageSlice";
 import { useDispatch } from "react-redux";
 
@@ -47,13 +46,7 @@ const AvatarChange = ({ Info, setInfo }) => {
 				/>
 			</label>
 			<Image
-				src={
-					avatar
-						? avatar
-						: Info.avatar.startsWith("http")
-						? Info.avatar
-						: ROOT_URL + Info.avatar
-				}
+				src={Info.avatar}
 				alt="avatar"
 				width={120}
 				height={120}

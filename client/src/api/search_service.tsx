@@ -28,6 +28,7 @@ export default function useSearchService() {
 
 			params.tags = tagsList.toString();
 		}
+		console.log(params);
 
 		try {
 			const res = await apiClient.get(url, {

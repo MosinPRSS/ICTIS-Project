@@ -1,10 +1,9 @@
 "use client";
 import useSessionService from "@/api/session_service";
-import { botIcon, questionIcon } from "@/assets/images/images";
+import { questionIcon } from "@/assets/images/images";
 import Loading from "@/components/Loading";
 import { initChats } from "@/store/slices/chatsSlice";
 import { RootState } from "@/store/store";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -87,12 +86,7 @@ const ChatInterface: React.FC = () => {
 								>
 									<div className="relative">
 										<Image
-											src={
-												chat.chatbot.avatar !==
-												DEFAULT_IMAGE_SRC
-													? chat.chatbot.avatar
-													: questionIcon
-											}
+											src={chat.chatbot.avatar}
 											alt={chat.chatbot.name}
 											className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-400/30"
 											width={40}

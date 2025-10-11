@@ -1,10 +1,8 @@
 "use client";
 import useUserService from "@/api/user_service";
-import { personIcon } from "@/assets/images/images";
 import Card from "@/components/Card";
 import Loading from "@/components/Loading";
 import { useWindow } from "@/hooks/window";
-import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -58,34 +56,36 @@ const UserPage = () => {
 			) : userInfo ? (
 				<div
 					className={`${
-						userDevice === "mobile" ? "flex-col" : "justify-between"
-					} flex h-full w-full gap-10 grow p-10 pb-0`}
+						userDevice === "mobile"
+							? "flex-col"
+							: "justify-between p-10"
+					} flex h-full w-full gap-10 grow pb-0`}
 				>
 					<div
 						className={`${
-							userDevice === "mobile"
-								? "w-full"
-								: "w-[50%] overflow-y-auto"
-						} flex flex-col h-fit gap-10 overflow-y-auto ${
+							userDevice === "mobile" ? "w-full" : "w-[50%]"
+						} flex flex-col h-fit gap-10 ${
 							selectedTheme.options.elementBackground
 						} p-10 border-1 ${
 							selectedTheme.options.border
 						} rounded-[10px]`}
 					>
-						<div className={`flex gap-5 items-center`}>
+						<div
+							className={`flex gap-5 ${
+								userDevice === "mobile"
+									? "flex-col"
+									: "flex-wrap"
+							}`}
+						>
 							<div
 								className={`${selectedTheme.options.border} border-[1px] rounded-[10px] bg-black min-w-40 min-h-40`}
 							>
 								<Image
-									src={
-										userInfo.user.avatar ===
-										DEFAULT_IMAGE_SRC
-											? personIcon
-											: ROOT_URL + userInfo.user.avatar
-									}
+									src={userInfo.user.avatar}
 									alt="avatar"
 									width={100}
 									height={100}
+									className="w-full h-full"
 								/>
 							</div>
 							<div>

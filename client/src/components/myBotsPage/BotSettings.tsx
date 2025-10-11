@@ -108,7 +108,11 @@ const BotSettings = ({
 	}
 
 	return (
-		<div className="absolute inset-0 min-h-screen p-10 backdrop-blur-3xl flex items-center justify-center">
+		<div
+			className={`absolute inset-0 min-h-screen ${
+				userDevice === "mobile" ? "p-3" : "p-10"
+			} backdrop-blur-3xl flex items-center justify-center`}
+		>
 			{/* Modal Container */}
 			<div className="w-[90%] h-[90%] relative">
 				{/* Modal */}

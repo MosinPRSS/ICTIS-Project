@@ -1,9 +1,10 @@
 import { cancelIcon } from "@/assets/images/images";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Loading from "../Loading";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import CreateSession from "../botPage/CreateSession";
 
 const ChatList = ({
 	setShowChatList,
@@ -13,6 +14,7 @@ const ChatList = ({
 	botChats,
 }) => {
 	const { selectedTheme } = useSelector((state: RootState) => state);
+	const [showCreateSession, setShowCreateSession] = useState(false);
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 			<div
@@ -59,9 +61,9 @@ const ChatList = ({
 							</div>
 							<div className="w-full pt-4 border-t border-white/10 flex flex-col gap-5">
 								<button
-									//onClick={() =>
-									//createNewChat(chatInfo.id)
-									//}
+									onClick={() => {
+										setShowCreateSession(true);
+									}}
 									className={`w-full flex justify-center items-center gap-3 p-3 rounded-xl hover:bg-white ${selectedTheme.options.elementBackground} transition-colors text-white font-medium`}
 								>
 									Создать новый чат
@@ -86,6 +88,12 @@ const ChatList = ({
 					)}
 				</div>
 			</div>
+			{showCreateSession && (
+				<CreateSession
+					setIsCreatingSession={setShowCreateSession}
+					botID={chatInfo.chatbot.id}
+				/>
+			)}
 		</div>
 	);
 };

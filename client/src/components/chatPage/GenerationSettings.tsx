@@ -51,7 +51,7 @@ const GenerationSettings = ({
 	return (
 		<div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 			<div
-				className={`${selectedTheme.options.background} text-white rounded-2xl p-5 w-full max-w-md border border-white/10`}
+				className={`${selectedTheme.options.background} text-white rounded-2xl p-5 w-full h-fit max-w-md border border-white/10`}
 			>
 				<div className="flex items-center justify-between mb-5">
 					<h3 className="text-lg font-semibold">

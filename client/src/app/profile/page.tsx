@@ -3,13 +3,11 @@ import useUserService from "@/api/user_service";
 import { questionIcon, uploadIcon } from "@/assets/images/images";
 import AvatarChange from "@/components/AvatarChange";
 import DeleteConfirm from "@/components/DeleteConfirm";
-import useAvatarChange from "@/hooks/avatar";
 import { useWindow } from "@/hooks/window";
 import { IUser } from "@/interfaces/entries";
 import { openMessage } from "@/store/slices/messageSlice";
 import { logout } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
-import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -126,17 +124,7 @@ const ProfilePage = () => {
 											/>
 										) : (
 											<Image
-												src={
-													userInfo.avatar ===
-													DEFAULT_IMAGE_SRC
-														? questionIcon
-														: userInfo.avatar.startsWith(
-																"http"
-														  )
-														? userInfo.avatar
-														: ROOT_URL +
-														  userInfo.avatar
-												}
+												src={userInfo.avatar}
 												alt="avatar"
 												width={120}
 												height={120}

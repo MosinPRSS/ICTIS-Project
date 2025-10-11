@@ -1,8 +1,7 @@
-import { cancelIcon, questionIcon } from "@/assets/images/images";
+import { cancelIcon } from "@/assets/images/images";
 import { useWindow } from "@/hooks/window";
 import { showAuth } from "@/store/slices/userSlice";
 import { RootState } from "@/store/store";
-import { DEFAULT_IMAGE_SRC } from "@/types/defaultImageSrc";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -41,7 +40,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 				} gap-5`}
 			>
 				<div
-					className={`space-y-6 overflow-visible ${
+					className={`space-y-6 overflow-hidden ${
 						userDevice === "mobile" ? "w-full" : "w-[50%]"
 					}`}
 				>
@@ -52,7 +51,11 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 						transition={{ duration: 0.4 }}
 						className={`flex flex-col justify-between items-center ${selectedTheme.options.background}  rounded-2xl p-6 border border-white/10`}
 					>
-						<div className="w-full flex">
+						<div
+							className={`w-full flex ${
+								userDevice === "mobile" && "justify-center"
+							}`}
+						>
 							<button
 								onClick={() => setShowBotInfo(false)}
 								className="p-1 mb-5 rounded-full hover:bg-white/10 transition-colors self-end"
@@ -68,11 +71,7 @@ const BotInfo = ({ setShowBotInfo, chatInfo }) => {
 						<div className="flex gap-5 items-center">
 							<div className="w-24 h-24 flex justify-center items-center rounded-full mb-4 overflow-hidden ring-4 ring-white">
 								<Image
-									src={
-										chatInfo.avatar === DEFAULT_IMAGE_SRC
-											? questionIcon
-											: chatInfo.avatar
-									}
+									src={chatInfo.avatar}
 									alt={chatInfo.name}
 									className="w-full h-full rounded-full object-cover"
 									width={40}

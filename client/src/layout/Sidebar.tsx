@@ -21,7 +21,6 @@ import { useDispatch } from "react-redux";
 import { auth, logout, showAuth } from "@/store/slices/userSlice";
 import { logoutApi } from "@/api/token_service";
 import { useRouter } from "next/navigation";
-import { DEFAULT_IMAGE_SRC, ROOT_URL } from "@/types/defaultImageSrc";
 import { setTheme } from "@/store/slices/themeSlice";
 
 const Sidebar = () => {
@@ -241,21 +240,7 @@ const Sidebar = () => {
 									>
 										{user.user.avatarUrl && (
 											<Image
-												src={
-													!user.user.avatarUrl ||
-													user.user.avatarUrl ===
-														DEFAULT_IMAGE_SRC
-														? personIcon
-														: user.user.avatarUrl.startsWith(
-																"http://"
-														  ) ||
-														  user.user.avatarUrl.startsWith(
-																"https://"
-														  )
-														? user.user.avatarUrl
-														: ROOT_URL +
-														  user.user.avatarUrl
-												}
+												src={user.user.avatarUrl}
 												alt="avatar"
 												width={50}
 												height={50}
@@ -270,7 +255,7 @@ const Sidebar = () => {
 									</button>
 								</div>
 								<button
-									className="hover:bg-white group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
+									className="hover:bg-white hover:scale-150 transition duration-200 ease-in-out group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={(e) => logOut(e)}
 								>
 									<ExitIcon />
@@ -280,7 +265,7 @@ const Sidebar = () => {
 							<>
 								<p className="whitespace-nowrap">Гость</p>
 								<button
-									className="hover:bg-white group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
+									className="hover:bg-white transition duration-200 ease-in-out hover:scale-200 group hover:text-black rounded-xs min-w-[20px] min-h-[20px]"
 									onClick={() => dispatch(showAuth(true))}
 								>
 									<ExitIcon />
