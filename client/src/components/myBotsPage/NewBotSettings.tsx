@@ -325,7 +325,7 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 									</label>
 									<input
 										type="text"
-										value={botInfo.name}
+										value={botInfo.chatname}
 										onChange={(e) => {
 											changeBot({
 												...botInfo,
@@ -385,7 +385,7 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 										Первое сообщение
 									</label>
 									<textarea
-										value={botInfo.scenario}
+										value={botInfo.first_message}
 										onChange={(e) => {
 											changeBot({
 												...botInfo,
