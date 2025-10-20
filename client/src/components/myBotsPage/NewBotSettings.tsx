@@ -9,14 +9,13 @@ import useBotService from "@/api/bot_service";
 import { openMessage } from "@/store/slices/messageSlice";
 import AvatarChange from "../AvatarChange";
 const newBot: IBot = {
-	id: 0,
-	name: "Новый бот",
-	chatname: "Новый бот",
-	description: "Описание",
-	public_description: "Публичное описание",
-	scenario: "Сценарий",
-	first_message: "Первое сообщение",
-	avatar: "https://via.placeholder.com/150",
+	name: "",
+	chatname: "",
+	description: "",
+	public_description: "",
+	scenario: "",
+	first_message: "",
+	avatar: "",
 	tags: [],
 };
 
@@ -320,6 +319,24 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 									/>
 								</div>
 
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3">
+										Имя в чате
+									</label>
+									<input
+										type="text"
+										value={botInfo.name}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												chatname: e.target.value,
+											});
+										}}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Введите имя бота в чате"
+									/>
+								</div>
+
 								{/* Description Field */}
 								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
 									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
@@ -336,7 +353,7 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 										}}
 										rows={4}
 										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
-										placeholder="Опишите вашего бота"
+										placeholder="Опишите вашего бота. Вы можете использовать поля {{char}} (персонаж) и {{user}} (пользователь) для уточнения роли каждого в чате."
 									/>
 								</div>
 
@@ -358,6 +375,26 @@ const NewBotSettings = ({ setSelectedBot, updateBotsList }: ISelectedBot) => {
 										rows={4}
 										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
 										placeholder="Публичное описание для других пользователей"
+									/>
+								</div>
+
+
+								<div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+									<label className="block text-sm font-semibold text-purple-300 uppercase tracking-wide mb-3 flex items-center gap-2">
+										{/* <Globe className="w-4 h-4" /> */}
+										Первое сообщение
+									</label>
+									<textarea
+										value={botInfo.scenario}
+										onChange={(e) => {
+											changeBot({
+												...botInfo,
+												first_message: e.target.value,
+											});
+										}}
+										rows={4}
+										className={`w-full ${selectedTheme.options.background} text-white px-4 py-3 rounded-xl border border-white/10 ${selectedTheme.options.focusBorder} focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none`}
+										placeholder="Первое сообщение от бота. Вы можете использовать поля {{char}} (персонаж) и {{user}} (пользователь) для уточнения роли каждого в чате."
 									/>
 								</div>
 
