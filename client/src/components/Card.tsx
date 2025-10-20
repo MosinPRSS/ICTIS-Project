@@ -41,7 +41,7 @@ const Card = ({ entity, fun, arg }) => {
 					</p>
 				</div>
 				<p className="text-sm text-gray-300/90 line-clamp-2 leading-relaxed mt-1 h-[50%] overflow-hidden">
-					{entity?.description}
+					{entity?.public_description}
 				</p>
 				<div className="flex flex-wrap gap-2 h-[30%]">
 					{entity.tags?.map((tag) => (
